@@ -1,0 +1,140 @@
+<div class="contato-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="animated-text">Entre em</span>
+        <span class="highlight">Contato</span>
+      </h1>
+      <p class="hero-description">
+        Estamos prontos para ajudar você! Entre em contato conosco através dos canais abaixo
+        ou preencha nosso formulário para receber uma resposta personalizada.
+      </p>
+      <div class="pulse-animation">
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Methods -->
+  <section class="contact-methods-section">
+    <div class="container">
+      <h2 class="section-title">Formas de Contato</h2>
+      <div class="contact-methods-grid">
+        <div class="contact-method"
+             *ngFor="let method of contactMethods; let i = index"
+             [style.border-color]="method.color"
+             [style.animation-delay.s]="i * 0.2">
+          <div class="method-icon" [style.background-color]="method.color">
+            {{ method.icon }}
+          </div>
+          <h3 class="method-title">{{ method.title }}</h3>
+          <p class="method-description">{{ method.description }}</p>
+          <a [href]="method.link || '#'"
+             class="method-value"
+             [style.color]="method.color"
+             [target]="method.link && method.link.startsWith('http') ? '_blank' : ''"
+             [rel]="method.link && method.link.startsWith('http') ? 'noopener' : ''">
+            {{ method.value }}
+          </a>
+          <div class="method-hover-effect" [style.background-color]="method.color"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Offices Section -->
+  <section class="offices-section">
+    <div class="container">
+      <h2 class="section-title">Nossa Localização</h2>
+      <div class="offices-content">
+        <div class="offices-list">
+          <div class="office-card"
+               *ngFor="let office of offices; let i = index"
+               [class.active]="i === currentOfficeIndex"
+               (click)="selectOffice(i)">
+            <div class="office-header">
+              <h3>{{ office.name }}</h3>
+              <span class="office-badge" *ngIf="office.isMainOffice">Sede</span>
+            </div>
+            <div class="office-info">
+              <div class="info-item">
+                <span class="info-icon">📍</span>
+                <span>{{ office.address }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">📞</span>
+                <span>{{ office.phone }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">✉️</span>
+                <span>{{ office.email }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-placeholder">
+          <div class="map-container">
+            <div class="map-pin"
+                 [style.animation-delay.s]="currentOfficeIndex * 0.2">
+              📍
+            </div>
+            <div class="map-info">
+              <h4>{{ currentOffice.name }}</h4>
+              <p>{{ currentOffice.address }}</p>
+            </div>
+            <div class="map-background">
+              <div class="map-grid"></div>
+              <div class="location-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="section-title">Perguntas Frequentes</h2>
+      <div class="faq-list">
+        <div class="faq-item"
+             *ngFor="let faq of faqs; let i = index"
+             [class.open]="faq.isOpen">
+          <button class="faq-question" (click)="toggleFAQ(i)">
+            <span>{{ faq.question }}</span>
+            <span class="faq-icon">{{ faq.isOpen ? '−' : '+' }}</span>
+          </button>
+          <div class="faq-answer" [class.open]="faq.isOpen">
+            <p>{{ faq.answer }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ainda tem dúvidas?</h2>
+        <p>
+          Nossa equipe de especialistas está pronta para ajudar você.
+          Entre em contato e descubra como podemos contribuir para o seu sucesso.
+        </p>
+        <div class="cta-buttons">
+          <a href="tel:+551134567890" class="cta-btn primary">
+            📞 Ligar Agora
+          </a>
+          <a href="https://wa.me/5511999998888" target="_blank" rel="noopener" class="cta-btn secondary">
+            💬 WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

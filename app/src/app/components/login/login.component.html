@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Login</h1>
+      <p>Entre na sua conta INOVALAB</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          placeholder="Digite seu e-mail"
+          class="form-input"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          placeholder="Digite sua senha"
+          class="form-input"
+        >
+      </div>
+
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox"> Lembrar de mim
+        </label>
+        <a href="#" class="forgot-password" (click)="esqueceuSenha(); $event.preventDefault()">Esqueceu a senha?</a>
+      </div>
+
+      <button type="submit" class="login-button">Entrar</button>
+    </form>
+
+    <div class="login-footer">
+      <p>Não tem uma conta? <a href="#" class="signup-link" (click)="goToCadastro(); $event.preventDefault()">Criar conta</a></p>
+      <button type="button" class="back-button" (click)="goToHome()">
+        ← Voltar para o início
+      </button>
+    </div>
+  </div>
+</div>

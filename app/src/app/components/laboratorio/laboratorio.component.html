@@ -1,0 +1,152 @@
+<div class="laboratorio-container">
+  <!-- Header da página -->
+  <div class="page-header">
+    <div class="container">
+      <h1>🔬 Laboratório INOVALAB</h1>
+      <p>Gerencie seus agendamentos de laboratório</p>
+      <button class="btn-novo-agendamento" (click)="abrirFormulario()">
+        <i class="icon">➕</i>
+        Novo Agendamento
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulário de agendamento (Modal) -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ agendamentoEditando ? 'Editar' : 'Novo' }} Agendamento</h2>
+        <button class="btn-fechar" (click)="fecharFormulario()">✕</button>
+      </div>
+
+      <form class="agendamento-form" (ngSubmit)="salvarAgendamento()">
+        <div class="form-group">
+          <label for="titulo">Título *</label>
+          <input
+            type="text"
+            id="titulo"
+            [(ngModel)]="novoAgendamento.titulo"
+            name="titulo"
+            required
+            placeholder="Digite o título do agendamento"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="data">Data *</label>
+          <input
+            type="date"
+            id="data"
+            [(ngModel)]="novoAgendamento.data"
+            name="data"
+            required
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="descricao">Descrição *</label>
+          <textarea
+            id="descricao"
+            [(ngModel)]="novoAgendamento.descricao"
+            name="descricao"
+            required
+            placeholder="Descreva detalhes do agendamento..."
+            class="form-textarea"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar" (click)="fecharFormulario()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-salvar">
+            {{ agendamentoEditando ? 'Atualizar' : 'Agendar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de agendamentos -->
+  <div class="agendamentos-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Agendamentos</h2>
+        <span class="total">{{ agendamentos.length }} agendamento(s)</span>
+      </div>
+
+      <!-- Grid de agendamentos -->
+      <div class="agendamentos-grid" *ngIf="agendamentos.length > 0">
+        <div class="agendamento-card" *ngFor="let agendamento of agendamentos">
+          <div class="card-header">
+            <h3>{{ agendamento.titulo }}</h3>
+            <span class="status-badge" [class]="getStatusClass(agendamento.status)">
+              {{ getStatusText(agendamento.status) }}
+            </span>
+          </div>
+
+          <div class="card-content">
+            <div class="agendamento-info">
+              <div class="info-item">
+                <i class="icon">📅</i>
+                <span>{{ formatarData(agendamento.data) }}</span>
+              </div>
+              <div class="info-item">
+                <i class="icon">👤</i>
+                <span>{{ agendamento.usuario }}</span>
+              </div>
+            </div>
+
+            <p class="descricao">{{ agendamento.descricao }}</p>
+          </div>
+
+          <div class="card-actions">
+            <button
+              class="btn-action btn-editar"
+              (click)="editarAgendamento(agendamento)"
+              [disabled]="agendamento.status === 'cancelado'"
+            >
+              <i class="icon">✏️</i>
+              Editar
+            </button>
+
+            <!-- Dropdown de status -->
+            <div class="status-dropdown">
+              <select
+                [value]="agendamento.status"
+                (change)="alterarStatus(agendamento.id, $any($event.target).value)"
+                class="status-select"
+                title="Alterar status do agendamento"
+              >
+                <option value="ativo">Ativo</option>
+                <option value="concluido">Concluído</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <button
+              class="btn-action btn-excluir"
+              (click)="excluirAgendamento(agendamento.id)"
+            >
+              <i class="icon">🗑️</i>
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado vazio -->
+      <div class="empty-state" *ngIf="agendamentos.length === 0">
+        <div class="empty-icon">📅</div>
+        <h3>Nenhum agendamento encontrado</h3>
+        <p>Clique no botão "Novo Agendamento" para criar seu primeiro agendamento.</p>
+        <button class="btn-criar-primeiro" (click)="abrirFormulario()">
+          Criar Primeiro Agendamento
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

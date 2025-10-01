@@ -1,0 +1,229 @@
+<div class="sobre-nos-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="animated-text">Sobre o</span>
+          <span class="highlight">INOVALAB</span>
+        </h1>
+        <p class="hero-description">
+          Somos uma empresa dedicada à inovação em laboratórios, combinando ciência de ponta
+          com tecnologia avançada para transformar o futuro da pesquisa e análises.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">Anos de Experiência</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Projetos Realizados</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Especialistas</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="particle-container">
+          <div class="particle"
+               *ngFor="let particle of particles; trackBy: trackByFn"
+               [style.left.%]="particle.x"
+               [style.top.%]="particle.y"
+               [style.width.px]="particle.size"
+               [style.height.px]="particle.size"
+               [style.opacity]="particle.opacity">
+          </div>
+        </div>
+        <div class="dna-animation">
+          <div class="dna-helix">
+            <div class="helix-base" *ngFor="let i of [1,2,3,4,5,6,7,8]"
+                 [style.animation-delay.s]="i * 0.2">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Vision Values -->
+  <section class="mission-section">
+    <div class="container">
+      <div class="mission-grid">
+        <div class="mission-card">
+          <div class="card-icon">🎯</div>
+          <h3>Nossa Missão</h3>
+          <p>Fornecer soluções laboratoriais inovadoras e de alta qualidade, contribuindo para o avanço da ciência e o bem-estar da sociedade.</p>
+        </div>
+        <div class="mission-card">
+          <div class="card-icon">🔮</div>
+          <h3>Nossa Visão</h3>
+          <p>Ser reconhecida como a empresa líder em inovação laboratorial na América Latina, transformando a forma como a ciência é aplicada.</p>
+        </div>
+        <div class="mission-card values-card">
+          <div class="card-icon">💡</div>
+          <h3>Nossos Valores</h3>
+          <p>Investimos constantemente em novas tecnologias e metodologias.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="timeline-section">
+    <div class="container">
+      <h2 class="section-title">Nossa Jornada</h2>
+      <div class="timeline" #timelineContainer [class.visible]="isTimelineVisible">
+        <div class="timeline-item"
+             *ngFor="let event of timeline; let i = index"
+             [class.left]="i % 2 === 0"
+             [class.right]="i % 2 === 1"
+             [style.animation-delay.s]="i * 0.2">
+          <div class="timeline-content" [style.border-color]="event.color">
+            <div class="timeline-header" [style.background-color]="event.color">
+              <span class="timeline-icon">{{ event.icon }}</span>
+              <span class="timeline-year">{{ event.year }}</span>
+            </div>
+            <div class="timeline-body">
+              <h4>{{ event.title }}</h4>
+              <p>{{ event.description }}</p>
+            </div>
+          </div>
+          <div class="timeline-dot" [style.background-color]="event.color"></div>
+        </div>
+        <div class="timeline-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <div class="container">
+      <h2 class="section-title">Nossa Equipe</h2>
+      <div class="team-showcase">
+        <div class="team-controls">
+          <button class="nav-btn prev" (click)="prevTeamMember()" [disabled]="activeTeamMember === 0">
+            ←
+          </button>
+          <div class="team-indicators">
+            <button *ngFor="let member of teamMembers; let i = index"
+                    class="team-indicator"
+                    [class.active]="i === activeTeamMember"
+                    (click)="selectTeamMember(i)">
+              {{ i + 1 }}
+            </button>
+          </div>
+          <button class="nav-btn next" (click)="nextTeamMember()" [disabled]="activeTeamMember === teamMembers.length - 1">
+            →
+          </button>
+        </div>
+
+        <div class="team-content">
+          <div class="team-member-card" *ngFor="let member of teamMembers; let i = index"
+               [class.active]="i === activeTeamMember"
+               [style.transform]="'translateX(' + (i - activeTeamMember) * 100 + '%)'">
+            <div class="member-image">
+              <img [src]="member.image"
+                   [alt]="member.name"
+                   [title]="member.name"
+                   alt="Membro da equipe"
+                   title="Membro da equipe" />
+              <div class="image-overlay">
+              </div>
+            </div>
+            <div class="member-info">
+              <h3 class="member-name">{{ member.name }}</h3>
+              <p class="member-position">{{ member.position }}</p>
+              <p class="member-description">{{ member.description }}</p>
+              <div class="member-specialties">
+                <span *ngFor="let specialty of member.specialties" class="specialty-tag">
+                  {{ specialty }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Culture Section -->
+  <section class="culture-section">
+    <div class="container">
+      <div class="culture-content">
+        <div class="culture-text">
+          <h2>Nossa Cultura</h2>
+          <p>
+            No INOVALAB, acreditamos que a inovação nasce da colaboração entre mentes brilhantes.
+            Nossa cultura é baseada na curiosidade científica, no trabalho em equipe e na busca
+            constante pela excelência.
+          </p>
+          <div class="culture-highlights">
+            <div class="highlight-item">
+              <span class="highlight-icon">🚀</span>
+              <div>
+                <h4>Inovação Constante</h4>
+                <p>Incentivamos a criatividade e a experimentação</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-icon">🤝</span>
+              <div>
+                <h4>Colaboração</h4>
+                <p>Trabalhamos juntos para alcançar objetivos comuns</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-icon">📚</span>
+              <div>
+                <h4>Aprendizado Contínuo</h4>
+                <p>Investimos no desenvolvimento de nossa equipe</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="culture-visual">
+          <div class="floating-icons">
+            <div class="floating-icon icon-1">🔬</div>
+            <div class="floating-icon icon-2">⚗️</div>
+            <div class="floating-icon icon-3">🧪</div>
+            <div class="floating-icon icon-4">📊</div>
+            <div class="floating-icon icon-5">💡</div>
+            <div class="floating-icon icon-6">🌟</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certificates Section -->
+  <section class="certificates-section">
+    <div class="container">
+      <h2 class="section-title">Certificações e Reconhecimentos</h2>
+      <div class="certificates-grid">
+        <div class="certificate-card">
+          <div class="certificate-icon">🏆</div>
+          <h4>ISO 9001:2015</h4>
+          <p>Certificação internacional de qualidade</p>
+        </div>
+        <div class="certificate-card">
+          <div class="certificate-icon">✅</div>
+          <h4>ABNT NBR</h4>
+          <p>Acreditação para laboratórios de ensaio</p>
+        </div>
+        <div class="certificate-card">
+          <div class="certificate-icon">🥇</div>
+          <h4>Prêmio Inovação</h4>
+          <p>Melhor laboratório da região - 2023</p>
+        </div>
+        <div class="certificate-card">
+          <div class="certificate-icon">🌱</div>
+          <h4>Selo Verde</h4>
+          <p>Certificação de sustentabilidade</p>
+        </div>
+      </div>
+    </div>
+</section>
+</div>

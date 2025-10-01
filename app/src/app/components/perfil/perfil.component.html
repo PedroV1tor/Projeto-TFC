@@ -1,0 +1,341 @@
+<div class="perfil-container">
+  <div class="perfil-card">
+    <div class="perfil-header">
+      <button class="back-button" (click)="voltarInicio()">
+        ← Voltar para o início
+      </button>
+      <h1>Meu Perfil</h1>
+      <p>Gerencie suas informações pessoais</p>
+    </div>
+
+    <div class="perfil-content" *ngIf="usuario">
+      <!-- Visualização do Perfil -->
+      <div class="perfil-view" *ngIf="!modoEdicao">
+        <div class="perfil-avatar">
+          <div class="avatar-placeholder">
+            <span class="avatar-text">{{ (usuario.nome?.charAt(0) || 'U') + (usuario.sobrenome?.charAt(0) || '') }}</span>
+          </div>
+        </div>
+
+        <div class="perfil-sections">
+          <!-- Dados Pessoais -->
+          <div class="info-section">
+            <h3>Dados Pessoais</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Nome Completo:</label>
+                <span>{{ (usuario.nome || '') + ' ' + (usuario.sobrenome || '') || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Email:</label>
+                <span>{{ usuario.email }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Usuário:</label>
+                <span>{{ usuario.nomeUsuario || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Telefone:</label>
+                <span>{{ usuario.telefone || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Matrícula:</label>
+                <span>{{ usuario.matricula || 'Não informada' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Informações Acadêmicas -->
+          <div class="info-section">
+            <h3>Informações Acadêmicas</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Instituição:</label>
+                <span>{{ 'Não informada' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Curso:</label>
+                <span>{{ 'Não informado' }}</span>
+              </div>
+            </div>
+
+            <div class="info-item bio-item">
+              <label>Biografia:</label>
+              <div class="bio-content">{{ 'Nenhuma biografia adicionada.' }}</div>
+            </div>
+          </div>
+
+          <!-- Endereço -->
+          <div class="info-section">
+            <h3>Endereço</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>CEP:</label>
+                <span>{{ usuario.cep || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Rua:</label>
+                <span>{{ usuario.rua || 'Não informada' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Bairro:</label>
+                <span>{{ usuario.bairro || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Número:</label>
+                <span>{{ usuario.numero || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Complemento:</label>
+                <span>{{ usuario.complemento || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Referência:</label>
+                <span>{{ usuario.referencia || 'Não informada' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Informações do Sistema -->
+          <div class="info-section">
+            <h3>Informações do Sistema</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Membro desde:</label>
+                <span>{{ formatarData(usuario.dataCriacao || '') }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="perfil-actions">
+          <button class="edit-button" (click)="ativarEdicao()">
+            Editar Perfil
+          </button>
+        </div>
+      </div>
+
+      <!-- Formulário de Edição -->
+      <div class="perfil-edit" *ngIf="modoEdicao">
+        <form class="edit-form" (ngSubmit)="salvarPerfil()">
+          <!-- Dados Pessoais -->
+          <div class="form-section">
+            <h3>Dados Pessoais</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nome">Nome: <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="nome"
+                  [(ngModel)]="perfilForm.nome"
+                  name="nome"
+                  class="form-input"
+                  placeholder="Digite seu nome"
+                  required>
+              </div>
+
+              <div class="form-group">
+                <label for="sobrenome">Sobrenome: <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="sobrenome"
+                  [(ngModel)]="perfilForm.sobrenome"
+                  name="sobrenome"
+                  class="form-input"
+                  placeholder="Digite seu sobrenome"
+                  required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                [value]="usuario.email"
+                disabled
+                class="form-input disabled">
+              <small class="form-hint">O email não pode ser alterado</small>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="usuario">Usuário:</label>
+                <input
+                  type="text"
+                  id="usuario"
+                  [(ngModel)]="perfilForm.usuario"
+                  name="usuario"
+                  class="form-input"
+                  placeholder="Nome de usuário">
+              </div>
+
+              <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input
+                  type="tel"
+                  id="telefone"
+                  [(ngModel)]="perfilForm.telefone"
+                  name="telefone"
+                  class="form-input"
+                  placeholder="(11) 99999-9999"
+                  (blur)="formatarTelefone()">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="matricula">Matrícula:</label>
+              <input
+                type="text"
+                id="matricula"
+                [(ngModel)]="perfilForm.matricula"
+                name="matricula"
+                class="form-input"
+                placeholder="Número da matrícula">
+            </div>
+          </div>
+
+          <!-- Informações Acadêmicas -->
+          <div class="form-section">
+            <h3>Informações Acadêmicas</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="instituicao">Instituição:</label>
+                <input
+                  type="text"
+                  id="instituicao"
+                  [(ngModel)]="perfilForm.instituicao"
+                  name="instituicao"
+                  class="form-input"
+                  placeholder="Nome da sua instituição">
+              </div>
+
+              <div class="form-group">
+                <label for="curso">Curso:</label>
+                <input
+                  type="text"
+                  id="curso"
+                  [(ngModel)]="perfilForm.curso"
+                  name="curso"
+                  class="form-input"
+                  placeholder="Seu curso ou área de estudo">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="bio">Biografia:</label>
+              <textarea
+                id="bio"
+                [(ngModel)]="perfilForm.bio"
+                name="bio"
+                class="form-input textarea"
+                placeholder="Conte um pouco sobre você, seus interesses e objetivos..."
+                rows="4"
+                maxlength="500"></textarea>
+              <small class="form-hint">{{ perfilForm.bio.length }}/500 caracteres</small>
+            </div>
+          </div>
+
+          <!-- Endereço -->
+          <div class="form-section">
+            <h3>Endereço</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input
+                  type="text"
+                  id="cep"
+                  [(ngModel)]="perfilForm.cep"
+                  name="cep"
+                  class="form-input"
+                  placeholder="00000-000"
+                  (blur)="formatarCEP()">
+              </div>
+
+              <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input
+                  type="text"
+                  id="bairro"
+                  [(ngModel)]="perfilForm.bairro"
+                  name="bairro"
+                  class="form-input"
+                  placeholder="Nome do bairro">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="rua">Rua:</label>
+                <input
+                  type="text"
+                  id="rua"
+                  [(ngModel)]="perfilForm.rua"
+                  name="rua"
+                  class="form-input"
+                  placeholder="Nome da rua">
+              </div>
+
+              <div class="form-group">
+                <label for="numero">Número:</label>
+                <input
+                  type="text"
+                  id="numero"
+                  [(ngModel)]="perfilForm.numero"
+                  name="numero"
+                  class="form-input"
+                  placeholder="Número da residência">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="complemento">Complemento:</label>
+                <input
+                  type="text"
+                  id="complemento"
+                  [(ngModel)]="perfilForm.complemento"
+                  name="complemento"
+                  class="form-input"
+                  placeholder="Apto, bloco, etc.">
+              </div>
+
+              <div class="form-group">
+                <label for="referencia">Referência:</label>
+                <input
+                  type="text"
+                  id="referencia"
+                  [(ngModel)]="perfilForm.referencia"
+                  name="referencia"
+                  class="form-input"
+                  placeholder="Ponto de referência">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-button" (click)="cancelarEdicao()">
+              Cancelar
+            </button>
+            <button type="submit" class="save-button">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

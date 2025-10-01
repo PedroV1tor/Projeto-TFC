@@ -1,0 +1,93 @@
+using Microsoft.EntityFrameworkCore;
+using InovalabAPI.Models;
+
+namespace InovalabAPI.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Agendamento> Agendamentos { get; set; }
+        public DbSet<Publicacao> Publicacoes { get; set; }
+        public DbSet<Orcamento> Orcamentos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configurações do modelo Usuario
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.NomeUsuario).IsUnique();
+                entity.Property(e => e.Email).IsRequired();
+                entity.Property(e => e.SenhaHash).IsRequired();
+                entity.Property(e => e.Nome).IsRequired();
+                entity.Property(e => e.Sobrenome).IsRequired();
+                entity.Property(e => e.NomeUsuario).IsRequired();
+                entity.Property(e => e.Telefone).IsRequired();
+                entity.Property(e => e.CEP).IsRequired();
+                entity.Property(e => e.Rua).IsRequired();
+                entity.Property(e => e.Bairro).IsRequired();
+            });
+
+            // Configurações do modelo Agendamento
+            modelBuilder.Entity<Agendamento>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Titulo).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Data).IsRequired();
+                entity.Property(e => e.Descricao).IsRequired().HasMaxLength(1000);
+                entity.Property(e => e.Usuario).HasMaxLength(100);
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.CriadoEm).IsRequired();
+                
+                entity.HasOne(e => e.UsuarioCriador)
+                      .WithMany()
+                      .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Configurações do modelo Publicacao
+            modelBuilder.Entity<Publicacao>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Titulo).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Resumo).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.Descricao).IsRequired().HasMaxLength(5000);
+                entity.Property(e => e.Autor).HasMaxLength(100);
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.CriadoEm).IsRequired();
+                
+                entity.HasOne(e => e.UsuarioCriador)
+                      .WithMany()
+                      .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Configurações do modelo Orcamento
+            modelBuilder.Entity<Orcamento>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Titulo).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Descricao).IsRequired().HasMaxLength(2000);
+                entity.Property(e => e.PrazoEntrega).IsRequired();
+                entity.Property(e => e.PrazoOrcamento).IsRequired();
+                entity.Property(e => e.Valor).HasPrecision(18, 2);
+                entity.Property(e => e.Cliente).HasMaxLength(100);
+                entity.Property(e => e.Responsavel).HasMaxLength(100);
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.CriadoEm).IsRequired();
+                
+                entity.HasOne(e => e.UsuarioCriador)
+                      .WithMany()
+                      .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+    }
+}

@@ -1,0 +1,53 @@
+.footer {
+  padding: 20px 0;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eaeaea;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #0000FF;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background-color: #8BC34A;
+    }
+  }
+}
+
+.university {
+  p {
+    color: #0000FF;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

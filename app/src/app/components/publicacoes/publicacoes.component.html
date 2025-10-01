@@ -1,0 +1,258 @@
+<div class="publicacoes-container">
+  <!-- Header da página -->
+  <div class="page-header">
+    <div class="container">
+      <h1>📝 Publicações INOVALAB</h1>
+      <p>Gerencie suas publicações e compartilhe conhecimento</p>
+      <button class="btn-nova-publicacao" (click)="abrirFormulario()">
+        <i class="icon">➕</i>
+        Nova Publicação
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulário de publicação (Modal) -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ publicacaoEditando ? 'Editar' : 'Nova' }} Publicação</h2>
+        <button class="btn-fechar" (click)="fecharFormulario()">✕</button>
+      </div>
+
+      <form class="publicacao-form" (ngSubmit)="salvarPublicacao()">
+        <div class="form-group">
+          <label for="titulo">Título *</label>
+          <input
+            type="text"
+            id="titulo"
+            [(ngModel)]="novaPublicacao.titulo"
+            name="titulo"
+            required
+            placeholder="Digite o título da publicação"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="resumo">Resumo *</label>
+          <textarea
+            id="resumo"
+            [(ngModel)]="novaPublicacao.resumo"
+            name="resumo"
+            required
+            placeholder="Escreva um resumo atrativo (mínimo 10 caracteres)..."
+            class="form-textarea resumo"
+            rows="3"
+          ></textarea>
+          <small class="char-count">{{ novaPublicacao.resumo.length }} caracteres</small>
+        </div>
+
+        <div class="form-group">
+          <label for="descricao">Descrição *</label>
+          <textarea
+            id="descricao"
+            [(ngModel)]="novaPublicacao.descricao"
+            name="descricao"
+            required
+            placeholder="Descreva detalhadamente o conteúdo (mínimo 50 caracteres)..."
+            class="form-textarea descricao"
+            rows="6"
+          ></textarea>
+          <small class="char-count">{{ novaPublicacao.descricao.length }} caracteres</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar" (click)="fecharFormulario()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-salvar">
+            {{ publicacaoEditando ? 'Atualizar' : 'Publicar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de publicações -->
+  <div class="publicacoes-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Suas Publicações</h2>
+        <span class="total">{{ publicacoes.length }} publicação(ões)</span>
+      </div>
+
+      <!-- Timeline de publicações -->
+      <div class="publicacoes-timeline" *ngIf="publicacoes.length > 0">
+        <div class="timeline-item" *ngFor="let publicacao of publicacoes; let i = index">
+          <div class="timeline-marker">
+            <div class="marker-dot" [class]="getStatusClass(publicacao.status)"></div>
+            <div class="marker-line" *ngIf="i < publicacoes.length - 1"></div>
+          </div>
+
+          <div class="timeline-content">
+            <div class="publication-card">
+              <div class="card-header">
+                <div class="header-main">
+                  <h3 class="publication-title">{{ publicacao.titulo }}</h3>
+                  <span class="status-badge" [class]="getStatusClass(publicacao.status)">
+                    {{ getStatusText(publicacao.status) }}
+                  </span>
+                </div>
+                <div class="publication-meta">
+                  <span class="publication-date">{{ formatarDataCompleta(publicacao.criadoEm) }}</span>
+                  <span class="publication-author">por {{ publicacao.autor }}</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <p class="publication-summary">{{ publicacao.resumo }}</p>
+                <div class="publication-description">
+                  <p>{{ truncarTexto(publicacao.descricao, 250) }}</p>
+                  <button class="read-more-btn"
+                          *ngIf="publicacao.descricao.length > 250"
+                          (click)="abrirPopup(publicacao)">
+                    Ler mais
+                  </button>
+                </div>
+
+                <div class="publication-stats">
+                  <div class="stat-badge">
+                    <i class="icon">📝</i>
+                    <span>{{ contarPalavras(publicacao.descricao) }} palavras</span>
+                  </div>
+                  <div class="stat-badge">
+                    <i class="icon">⏱️</i>
+                    <span>{{ calcularTempoLeitura(publicacao.descricao) }} min</span>
+                  </div>
+                  <div class="stat-badge">
+                    <i class="icon">📅</i>
+                    <span>{{ formatarDataRelativa(publicacao.criadoEm) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button
+                  class="action-btn edit-btn"
+                  (click)="editarPublicacao(publicacao)"
+                  [disabled]="publicacao.status === 'arquivada'"
+                  title="Editar publicação"
+                >
+                  <i class="icon">✏️</i>
+                  <span>Editar</span>
+                </button>
+
+                <div class="status-control">
+                  <label for="status-{{ publicacao.id }}" class="status-label">Status:</label>
+                  <select
+                    id="status-{{ publicacao.id }}"
+                    [value]="publicacao.status"
+                    (change)="alterarStatus(publicacao.id, $any($event.target).value)"
+                    class="status-select"
+                  >
+                    <option value="ativa">Ativa</option>
+                    <option value="rascunho">Rascunho</option>
+                    <option value="arquivada">Arquivada</option>
+                  </select>
+                </div>
+
+                <button
+                  class="action-btn delete-btn"
+                  (click)="excluirPublicacao(publicacao.id)"
+                  title="Excluir publicação"
+                >
+                  <i class="icon">🗑️</i>
+                  <span>Excluir</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado vazio -->
+      <div class="empty-state" *ngIf="publicacoes.length === 0">
+        <div class="empty-icon">📝</div>
+        <h3>Nenhuma publicação encontrada</h3>
+        <p>Clique no botão "Nova Publicação" para compartilhar seu primeiro conteúdo.</p>
+        <button class="btn-criar-primeiro" (click)="abrirFormulario()">
+          Criar Primeira Publicação
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup para visualizar conteúdo completo -->
+  <div class="popup-overlay" *ngIf="mostrarPopup" (click)="fecharPopupOverlay($event)">
+    <div class="popup-container" *ngIf="publicacaoSelecionada">
+      <div class="popup-header">
+        <h2 class="popup-title">{{ publicacaoSelecionada.titulo }}</h2>
+        <button class="popup-close-btn" (click)="fecharPopup()" title="Fechar">
+          <i class="icon">✕</i>
+        </button>
+      </div>
+
+      <div class="popup-meta">
+        <div class="meta-info">
+          <span class="meta-item">
+            <i class="icon">👤</i>
+            <span>{{ publicacaoSelecionada.autor || 'Autor não informado' }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">📅</i>
+            <span>{{ formatarDataCompleta(publicacaoSelecionada.criadoEm) }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">📊</i>
+            <span class="status-badge" [class]="getStatusClass(publicacaoSelecionada.status)">
+              {{ getStatusText(publicacaoSelecionada.status) }}
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="popup-content">
+        <div class="content-section">
+          <h3 class="section-title">📝 Resumo</h3>
+          <p class="summary-text">{{ publicacaoSelecionada.resumo }}</p>
+        </div>
+
+        <div class="content-section">
+          <h3 class="section-title">📖 Conteúdo Completo</h3>
+          <div class="content-text">
+            <p>{{ publicacaoSelecionada.descricao }}</p>
+          </div>
+        </div>
+
+        <div class="content-stats">
+          <div class="stat-item">
+            <i class="icon">📝</i>
+            <span>{{ contarPalavras(publicacaoSelecionada.descricao) }} palavras</span>
+          </div>
+          <div class="stat-item">
+            <i class="icon">⏱️</i>
+            <span>{{ calcularTempoLeitura(publicacaoSelecionada.descricao) }} min de leitura</span>
+          </div>
+          <div class="stat-item">
+            <i class="icon">🕒</i>
+            <span>{{ formatarDataRelativa(publicacaoSelecionada.criadoEm) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button class="btn-action btn-secondary" (click)="fecharPopup()">
+          <i class="icon">👁️</i>
+          <span>Fechar</span>
+        </button>
+        <button class="btn-action btn-primary"
+                (click)="editarPublicacao(publicacaoSelecionada); fecharPopup()"
+                [disabled]="publicacaoSelecionada.status === 'arquivada'"
+                title="Editar publicação">
+          <i class="icon">✏️</i>
+          <span>Editar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

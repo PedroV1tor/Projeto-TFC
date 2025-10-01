@@ -1,0 +1,54 @@
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img src="/favicon.png" alt="INOVALAB" class="logo-img">
+        <span class="logo-text">INOVA<span class="lab">LAB</span></span>
+      </a>
+    </div>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#" class="nav-link" (click)="goToHome(); $event.preventDefault()">HOME</a></li>
+        <li><a href="#" class="nav-link" (click)="goToInfo(); $event.preventDefault()">INFO</a></li>
+        <li><a href="#" class="nav-link" (click)="goToSobreNos(); $event.preventDefault()">SOBRE NÓS</a></li>
+        <li *ngIf="isLoggedIn" class="services-menu">
+          <a href="#" class="nav-link">SERVIÇOS</a>
+          <div class="services-dropdown">
+            <a href="#" class="dropdown-item" (click)="goToNovaPublicacao(); $event.preventDefault()">
+              <i class="icon">📝</i>
+              <span>Fazer nova publicação</span>
+            </a>
+            <a href="#" class="dropdown-item" (click)="goToLaboratorio(); $event.preventDefault()">
+              <i class="icon">🔬</i>
+              <span>Laboratório</span>
+            </a>
+            <a href="#" class="dropdown-item" (click)="goToOrcamento(); $event.preventDefault()">
+              <i class="icon">💰</i>
+              <span>Orçamento</span>
+            </a>
+            <a href="#" class="dropdown-item" (click)="goToRelatorios(); $event.preventDefault()">
+              <i class="icon">📊</i>
+              <span>Emitir Relatório</span>
+            </a>
+          </div>
+        </li>
+        <li><a href="#" class="nav-link" (click)="goToContato(); $event.preventDefault()">CONTATO</a></li>
+        <li *ngIf="!isLoggedIn"><a href="#" class="nav-link" (click)="goToLogin(); $event.preventDefault()">LOGIN</a></li>
+        <li *ngIf="isLoggedIn" class="user-menu">
+          <a href="#" class="nav-link" (click)="goToPerfil(); $event.preventDefault()">PERFIL</a>
+          <div class="user-dropdown">
+            <span class="user-name">{{ currentUser?.nome }}</span>
+            <button class="logout-btn" (click)="logout()">Sair</button>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <button type="button" class="menu-toggle" title="Abrir menu" aria-label="Abrir menu de navegação">
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
+  </div>
+</header>

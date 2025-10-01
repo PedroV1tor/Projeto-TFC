@@ -1,0 +1,57 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Reset básico e configuração da fonte Poppins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding-top: 90px; /* Compensa a altura do header fixo */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p, span, div {
+  font-family: 'Poppins', sans-serif;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+}
+
+a {
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+}
+
+/* Configurações específicas para diferentes pesos da fonte */
+.font-light { font-weight: 300; }
+.font-regular { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+/* Responsividade para o padding do body com header fixo */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px; /* Altura menor para mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 75px; /* Altura ainda menor para telas pequenas */
+  }
+}

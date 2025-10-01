@@ -1,0 +1,35 @@
+<div class="verificar-container">
+  <div class="verificar-card">
+    <div class="verificar-header">
+      <h1>INOVALAB</h1>
+      <p>Um código de verificação foi enviado para seu email.</p>
+      <p class="email-info">Por favor, insira o código de 5 dígitos abaixo:</p>
+    </div>
+    
+    <form class="verificar-form" (ngSubmit)="onVerificar()">
+      <div class="codigo-input-container">
+        <input 
+          type="text" 
+          [(ngModel)]="codigo" 
+          name="codigo"
+          maxlength="5"
+          placeholder="00000"
+          class="codigo-input"
+          required
+        >
+      </div>
+      
+      <button type="submit" class="verificar-button">Verificar</button>
+    </form>
+    
+    <div class="verificar-footer">
+      <a href="#" class="reenviar-link" (click)="reenviarCodigo(); $event.preventDefault()">
+        Reenviar código
+      </a>
+      <br>
+      <a href="#" class="voltar-link" (click)="voltarParaLogin(); $event.preventDefault()">
+        Voltar para login
+      </a>
+    </div>
+  </div>
+</div>

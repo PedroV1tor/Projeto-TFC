@@ -1,0 +1,90 @@
+<div class="redefinir-container">
+  <div class="redefinir-card">
+    <div class="redefinir-header">
+      <h1>Redefinir Senha</h1>
+      <p>Crie uma nova senha para sua conta</p>
+      <p class="email-info">{{ email }}</p>
+    </div>
+    
+    <form class="redefinir-form" (ngSubmit)="onRedefinir()">
+      <div class="form-group">
+        <label for="novaSenha">Nova Senha:</label>
+        <div class="password-input-container">
+          <input 
+            type="password" 
+            id="novaSenha" 
+            name="novaSenha" 
+            [(ngModel)]="novaSenha" 
+            required 
+            placeholder="Digite sua nova senha"
+            class="form-input"
+            minlength="6"
+          >
+          <button 
+            type="button" 
+            class="show-password-btn"
+            (click)="mostrarSenha('novaSenha')"
+            title="Mostrar/Ocultar senha"
+          >
+            👁️
+          </button>
+        </div>
+        <small class="password-hint">A senha deve ter pelo menos 6 caracteres</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmarSenha">Confirmar Nova Senha:</label>
+        <div class="password-input-container">
+          <input 
+            type="password" 
+            id="confirmarSenha" 
+            name="confirmarSenha" 
+            [(ngModel)]="confirmarSenha" 
+            required 
+            placeholder="Confirme sua nova senha"
+            class="form-input"
+            [class.error]="confirmarSenha && novaSenha !== confirmarSenha"
+          >
+          <button 
+            type="button" 
+            class="show-password-btn"
+            (click)="mostrarSenha('confirmarSenha')"
+            title="Mostrar/Ocultar senha"
+          >
+            👁️
+          </button>
+        </div>
+        <small 
+          class="password-error" 
+          *ngIf="confirmarSenha && novaSenha !== confirmarSenha"
+        >
+          As senhas não coincidem
+        </small>
+      </div>
+
+      <div class="password-requirements">
+        <h4>Requisitos da senha:</h4>
+        <ul>
+          <li [class.valid]="novaSenha.length >= 6">Pelo menos 6 caracteres</li>
+          <li [class.valid]="temLetraMaiuscula">Pelo menos uma letra maiúscula</li>
+          <li [class.valid]="temNumero">Pelo menos um número</li>
+          <li [class.valid]="novaSenha === confirmarSenha && novaSenha.length > 0">Senhas coincidem</li>
+        </ul>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="redefinir-button"
+        [disabled]="!novaSenha || !confirmarSenha || novaSenha !== confirmarSenha || novaSenha.length < 6"
+      >
+        Redefinir Senha
+      </button>
+    </form>
+    
+    <div class="redefinir-footer">
+      <button type="button" class="voltar-button" (click)="voltarParaLogin()">
+        ← Voltar para login
+      </button>
+    </div>
+  </div>
+</div>

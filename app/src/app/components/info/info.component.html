@@ -1,0 +1,154 @@
+<div class="info-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="gradient-text">INOVALAB</span>
+        <span class="subtitle">Inovação em Laboratórios</span>
+      </h1>
+      <p class="hero-description">
+        Transformando a ciência através da tecnologia e inovação.
+        Oferecemos soluções completas para laboratórios com excelência e qualidade.
+      </p>
+      <div class="floating-elements">
+        <div class="float-element element-1">🔬</div>
+        <div class="float-element element-2">⚗️</div>
+        <div class="float-element element-3">🧪</div>
+        <div class="float-element element-4">🔬</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number">{{ stats.clients.current }}{{ stats.clients.suffix }}</div>
+          <div class="stat-label">Clientes Atendidos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-number">{{ stats.projects.current }}{{ stats.projects.suffix }}</div>
+          <div class="stat-label">Projetos Realizados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-number">{{ stats.success.current }}{{ stats.success.suffix }}</div>
+          <div class="stat-label">Taxa de Sucesso</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Cards Carousel -->
+  <section class="carousel-section">
+    <div class="container">
+      <h2 class="section-title">Nossos Diferenciais</h2>
+      <div class="carousel-container">
+        <button class="carousel-btn prev-btn" (click)="prevCard()" [disabled]="isAnimating">
+          <i class="arrow-left">←</i>
+        </button>
+
+        <div class="cards-wrapper">
+          <div class="card-container"
+               *ngFor="let card of infoCards; let i = index"
+               [class.active]="i === currentCardIndex"
+               [style.transform]="'translateX(' + (i - currentCardIndex) * 100 + '%)'">
+            <div class="info-card"
+                 [style.border-color]="card.color"
+                 (mouseenter)="onCardHover(i)"
+                 (mouseleave)="onCardLeave()">
+              <div class="card-header" [style.background-color]="card.color">
+                <div class="card-icon">{{ card.icon }}</div>
+                <h3 class="card-title">{{ card.title }}</h3>
+              </div>
+              <div class="card-body">
+                <p class="card-description">{{ card.description }}</p>
+                <ul class="card-details">
+                  <li *ngFor="let detail of card.details" class="detail-item">
+                    <span class="detail-icon">✓</span>
+                    {{ detail }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-btn next-btn" (click)="nextCard()" [disabled]="isAnimating">
+          <i class="arrow-right">→</i>
+        </button>
+      </div>
+
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        <button *ngFor="let card of infoCards; let i = index"
+                class="indicator"
+                [class.active]="i === currentCardIndex"
+                [style.background-color]="i === currentCardIndex ? card.color : ''"
+                [title]="'Ver ' + card.title"
+                [attr.aria-label]="'Ir para ' + card.title"
+                (click)="goToCard(i)">
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Overview -->
+  <section class="services-section">
+    <div class="container">
+      <h2 class="section-title">Nossos Serviços</h2>
+      <div class="services-grid">
+        <div class="service-card" *ngFor="let service of services; let i = index"
+             [style.animation-delay]="i * 0.2 + 's'">
+          <div class="service-icon">{{ service.icon }}</div>
+          <h3 class="service-name">{{ service.name }}</h3>
+          <p class="service-description">{{ service.description }}</p>
+          <ul class="service-features">
+            <li *ngFor="let feature of service.features">{{ feature }}</li>
+          </ul>
+          <div class="service-price">{{ service.price }}</div>
+          <button class="service-btn" title="Saiba mais sobre este serviço">Saiba Mais</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology Section -->
+  <section class="tech-section">
+    <div class="container">
+      <h2 class="section-title">Tecnologia de Ponta</h2>
+      <div class="tech-content">
+        <div class="tech-text">
+          <h3>Equipamentos Modernos</h3>
+          <p>Utilizamos equipamentos de última geração para garantir resultados precisos e confiáveis em todas as análises.</p>
+          <div class="tech-features">
+            <div class="tech-feature">
+              <span class="tech-icon">🎯</span>
+              <span>Precisão de 99.9%</span>
+            </div>
+            <div class="tech-feature">
+              <span class="tech-icon">⚡</span>
+              <span>Resultados Rápidos</span>
+            </div>
+            <div class="tech-feature">
+              <span class="tech-icon">🔒</span>
+              <span>Segurança Total</span>
+            </div>
+          </div>
+        </div>
+        <div class="tech-animation">
+          <div class="dna-helix">
+            <div class="helix-strand strand-1"></div>
+            <div class="helix-strand strand-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+
+</div>

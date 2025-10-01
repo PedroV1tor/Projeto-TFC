@@ -1,0 +1,315 @@
+.hero {
+  padding: 100px 0 0 0;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  height: 100%;
+  min-height: calc(100vh - 100px);
+}
+
+// Texto à esquerda
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 10;
+
+  .hero-paragraph {
+    color: #2B5CE6;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 30px;
+    max-width: 280px;
+  }
+
+  .read-more {
+    background-color: #8BC34A;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #7CB342;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Seção central com imagem e logo de fundo
+.hero-center {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 600px;
+
+    .logo-background {
+    position: absolute;
+    z-index: 1;
+
+
+    .background-logo {
+      width: 100%;
+      height: 700px;
+      object-fit: contain;
+    }
+  }
+
+  .person-container {
+    position: relative;
+    z-index: 5;
+    height: 100%;
+
+    .person-img {
+      width: 570px;
+      height: 100%;
+      object-fit: cover;
+
+    }
+  }
+}
+
+// Texto à direita
+.hero-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 10;
+
+  .innovation-text {
+    text-align: right;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    line-height: 0.9;
+
+    .inova {
+      color: #2B5CE6;
+      font-size: 72px;
+      display: block;
+    }
+
+    .cao {
+      color: #2B5CE6;
+      font-size: 72px;
+    }
+
+    .ampersand {
+      color: #8BC34A;
+      font-size: 72px;
+      margin-left: 10px;
+    }
+
+    .criati {
+      color: #8BC34A;
+      font-size: 72px;
+      display: block;
+    }
+
+    .vidade {
+      color: #8BC34A;
+      font-size: 72px;
+      display: block;
+    }
+  }
+}
+
+// Marca da universidade
+.university-brand {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  color: #2B5CE6;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+// Ícones de redes sociais
+.social-icons {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+
+  .social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &.facebook {
+      background-color: #1877F2;
+
+      &:hover {
+        background-color: #166FE5;
+        transform: translateY(-3px);
+      }
+    }
+
+    &.instagram {
+      background: linear-gradient(45deg, #E4405F, #833AB4, #C13584);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(196, 53, 132, 0.4);
+      }
+    }
+
+    &.twitter {
+      background-color: #1DA1F2;
+
+      &:hover {
+        background-color: #0D8BD9;
+        transform: translateY(-3px);
+      }
+    }
+
+    &.whatsapp {
+      background-color: #25D366;
+
+      &:hover {
+        background-color: #20BD5A;
+        transform: translateY(-3px);
+      }
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 1200px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 60px;
+  }
+
+    .hero-center {
+    order: 1;
+    height: 500px;
+
+    .logo-background .background-logo {
+      width: 320px;
+      height: 320px;
+    }
+
+    .person-container .person-img {
+      width: 250px;
+      height: 375px;
+    }
+  }
+
+  .hero-text {
+    order: 2;
+    align-items: center;
+
+    .hero-paragraph {
+      text-align: center;
+      max-width: 400px;
+    }
+  }
+
+  .hero-right {
+    order: 3;
+    justify-content: center;
+
+    .innovation-text {
+      text-align: center;
+
+      .inova, .cao, .criati, .vidade {
+        font-size: 56px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .hero-content {
+    gap: 40px;
+  }
+
+    .hero-center {
+    height: 400px;
+
+    .logo-background .background-logo {
+      width: 250px;
+      height: 250px;
+    }
+
+    .person-container .person-img {
+      width: 200px;
+      height: 300px;
+    }
+  }
+
+  .hero-right .innovation-text {
+    .inova, .cao, .criati, .vidade {
+      font-size: 42px;
+    }
+  }
+
+  .university-brand {
+    font-size: 10px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .social-icons {
+    bottom: 20px;
+    left: 20px;
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}

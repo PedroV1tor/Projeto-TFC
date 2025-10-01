@@ -1,0 +1,323 @@
+<div class="orcamento-container">
+  <div class="header-section">
+    <h1 class="page-title">
+      <i class="fas fa-calculator"></i>
+      Gestão de Orçamentos
+    </h1>
+    <div class="header-actions">
+      <button class="btn btn-estatisticas" (click)="toggleEstatisticas()">
+        <i class="fas fa-chart-bar"></i>
+        {{ mostrarEstatisticas ? 'Ocultar' : 'Mostrar' }} Estatísticas
+      </button>
+      <button class="btn btn-primary" (click)="abrirFormulario()">
+        <i class="fas fa-plus"></i>
+        Fazer orçamento
+      </button>
+    </div>
+  </div>
+
+  <!-- Estatísticas -->
+  <div class="estatisticas-section" *ngIf="mostrarEstatisticas">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fas fa-clipboard-list"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ getEstatisticas().total }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+      </div>
+      <div class="stat-card pendente">
+        <i class="fas fa-clock"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ getEstatisticas().pendentes }}</span>
+          <span class="stat-label">Pendentes</span>
+        </div>
+      </div>
+      <div class="stat-card aprovado">
+        <i class="fas fa-check-circle"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ getEstatisticas().aprovados }}</span>
+          <span class="stat-label">Aprovados</span>
+        </div>
+      </div>
+      <div class="stat-card rejeitado">
+        <i class="fas fa-times-circle"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ getEstatisticas().rejeitados }}</span>
+          <span class="stat-label">Rejeitados</span>
+        </div>
+      </div>
+      <div class="stat-card concluido">
+        <i class="fas fa-flag-checkered"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ getEstatisticas().concluidos }}</span>
+          <span class="stat-label">Concluídos</span>
+        </div>
+      </div>
+      <div class="stat-card valor">
+        <i class="fas fa-dollar-sign"></i>
+        <div class="stat-info">
+          <span class="stat-number">{{ formatarMoeda(getEstatisticas().valorTotal) }}</span>
+          <span class="stat-label">Valor Total</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filter-section">
+    <div class="filter-tabs">
+      <button
+        class="filter-tab"
+        [class.active]="filtroStatus === 'todos'"
+        (click)="filtrarPorStatus('todos')">
+        Todos
+      </button>
+      <button
+        class="filter-tab"
+        [class.active]="filtroStatus === 'pendente'"
+        (click)="filtrarPorStatus('pendente')">
+        Pendentes
+      </button>
+      <button
+        class="filter-tab"
+        [class.active]="filtroStatus === 'aprovado'"
+        (click)="filtrarPorStatus('aprovado')">
+        Aprovados
+      </button>
+      <button
+        class="filter-tab"
+        [class.active]="filtroStatus === 'rejeitado'"
+        (click)="filtrarPorStatus('rejeitado')">
+        Rejeitados
+      </button>
+      <button
+        class="filter-tab"
+        [class.active]="filtroStatus === 'concluido'"
+        (click)="filtrarPorStatus('concluido')">
+        Concluídos
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de Orçamentos -->
+  <div class="orcamentos-list">
+    <div *ngIf="orcamentos.length === 0" class="empty-state">
+      <i class="fas fa-clipboard-list"></i>
+      <h3>Nenhum orçamento encontrado</h3>
+      <p>{{ filtroStatus === 'todos' ? 'Comece criando seu primeiro orçamento.' : 'Não há orçamentos com este status.' }}</p>
+    </div>
+
+    <div class="orcamento-card" *ngFor="let orcamento of orcamentos">
+      <div class="card-header">
+        <div class="title-section">
+          <h3 class="orcamento-titulo">{{ orcamento.titulo }}</h3>
+          <span class="status-badge" [ngClass]="getStatusClass(orcamento.status)">
+            {{ getStatusText(orcamento.status) }}
+          </span>
+        </div>
+        <div class="actions-menu">
+          <button class="btn-menu" title="Mais opções" aria-label="Menu de ações do orçamento">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <div class="dropdown-content">
+            <button (click)="editarOrcamento(orcamento)">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button *ngIf="orcamento.status === 'pendente'" (click)="aprovarOrcamento(orcamento.id)">
+              <i class="fas fa-check"></i> Aprovar
+            </button>
+            <button *ngIf="orcamento.status === 'pendente'" (click)="rejeitarOrcamento(orcamento.id)">
+              <i class="fas fa-times"></i> Rejeitar
+            </button>
+            <button *ngIf="orcamento.status === 'aprovado'" (click)="concluirOrcamento(orcamento.id)">
+              <i class="fas fa-flag-checkered"></i> Concluir
+            </button>
+            <button (click)="excluirOrcamento(orcamento.id)" class="btn-danger">
+              <i class="fas fa-trash"></i> Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-content">
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <div>
+              <span class="label">Cliente:</span>
+              <span class="value">{{ orcamento.cliente || 'Não informado' }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-user-tie"></i>
+            <div>
+              <span class="label">Responsável:</span>
+              <span class="value">{{ orcamento.responsavel || 'Não informado' }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <span class="label">Prazo Orçamento:</span>
+              <span class="value" [class.prazo-vencido]="isPrazoVencido(orcamento.prazoOrcamento)">
+                {{ formatarData(orcamento.prazoOrcamento) }}
+                <span *ngIf="!isPrazoVencido(orcamento.prazoOrcamento)" class="dias-restantes">
+                  ({{ diasRestantes(orcamento.prazoOrcamento) }} dias)
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-truck"></i>
+            <div>
+              <span class="label">Prazo Entrega:</span>
+              <span class="value">
+                {{ formatarData(orcamento.prazoEntrega) }}
+              </span>
+            </div>
+          </div>
+          <div class="info-item" *ngIf="orcamento.valor">
+            <i class="fas fa-dollar-sign"></i>
+            <div>
+              <span class="label">Valor:</span>
+              <span class="value valor">{{ formatarMoeda(orcamento.valor) }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-plus"></i>
+            <div>
+              <span class="label">Criado em:</span>
+              <span class="value">{{ formatarDataHora(orcamento.criadoEm) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="descricao-section">
+          <h4><i class="fas fa-file-alt"></i> Descrição</h4>
+          <p>{{ orcamento.descricao }}</p>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal do Formulário -->
+<div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>
+        <i class="fas fa-calculator"></i>
+        {{ orcamentoEditando ? 'Editar Orçamento' : 'Novo Orçamento' }}
+      </h2>
+      <button class="btn-close" (click)="fecharFormulario()" title="Fechar" aria-label="Fechar modal">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form class="orcamento-form" (ngSubmit)="salvarOrcamento()">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="titulo">
+            <i class="fas fa-heading"></i>
+            Título *
+          </label>
+          <input
+            type="text"
+            id="titulo"
+            [(ngModel)]="novoOrcamento.titulo"
+            name="titulo"
+            placeholder="Digite o título do orçamento"
+            required
+            maxlength="200">
+        </div>
+
+        <div class="form-group">
+          <label for="cliente">
+            <i class="fas fa-user"></i>
+            Cliente
+          </label>
+          <input
+            type="text"
+            id="cliente"
+            [(ngModel)]="novoOrcamento.cliente"
+            name="cliente"
+            placeholder="Nome do cliente"
+            maxlength="100">
+        </div>
+
+        <div class="form-group">
+          <label for="valor">
+            <i class="fas fa-dollar-sign"></i>
+            Valor Estimado
+          </label>
+          <input
+            type="number"
+            id="valor"
+            [(ngModel)]="novoOrcamento.valor"
+            name="valor"
+            placeholder="0,00"
+            min="0"
+            step="0.01">
+        </div>
+
+        <div class="form-group">
+          <label for="prazoOrcamento">
+            <i class="fas fa-calendar-alt"></i>
+            Prazo do Orçamento *
+          </label>
+          <input
+            type="date"
+            id="prazoOrcamento"
+            [(ngModel)]="novoOrcamento.prazoOrcamento"
+            name="prazoOrcamento"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="prazoEntrega">
+            <i class="fas fa-truck"></i>
+            Prazo de Entrega *
+          </label>
+          <input
+            type="date"
+            id="prazoEntrega"
+            [(ngModel)]="novoOrcamento.prazoEntrega"
+            name="prazoEntrega"
+            required>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="descricao">
+            <i class="fas fa-file-alt"></i>
+            Descrição do Serviço/Produto *
+          </label>
+          <textarea
+            id="descricao"
+            [(ngModel)]="novoOrcamento.descricao"
+            name="descricao"
+            placeholder="Descreva detalhadamente o serviço ou produto"
+            required
+            rows="4"
+            maxlength="2000"></textarea>
+          <small class="char-count">{{ novoOrcamento.descricao.length }}/2000 caracteres</small>
+        </div>
+
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="fecharFormulario()">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save"></i>
+          {{ orcamentoEditando ? 'Atualizar' : 'Criar' }} Orçamento
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

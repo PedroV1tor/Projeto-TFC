@@ -1,0 +1,253 @@
+<div class="home-container">
+  <app-hero></app-hero>
+
+  <!-- Seção de Novidades/Inovações -->
+  <section class="innovation-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Novidades em Inovação</h2>
+        <p>Descubra as últimas tendências e oportunidades no mundo da inovação tecnológica</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="innovation-card"
+             *ngFor="let card of cardsInovacao"
+             [class.featured]="card.featured">
+          <div class="card-image">
+            <div class="icon-container">
+              <i>{{ card.icone }}</i>
+            </div>
+          </div>
+          <div class="card-content">
+            <span class="card-date">{{ card.data }}</span>
+            <span class="card-category">{{ card.categoria }}</span>
+            <h3>{{ card.titulo }}</h3>
+            <p>{{ card.resumo }}</p>
+            <button class="card-link" (click)="abrirPopupInovacao(card)">
+              Saiba mais →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-footer">
+        <button class="view-all-btn">Ver todas as novidades</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Estatísticas -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">150+</div>
+          <div class="stat-label">Projetos de Inovação</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Estudantes Impactados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">25+</div>
+          <div class="stat-label">Parcerias Ativas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Anos de Experiência</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline de Publicações -->
+  <section class="timeline-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>📝 Timeline de Publicações</h2>
+        <p>Acompanhe as últimas publicações e novidades da comunidade INOVALAB</p>
+      </div>
+
+      <div class="timeline-container" *ngIf="publicacoesTimeline.length > 0">
+        <div class="timeline-item" *ngFor="let publicacao of publicacoesTimeline; let i = index">
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+            <div class="marker-line" *ngIf="i !== publicacoesTimeline.length - 1"></div>
+          </div>
+
+          <div class="timeline-content">
+            <div class="content-header">
+              <h3>{{ publicacao.titulo }}</h3>
+              <span class="timestamp">{{ formatarData(publicacao.criadoEm) }}</span>
+            </div>
+
+            <div class="content-meta">
+              <span class="author">📝 {{ publicacao.autor }}</span>
+            </div>
+
+            <p class="content-resume">{{ publicacao.resumo }}</p>
+            <p class="content-description">{{ truncarTexto(publicacao.descricao, 150) }}</p>
+
+            <div class="content-actions">
+              <button class="btn-read" (click)="abrirPopup(publicacao)">
+                <i class="icon">📖</i>
+                Ler mais
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-footer" *ngIf="publicacoesTimeline.length > 0">
+        <button class="btn-toggle-all" (click)="toggleMostrarTodas()">
+          {{ mostrarTodasPublicacoes ? 'Ver menos publicações' : 'Ver todas as publicações' }}
+        </button>
+      </div>
+
+      <!-- Estado vazio -->
+      <div class="timeline-empty" *ngIf="publicacoesTimeline.length === 0">
+        <div class="empty-icon">📝</div>
+        <h3>Nenhuma publicação disponível</h3>
+        <p>Seja o primeiro a compartilhar conhecimento na nossa comunidade!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popup para visualizar conteúdo completo -->
+  <div class="popup-overlay" *ngIf="mostrarPopup" (click)="fecharPopupOverlay($event)">
+    <div class="popup-container" *ngIf="publicacaoSelecionada">
+      <div class="popup-header">
+        <h2 class="popup-title">{{ publicacaoSelecionada.titulo }}</h2>
+        <button class="popup-close-btn" (click)="fecharPopup()" title="Fechar">
+          <i class="icon">✕</i>
+        </button>
+      </div>
+
+      <div class="popup-meta">
+        <div class="meta-info">
+          <span class="meta-item">
+            <i class="icon">👤</i>
+            <span>{{ publicacaoSelecionada.autor || 'Autor não informado' }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">📅</i>
+            <span>{{ formatarDataCompleta(publicacaoSelecionada.criadoEm) }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">📊</i>
+            <span class="status-badge" [class]="getStatusClass(publicacaoSelecionada.status)">
+              {{ getStatusText(publicacaoSelecionada.status) }}
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="popup-content">
+        <div class="content-section">
+          <h3 class="section-title">📝 Resumo</h3>
+          <p class="summary-text">{{ publicacaoSelecionada.resumo }}</p>
+        </div>
+
+        <div class="content-section">
+          <h3 class="section-title">📖 Conteúdo Completo</h3>
+          <div class="content-text">
+            <p>{{ publicacaoSelecionada.descricao }}</p>
+          </div>
+        </div>
+
+        <div class="content-stats">
+          <div class="stat-item">
+            <i class="icon">📝</i>
+            <span>{{ contarPalavras(publicacaoSelecionada.descricao) }} palavras</span>
+          </div>
+          <div class="stat-item">
+            <i class="icon">⏱️</i>
+            <span>{{ calcularTempoLeitura(publicacaoSelecionada.descricao) }} min de leitura</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button class="btn-action btn-secondary" (click)="fecharPopup()">
+          <i class="icon">👁️</i>
+          <span>Fechar</span>
+        </button>
+        <button class="btn-action btn-primary" (click)="curtirPublicacao(publicacaoSelecionada.id); fecharPopup()">
+          <i class="icon">❤️</i>
+          <span>Curtir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup para cards de inovação -->
+  <div class="popup-overlay" *ngIf="mostrarPopupInovacao" (click)="fecharPopupInovacaoOverlay($event)">
+    <div class="popup-container popup-inovacao" *ngIf="cardSelecionado">
+      <div class="popup-header">
+        <div class="popup-title-section">
+          <div class="popup-icon">{{ cardSelecionado.icone }}</div>
+          <div class="popup-title-content">
+            <h2 class="popup-title">{{ cardSelecionado.titulo }}</h2>
+            <span class="popup-category">{{ cardSelecionado.categoria }}</span>
+          </div>
+        </div>
+        <button class="popup-close-btn" (click)="fecharPopupInovacao()" title="Fechar">
+          <i class="icon">✕</i>
+        </button>
+      </div>
+
+      <div class="popup-meta">
+        <div class="meta-info">
+          <span class="meta-item">
+            <i class="icon">📅</i>
+            <span>{{ cardSelecionado.data }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">🏷️</i>
+            <span>{{ cardSelecionado.categoria }}</span>
+          </span>
+          <span class="meta-item">
+            <i class="icon">🔖</i>
+            <span>Novidade em Inovação</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="popup-content">
+        <div class="content-section">
+          <h3 class="section-title">📝 Resumo</h3>
+          <p class="summary-text">{{ cardSelecionado.resumo }}</p>
+        </div>
+
+        <div class="content-section">
+          <h3 class="section-title">📖 Conteúdo Completo</h3>
+          <div class="content-text">
+            <p>{{ cardSelecionado.conteudoCompleto }}</p>
+          </div>
+        </div>
+
+        <div class="content-stats">
+          <div class="stat-item">
+            <i class="icon">📝</i>
+            <span>{{ contarPalavras(cardSelecionado.conteudoCompleto) }} palavras</span>
+          </div>
+          <div class="stat-item">
+            <i class="icon">⏱️</i>
+            <span>{{ calcularTempoLeitura(cardSelecionado.conteudoCompleto) }} min de leitura</span>
+          </div>
+          <div class="stat-item">
+            <i class="icon">🏷️</i>
+            <span>{{ cardSelecionado.categoria }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button class="btn-action btn-secondary" (click)="fecharPopupInovacao()">
+          <span>Fechar</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,183 @@
+<div class="relatorios-container">
+  <!-- Header da página -->
+  <div class="page-header">
+    <div class="container">
+      <h1>📊 Relatórios INOVALAB</h1>
+      <p>Gere relatórios detalhados e exporte em PDF</p>
+    </div>
+  </div>
+
+  <!-- Seção Principal -->
+  <section class="principal-section" *ngIf="!relatorioSelecionado && publicacoesAtivas.length === 0">
+    <div class="container">
+      <h2 class="section-title">📝 Publicações do Sistema</h2>
+      <p class="section-description">Visualize todas as publicações ativas do sistema</p>
+
+      <!-- Botão para visualizar publicações ativas -->
+      <div class="acao-publicacoes">
+        <button class="btn-publicacoes-ativas"
+                (click)="exibirPublicacoesAtivas()"
+                [disabled]="carregando">
+          <span class="btn-icon">📝</span>
+          <span class="btn-text">Ver Todas as Publicações Ativas</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Publicações Ativas -->
+  <section class="publicacoes-ativas-section" *ngIf="publicacoesAtivas.length > 0 && !relatorioSelecionado">
+    <div class="container">
+      <h2 class="section-title">📝 Publicações Ativas ({{ publicacoesAtivas.length }})</h2>
+
+      <div class="publicacoes-grid">
+        <div class="publicacao-card" *ngFor="let publicacao of publicacoesAtivas">
+          <div class="publicacao-header">
+            <h3 class="publicacao-titulo">{{ publicacao.titulo }}</h3>
+            <span class="publicacao-status ativo">{{ publicacao.status }}</span>
+          </div>
+
+          <div class="publicacao-resumo">
+            <p>{{ publicacao.resumo }}</p>
+          </div>
+
+          <div class="publicacao-meta">
+            <div class="meta-item">
+              <span class="meta-label">Autor:</span>
+              <span class="meta-value">{{ publicacao.autor || 'Não informado' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Criado em:</span>
+              <span class="meta-value">{{ formatarData(publicacao.criadoEm) }}</span>
+            </div>
+          </div>
+
+          <div class="publicacao-stats">
+            <div class="stat-item">
+              <span class="stat-icon">👁️</span>
+              <span class="stat-value">{{ publicacao.visualizacoes }}</span>
+              <span class="stat-label">Visualizações</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-icon">❤️</span>
+              <span class="stat-value">{{ publicacao.curtidas }}</span>
+              <span class="stat-label">Curtidas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão para voltar -->
+      <div class="acao-voltar">
+        <button class="btn-voltar-resumo" (click)="publicacoesAtivas = []">
+          ← Voltar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seleção de Relatórios -->
+  <section class="selecao-relatorios" *ngIf="!relatorioSelecionado">
+    <div class="container">
+      <h2 class="section-title">📋 Selecione o Tipo de Relatório</h2>
+      <div class="tipos-grid">
+        <div class="tipo-card"
+             *ngFor="let tipo of tiposRelatorio"
+             (click)="selecionarRelatorio(tipo.id)"
+             [style.border-left-color]="tipo.cor">
+          <div class="tipo-icon" [style.color]="tipo.cor">{{ tipo.icone }}</div>
+          <div class="tipo-content">
+            <h3>{{ tipo.nome }}</h3>
+            <p>{{ tipo.descricao }}</p>
+          </div>
+          <div class="tipo-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros e Relatório -->
+  <section class="relatorio-section" *ngIf="relatorioSelecionado">
+    <div class="container">
+      <!-- Header do relatório -->
+      <div class="relatorio-header">
+        <div class="header-info">
+          <button class="btn-voltar" (click)="limparFiltros()">
+            ← Voltar
+          </button>
+          <div class="relatorio-titulo">
+            <h2>
+              <span [style.color]="getTipoRelatorio(relatorioSelecionado)?.cor">
+                {{ getTipoRelatorio(relatorioSelecionado)?.icone }}
+              </span>
+              {{ getTipoRelatorio(relatorioSelecionado)?.nome }}
+            </h2>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-exportar"
+                  (click)="exportarPDF()"
+                  [disabled]="carregando || (!dadosRelatorio.length && relatorioSelecionado !== 'resumo')">
+            <i class="icon">📄</i>
+            Exportar PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filtros-container">
+        <h3>🔍 Filtros</h3>
+        <div class="filtros-form">
+          <div class="filtro-group">
+            <label for="dataInicial">Data Inicial</label>
+            <input type="date"
+                   id="dataInicial"
+                   [(ngModel)]="filtro.dataInicial"
+                   class="filtro-input">
+          </div>
+
+          <div class="filtro-group">
+            <label for="dataFinal">Data Final</label>
+            <input type="date"
+                   id="dataFinal"
+                   [(ngModel)]="filtro.dataFinal"
+                   class="filtro-input">
+          </div>
+
+          <div class="filtro-actions">
+            <button class="btn-aplicar"
+                    (click)="aplicarFiltros()"
+                    [disabled]="carregando">
+              <span *ngIf="!carregando">Gerar Relatório</span>
+              <span *ngIf="carregando">
+                <div class="loading-spinner"></div>
+                Carregando...
+              </span>
+            </button>
+
+            <button class="btn-limpar"
+                    (click)="limparFiltros()"
+                    [disabled]="carregando">
+              Limpar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-container" *ngIf="carregando">
+        <div class="loading-spinner large"></div>
+        <p>Gerando relatório...</p>
+      </div>
+
+      <!-- Estado vazio -->
+      <div class="empty-state" *ngIf="!carregando && relatorioSelecionado !== 'resumo' && dadosRelatorio.length === 0 && mostrarFiltros">
+        <div class="empty-icon">📋</div>
+        <h3>Nenhum dado encontrado</h3>
+        <p>Tente ajustar os filtros de data ou verifique se existem dados no período selecionado.</p>
+      </div>
+    </div>
+  </section>
+</div>

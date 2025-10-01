@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Código Recuperação</title>
+</head>
+<body>
+    <h1>Teste de Verificação de Código</h1>
+    
+    <h2>1. Gerar Código</h2>
+    <button onclick="gerarCodigo()">Gerar Código para peedrovitor019@gmail.com</button>
+    <div id="resultGerar"></div>
+    
+    <h2>2. Verificar Código</h2>
+    <input type="text" id="codigo" placeholder="Digite o código de 5 dígitos" maxlength="5">
+    <button onclick="verificarCodigo()">Verificar Código</button>
+    <div id="resultVerificar"></div>
+
+    <script>
+        async function gerarCodigo() {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/recuperar-senha', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'peedrovitor019@gmail.com'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('resultGerar').innerHTML = 
+                    `<p style="color: green;">✅ ${data.message}</p>
+                     <p><strong>Verifique o console do backend para ver o código!</strong></p>`;
+            } catch (error) {
+                document.getElementById('resultGerar').innerHTML = 
+                    `<p style="color: red;">❌ Erro: ${error.message}</p>`;
+            }
+        }
+        
+        async function verificarCodigo() {
+            const codigo = document.getElementById('codigo').value;
+            if (codigo.length !== 5) {
+                alert('O código deve ter exatamente 5 dígitos!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/verificar-codigo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'peedrovitor019@gmail.com',
+                        codigo: codigo
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('resultVerificar').innerHTML = 
+                        `<p style="color: green;">✅ ${data.message}</p>`;
+                } else {
+                    const error = await response.json();
+                    document.getElementById('resultVerificar').innerHTML = 
+                        `<p style="color: red;">❌ Erro ${response.status}: ${error.message || 'Código inválido'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('resultVerificar').innerHTML = 
+                    `<p style="color: red;">❌ Erro de conexão: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
