@@ -4617,11 +4617,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pedro vitor\\Desktop\\Projeto TFC\\backend\\InovalabAPI.csproj",
+      "projectUniqueName": "C:\\Users\\pedro vitor\\Desktop\\TFC-II\\backend\\InovalabAPI.csproj",
       "projectName": "InovalabAPI",
-      "projectPath": "C:\\Users\\pedro vitor\\Desktop\\Projeto TFC\\backend\\InovalabAPI.csproj",
+      "projectPath": "C:\\Users\\pedro vitor\\Desktop\\TFC-II\\backend\\InovalabAPI.csproj",
       "packagesPath": "C:\\Users\\pedro vitor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pedro vitor\\Desktop\\Projeto TFC\\backend\\obj\\",
+      "outputPath": "C:\\Users\\pedro vitor\\Desktop\\TFC-II\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pedro vitor\\AppData\\Roaming\\NuGet\\NuGet.Config"

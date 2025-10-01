@@ -84,26 +84,38 @@ export class AuthService {
   login(email: string, senha: string): Observable<LoginResponse> {
     const loginRequest: LoginRequest = { email, senha };
 
+    console.log('AuthService: tentando fazer login para', email);
+
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginRequest)
       .pipe(
-        tap(response => {
-          // Salva o token e dados do usuário
-          if (typeof window !== 'undefined' && window.localStorage) {
-            localStorage.setItem('authToken', response.token);
-            localStorage.setItem('currentUser', JSON.stringify({
+        tap({
+          next: (response) => {
+            console.log('AuthService: login bem-sucedido para', email);
+
+            // Salva o token e dados do usuário
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.setItem('authToken', response.token);
+              localStorage.setItem('currentUser', JSON.stringify({
+                email: response.email,
+                nome: response.nome,
+                nomeUsuario: response.nomeUsuario
+              }));
+              console.log('AuthService: token salvo no localStorage:', response.token.substring(0, 20) + '...');
+            }
+
+            // Atualiza os subjects
+            this.currentUserSubject.next({
               email: response.email,
               nome: response.nome,
               nomeUsuario: response.nomeUsuario
-            }));
-          }
+            });
+            this.isLoggedInSubject.next(true);
 
-          // Atualiza os subjects
-          this.currentUserSubject.next({
-            email: response.email,
-            nome: response.nome,
-            nomeUsuario: response.nomeUsuario
-          });
-          this.isLoggedInSubject.next(true);
+            console.log('AuthService: estado de login atualizado para true');
+          },
+          error: (error) => {
+            console.error('AuthService: erro no login para', email, error);
+          }
         })
       );
   }
@@ -186,8 +198,15 @@ export class AuthService {
 
   getToken(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
-      return localStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        console.log('AuthService: retornando token existente:', token.substring(0, 20) + '...');
+      } else {
+        console.log('AuthService: nenhum token encontrado no localStorage');
+      }
+      return token;
     }
+    console.log('AuthService: ambiente não é navegador, retornando null');
     return null;
   }
 
@@ -212,5 +231,38 @@ export class AuthService {
     });
 
     return this.http.put(`${environment.apiUrl}/user/atualizar`, dados, { headers });
+  }
+
+  // Método de diagnóstico para verificar estado da autenticação
+  diagnosticarAutenticacao(): void {
+    console.log('=== DIAGNÓSTICO DE AUTENTICAÇÃO ===');
+    console.log('URL da API:', this.apiUrl);
+    console.log('Ambiente de produção:', environment.production);
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('authToken');
+      const user = localStorage.getItem('currentUser');
+
+      console.log('Token no localStorage:', token ? 'Presente' : 'Ausente');
+      if (token) {
+        console.log('Token (primeiros 20 chars):', token.substring(0, 20) + '...');
+      }
+
+      console.log('Dados do usuário no localStorage:', user ? 'Presente' : 'Ausente');
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          console.log('Dados do usuário:', userData);
+        } catch (e) {
+          console.log('Erro ao fazer parse dos dados do usuário:', e);
+        }
+      }
+    } else {
+      console.log('Ambiente não é navegador');
+    }
+
+    console.log('Estado atual isLoggedIn:', this.isLoggedIn);
+    console.log('Usuário atual:', this.currentUser);
+    console.log('=====================================');
   }
 }

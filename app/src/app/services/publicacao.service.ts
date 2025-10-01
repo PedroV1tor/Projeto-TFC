@@ -22,8 +22,11 @@ export class PublicacaoService {
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
-  //  console.log('Token atual:', token); // Log temporário para debug
-  //  console.log('Usuário logado:', this.authService.isLoggedIn); // Log temporário para debug
+    const isLoggedIn = this.authService.isLoggedIn;
+
+    console.log('PublicacaoService: criando headers para requisição');
+    console.log('PublicacaoService: usuário logado:', isLoggedIn);
+    console.log('PublicacaoService: token presente:', !!token);
 
     if (token) {
       return new HttpHeaders({

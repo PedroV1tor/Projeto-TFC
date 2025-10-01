@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Bdc5oe9/r4PGK34IqEVYcB2J2ayASiOpx3nZ3AjJDmtjw/yzvpAvTU8W48IIL6PurhuYHbAfsKhRNeSmrh0G/w==",
+  "dgSpecHash": "/5EqF6/2fpQ7DTCbUUco0rrsS6dL70i/7Ax1Yhl4I5Kumlk1wEWa/FJfZLZ2UJAqhvGMmcMXQjv84UlEjovEpQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\pedro vitor\\Desktop\\Projeto TFC\\backend\\InovalabAPI.csproj",
+  "projectFilePath": "C:\\Users\\pedro vitor\\Desktop\\TFC-II\\backend\\InovalabAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pedro vitor\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\pedro vitor\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
