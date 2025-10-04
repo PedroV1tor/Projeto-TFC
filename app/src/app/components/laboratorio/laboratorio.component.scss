@@ -4,7 +4,7 @@
   background: #f8f9fa;
 }
 
-/* Header da página */
+
 .page-header {
   background: linear-gradient(135deg, #12bb20 0%, #1556ce 100%);
   color: white;
@@ -66,7 +66,7 @@
   padding: 0 20px;
 }
 
-/* Modal */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -126,7 +126,7 @@
   }
 }
 
-/* Formulário */
+
 .agendamento-form {
   padding: 30px;
 }
@@ -206,7 +206,7 @@
   }
 }
 
-/* Seção de agendamentos */
+
 .agendamentos-section {
   padding: 60px 0;
 }
@@ -230,7 +230,7 @@
   }
 }
 
-/* Grid de agendamentos */
+
 .agendamentos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -386,7 +386,7 @@
   }
 }
 
-/* Estado vazio */
+
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -430,7 +430,7 @@
   }
 }
 
-/* Animações */
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -447,7 +447,7 @@
   }
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
   .page-header {
     padding: 40px 0;

@@ -18,11 +18,11 @@ export class PublicacoesComponent implements OnInit {
   mostrarFormulario = false;
   publicacaoEditando: Publicacao | null = null;
 
-  // Popup para visualizar conteúdo completo
+
   mostrarPopup = false;
   publicacaoSelecionada: Publicacao | null = null;
 
-  // Formulário
+
   novaPublicacao = {
     titulo: '',
     resumo: '',
@@ -72,26 +72,26 @@ export class PublicacoesComponent implements OnInit {
       return;
     }
 
-    // Validar tamanho mínimo do resumo
+
     if (this.novaPublicacao.resumo.length < 10) {
       alert('O resumo deve ter pelo menos 10 caracteres.');
       return;
     }
 
-    // Validar tamanho mínimo da descrição
+
     if (this.novaPublicacao.descricao.length < 50) {
       alert('A descrição deve ter pelo menos 50 caracteres.');
       return;
     }
 
-    // Debug: Verificar se o usuário está logado
+
     console.log('Usuário logado:', this.authService.isLoggedIn);
     console.log('Token atual:', this.authService.getToken());
     console.log('Dados da publicação:', this.novaPublicacao);
 
     try {
       if (this.publicacaoEditando) {
-        // Editando publicação existente
+
         this.publicacaoService.atualizarPublicacao(
           this.publicacaoEditando.id,
           this.novaPublicacao
@@ -107,7 +107,7 @@ export class PublicacoesComponent implements OnInit {
           }
         });
       } else {
-        // Criando nova publicação
+
         this.publicacaoService.criarPublicacao(this.novaPublicacao).subscribe({
           next: () => {
             alert('Publicação criada com sucesso!');
@@ -217,22 +217,22 @@ export class PublicacoesComponent implements OnInit {
     }
   }
 
-  // Métodos para controlar a popup
+
   abrirPopup(publicacao: Publicacao): void {
     this.publicacaoSelecionada = publicacao;
     this.mostrarPopup = true;
-    // Prevenir scroll do body quando popup estiver aberta
+
     document.body.style.overflow = 'hidden';
   }
 
   fecharPopup(): void {
     this.mostrarPopup = false;
     this.publicacaoSelecionada = null;
-    // Restaurar scroll do body
+
     document.body.style.overflow = 'auto';
   }
 
-  // Fechar popup ao clicar no overlay
+
   fecharPopupOverlay(event: Event): void {
     if (event.target === event.currentTarget) {
       this.fecharPopup();

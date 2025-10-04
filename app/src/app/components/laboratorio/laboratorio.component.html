@@ -1,5 +1,5 @@
 <div class="laboratorio-container">
-  <!-- Header da página -->
+  
   <div class="page-header">
     <div class="container">
       <h1>🔬 Laboratório INOVALAB</h1>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <!-- Formulário de agendamento (Modal) -->
+  
   <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <!-- Lista de agendamentos -->
+  
   <div class="agendamentos-section">
     <div class="container">
       <div class="section-title">
@@ -78,7 +78,7 @@
         <span class="total">{{ agendamentos.length }} agendamento(s)</span>
       </div>
 
-      <!-- Grid de agendamentos -->
+      
       <div class="agendamentos-grid" *ngIf="agendamentos.length > 0">
         <div class="agendamento-card" *ngFor="let agendamento of agendamentos">
           <div class="card-header">
@@ -113,7 +113,7 @@
               Editar
             </button>
 
-            <!-- Dropdown de status -->
+            
             <div class="status-dropdown">
               <select
                 [value]="agendamento.status"
@@ -138,7 +138,7 @@
         </div>
       </div>
 
-      <!-- Estado vazio -->
+      
       <div class="empty-state" *ngIf="agendamentos.length === 0">
         <div class="empty-icon">📅</div>
         <h3>Nenhum agendamento encontrado</h3>

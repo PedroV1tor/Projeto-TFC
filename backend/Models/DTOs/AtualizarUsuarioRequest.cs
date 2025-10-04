@@ -47,4 +47,3 @@ namespace InovalabAPI.Models.DTOs
         public string? Complemento { get; set; }
     }
 }
-

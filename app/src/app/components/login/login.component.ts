@@ -23,14 +23,14 @@ export class LoginComponent {
       return;
     }
 
-    // Validação básica de e-mail
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
       alert('Por favor, digite um e-mail válido.');
       return;
     }
 
-    // Tenta fazer login usando o serviço
+
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.router.navigate(['/']);
@@ -55,7 +55,7 @@ export class LoginComponent {
   }
 
   esqueceuSenha() {
-    // Redireciona para a página de recuperar senha
+
     this.router.navigate(['/recuperar-senha']);
   }
 }

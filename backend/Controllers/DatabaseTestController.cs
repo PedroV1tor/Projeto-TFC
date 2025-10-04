@@ -38,7 +38,7 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando usuários DIRETAMENTE do contexto...");
                 
-                // Busca direta no contexto do Entity Framework
+
                 var usuarios = await _context.Usuarios.ToListAsync();
                 
                 Console.WriteLine($"📊 Total de usuários encontrados no banco (direto): {usuarios.Count}");
@@ -81,7 +81,7 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando usuários através do SERVIÇO...");
                 
-                // Busca através do serviço
+
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var usuariosList = usuarios.ToList();
                 
@@ -251,7 +251,7 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine("🔍 [DatabaseTest] Gerando estatísticas completas...");
                 
-                // Estatísticas por data de criação
+
                 var usuariosPorData = await _context.Usuarios
                     .GroupBy(u => u.DataCriacao.Date)
                     .Select(g => new { Data = g.Key, Count = g.Count() })
@@ -276,7 +276,7 @@ namespace InovalabAPI.Controllers
                     .OrderBy(x => x.Data)
                     .ToListAsync();
 
-                // Ranges de datas
+
                 var dataMinUsuario = await _context.Usuarios.MinAsync(u => u.DataCriacao);
                 var dataMaxUsuario = await _context.Usuarios.MaxAsync(u => u.DataCriacao);
 

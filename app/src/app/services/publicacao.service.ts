@@ -46,39 +46,39 @@ export class PublicacaoService {
     });
   }
 
-  // Listar todas as publicações
+
   getPublicacoes(): Observable<Publicacao[]> {
     return this.http.get<Publicacao[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  // Obter publicações ativas para timeline
+
   getPublicacoesAtivas(): Observable<Publicacao[]> {
     return this.http.get<Publicacao[]>(`${this.apiUrl}/ativas`, { headers: this.getHeaders() });
   }
 
-  // Obter timeline das publicações
+
   getTimeline(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/timeline`, { headers: this.getHeaders() });
   }
 
-  // Obter publicação por ID
+
   getPublicacaoById(id: number): Observable<Publicacao> {
     return this.http.get<Publicacao>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  // Obter publicações por status
+
   getPublicacoesByStatus(status: string): Observable<Publicacao[]> {
     return this.http.get<Publicacao[]>(`${this.apiUrl}/status/${status}`, { headers: this.getHeaders() });
   }
 
-  // Obter minhas publicações
+
   getMinhasPublicacoes(): Observable<Publicacao[]> {
     return this.http.get<Publicacao[]>(`${this.apiUrl}/minhas`, { headers: this.getHeaders() });
   }
 
-  // Criar nova publicação
+
   criarPublicacao(publicacao: Omit<Publicacao, 'id' | 'criadoEm' | 'status' | 'visualizacoes' | 'curtidas'>): Observable<Publicacao> {
-    // Mapear os campos para o formato esperado pelo backend
+
     const dadosBackend = {
       Titulo: publicacao.titulo,
       Resumo: publicacao.resumo,
@@ -90,22 +90,22 @@ export class PublicacaoService {
     return this.http.post<Publicacao>(this.apiUrl, dadosBackend, { headers: this.getHeaders() });
   }
 
-  // Atualizar publicação
+
   atualizarPublicacao(id: number, publicacaoAtualizada: Partial<Publicacao>): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, publicacaoAtualizada, { headers: this.getHeaders() });
   }
 
-  // Excluir publicação
+
   excluirPublicacao(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  // Alterar status da publicação
+
   alterarStatus(id: number, novoStatus: 'ativa' | 'rascunho' | 'arquivada'): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { status: novoStatus }, { headers: this.getHeaders() });
   }
 
-  // Curtir publicação
+
   curtirPublicacao(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/curtir`, {}, { headers: this.getHeaders() });
   }

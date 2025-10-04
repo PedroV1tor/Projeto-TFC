@@ -186,7 +186,7 @@ export class SobreNosComponent implements OnInit, OnDestroy {
   }
 
   observeTimeline() {
-    // Simular observação do timeline para animação
+
     setTimeout(() => {
       this.isTimelineVisible = true;
     }, 500);
@@ -196,7 +196,7 @@ export class SobreNosComponent implements OnInit, OnDestroy {
     return item.id || index;
   }
 
-  // Métodos para controlar a visualização da equipe
+
   prevTeamMember() {
     if (this.activeTeamMember > 0) {
       this.activeTeamMember--;

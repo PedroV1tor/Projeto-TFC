@@ -35,7 +35,7 @@ namespace InovalabAPI.Controllers
                 return NotFound();
             }
 
-            // Retorna dados do usuário sem a senha
+
             var perfil = new
             {
                 usuario.Id,
@@ -102,7 +102,7 @@ namespace InovalabAPI.Controllers
                 return NotFound(new { message = "Usuário não encontrado" });
             }
 
-            // Atualizar dados do usuário
+
             usuario.Nome = request.Nome;
             usuario.Sobrenome = request.Sobrenome;
             usuario.Email = request.Email;

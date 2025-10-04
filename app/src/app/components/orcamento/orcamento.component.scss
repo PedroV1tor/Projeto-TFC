@@ -2,17 +2,17 @@
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  min-height: calc(100vh - 90px); /* Ajusta para compensar o header fixo */
+  min-height: calc(100vh - 90px); 
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 
   @media (max-width: 768px) {
     padding: 1rem;
-    min-height: calc(100vh - 80px); /* Altura menor para mobile */
+    min-height: calc(100vh - 80px); 
   }
 
   @media (max-width: 480px) {
     padding: 0.5rem;
-    min-height: calc(100vh - 75px); /* Altura ainda menor para telas pequenas */
+    min-height: calc(100vh - 75px); 
   }
 }
 

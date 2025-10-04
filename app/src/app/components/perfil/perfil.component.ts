@@ -17,7 +17,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   modoEdicao = false;
   private subscription = new Subscription();
 
-  // Formulário de edição
+
   perfilForm = {
     nome: '',
     sobrenome: '',
@@ -41,16 +41,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Verifica se o usuário está logado
+
     if (!this.authService.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }
 
-    // Carrega perfil do usuário da API
+
     this.carregarPerfil();
 
-    // Se inscreve nas mudanças do usuário atual
+
     this.subscription.add(
       this.authService.currentUser$.subscribe(user => {
         if (!user) {
@@ -112,7 +112,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   salvarPerfil() {
-    // Validações básicas
+
     if (!this.perfilForm.nome.trim()) {
       alert('O nome é obrigatório.');
       return;
@@ -133,7 +133,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Atualiza o perfil
+
     this.authService.updatePerfil({
       nome: this.perfilForm.nome.trim(),
       sobrenome: this.perfilForm.sobrenome.trim(),
@@ -150,7 +150,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       next: () => {
         alert('Perfil atualizado com sucesso!');
         this.modoEdicao = false;
-        // Recarrega o perfil do usuário
+
         this.carregarPerfil();
       },
       error: (error) => {
@@ -161,16 +161,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
     private validarTelefone(telefone: string): boolean {
-    // Remove caracteres não numéricos
+
     const apenasNumeros = telefone.replace(/\D/g, '');
-    // Aceita telefones com 10 ou 11 dígitos (com ou sem 9 adicional)
+
     return apenasNumeros.length === 10 || apenasNumeros.length === 11;
   }
 
   private validarCEP(cep: string): boolean {
-    // Remove caracteres não numéricos
+
     const apenasNumeros = cep.replace(/\D/g, '');
-    // CEP deve ter exatamente 8 dígitos
+
     return apenasNumeros.length === 8;
   }
 

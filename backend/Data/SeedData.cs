@@ -9,13 +9,13 @@ namespace InovalabAPI.Data
         {
             context.Database.EnsureCreated();
 
-            // Verifica se já existem usuários
+
             if (context.Usuarios.Any())
             {
                 return; // Banco já foi populado
             }
 
-            // Cria usuários de exemplo
+
             var usuarios = new Usuario[]
             {
                 new Usuario

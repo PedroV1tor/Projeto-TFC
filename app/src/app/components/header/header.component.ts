@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    // Se inscreve nas mudanças do estado de autenticação
+
     this.subscriptions.add(
       this.authService.isLoggedIn$.subscribe(isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToPerfil() {
-    // Navega para a página de perfil
+
     this.router.navigate(['/perfil']);
   }
 
@@ -52,19 +52,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToNovaPublicacao() {
-    // Navega para a página de publicações
+
     console.log('Navegando para Nova Publicação');
     this.router.navigate(['/publicacoes']);
   }
 
   goToLaboratorio() {
-    // Navega para a página do laboratório
+
     console.log('Navegando para Laboratório');
     this.router.navigate(['/laboratorio']);
   }
 
   goToOrcamento() {
-    // Navega para a página de orçamento
+
     console.log('Navegando para Orçamento');
     this.router.navigate(['/orcamento']);
   }

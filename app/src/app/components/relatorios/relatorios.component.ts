@@ -32,19 +32,19 @@ interface TipoRelatorio {
   styleUrl: './relatorios.component.scss'
 })
 export class RelatoriosComponent implements OnInit {
-  // Filtros
+
   filtro: FiltroRelatorio = {};
 
-  // Estados
+
   carregando = false;
   relatorioSelecionado = '';
   mostrarFiltros = false;
 
-  // Dados dos relatórios
+
   dadosRelatorio: any[] = [];
   publicacoesAtivas: Publicacao[] = [];
 
-  // Tipos de relatórios disponíveis
+
   tiposRelatorio: TipoRelatorio[] = [
     {
       id: 'usuarios',
@@ -83,7 +83,7 @@ export class RelatoriosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Componente carregado, pronto para usar
+
   }
 
   selecionarRelatorio(tipoId: string) {
@@ -172,11 +172,11 @@ export class RelatoriosComponent implements OnInit {
     const doc = new jsPDF();
     const dataAtual = new Date().toLocaleDateString('pt-BR');
 
-    // Configurar fonte
+
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
 
-    // Header
+
     doc.text('INOVALAB - Relatórios', 20, 20);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
@@ -186,7 +186,7 @@ export class RelatoriosComponent implements OnInit {
       doc.text(`Período: ${this.formatarData(this.filtro.dataInicial)} a ${this.formatarData(this.filtro.dataFinal)}`, 20, 40);
     }
 
-    // Conteúdo baseado no tipo de relatório
+
     switch (this.relatorioSelecionado) {
       case 'usuarios':
         this.gerarPDFUsuarios(doc);
@@ -202,7 +202,7 @@ export class RelatoriosComponent implements OnInit {
         break;
     }
 
-    // Salvar PDF
+
     const nomeArquivo = `relatorio-${this.relatorioSelecionado}-${Date.now()}.pdf`;
     doc.save(nomeArquivo);
   }
@@ -319,7 +319,7 @@ export class RelatoriosComponent implements OnInit {
     return this.tiposRelatorio.find(tipo => tipo.id === id);
   }
 
-  // Método para buscar todas as publicações ativas
+
   buscarPublicacoesAtivas(): void {
     this.carregando = true;
     this.publicacaoService.getPublicacoesAtivas().subscribe({
@@ -335,7 +335,7 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  // Método para exibir as publicações ativas
+
   exibirPublicacoesAtivas(): void {
     this.buscarPublicacoesAtivas();
   }

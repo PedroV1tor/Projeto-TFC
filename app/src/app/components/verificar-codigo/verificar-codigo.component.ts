@@ -25,11 +25,11 @@ export class VerificarCodigoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Recebe o email da query string
+
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || '';
       if (!this.email) {
-        // Se não há email, redireciona para recuperar senha
+
         this.router.navigate(['/recuperar-senha']);
       }
     });
@@ -54,7 +54,7 @@ export class VerificarCodigoComponent implements OnInit {
         this.isLoading = false;
         this.showMessage('Código verificado com sucesso!', false);
 
-        // Aguarda 1 segundo e redireciona para redefinir senha
+
         setTimeout(() => {
           this.router.navigate(['/redefinir-senha'], {
             queryParams: { email: this.email, codigo: this.codigo }

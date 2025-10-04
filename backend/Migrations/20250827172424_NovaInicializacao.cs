@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -6,10 +6,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InovalabAPI.Migrations
 {
-    /// <inheritdoc />
+
     public partial class NovaInicializacao : Migration
     {
-        /// <inheritdoc />
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -53,7 +53,7 @@ namespace InovalabAPI.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

@@ -1,7 +1,7 @@
 <div class="home-container">
   <app-hero></app-hero>
 
-  <!-- Seção de Novidades/Inovações -->
+  
   <section class="innovation-section">
     <div class="container">
       <div class="section-header">
@@ -36,7 +36,7 @@
     </div>
   </section>
 
-  <!-- Seção de Estatísticas -->
+  
   <section class="stats-section">
     <div class="container">
       <div class="stats-grid">
@@ -60,7 +60,7 @@
     </div>
   </section>
 
-  <!-- Timeline de Publicações -->
+  
   <section class="timeline-section">
     <div class="container">
       <div class="section-header">
@@ -104,7 +104,7 @@
         </button>
       </div>
 
-      <!-- Estado vazio -->
+      
       <div class="timeline-empty" *ngIf="publicacoesTimeline.length === 0">
         <div class="empty-icon">📝</div>
         <h3>Nenhuma publicação disponível</h3>
@@ -113,7 +113,7 @@
     </div>
   </section>
 
-  <!-- Popup para visualizar conteúdo completo -->
+  
   <div class="popup-overlay" *ngIf="mostrarPopup" (click)="fecharPopupOverlay($event)">
     <div class="popup-container" *ngIf="publicacaoSelecionada">
       <div class="popup-header">
@@ -180,7 +180,7 @@
     </div>
   </div>
 
-  <!-- Popup para cards de inovação -->
+  
   <div class="popup-overlay" *ngIf="mostrarPopupInovacao" (click)="fecharPopupInovacaoOverlay($event)">
     <div class="popup-container popup-inovacao" *ngIf="cardSelecionado">
       <div class="popup-header">

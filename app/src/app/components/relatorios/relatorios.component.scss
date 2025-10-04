@@ -4,7 +4,7 @@
   background: #f8f9fa;
 }
 
-/* Header da página */
+
 .page-header {
   background: linear-gradient(135deg, #2B5CE6 0%, #1e4bc7 100%);
   color: white;
@@ -49,7 +49,7 @@
   }
 }
 
-/* Seção Principal */
+
 .principal-section {
   padding: 4rem 0;
   background: white;
@@ -65,7 +65,7 @@
   margin-right: auto;
 }
 
-/* Botão Publicações Ativas */
+
 .acao-publicacoes {
   text-align: center;
 }
@@ -109,7 +109,7 @@
   }
 }
 
-/* Seção de Publicações Ativas */
+
 .publicacoes-ativas-section {
   padding: 4rem 0;
   background: white;
@@ -267,7 +267,7 @@
   }
 }
 
-/* Seleção de Relatórios */
+
 .selecao-relatorios {
   padding: 4rem 0;
   background: #f8f9fa;
@@ -331,7 +331,7 @@
   transform: translateX(5px);
 }
 
-/* Seção de Relatório */
+
 .relatorio-section {
   padding: 4rem 0;
   background: white;
@@ -403,7 +403,7 @@
   }
 }
 
-/* Filtros */
+
 .filtros-container {
   background: #f8f9fa;
   padding: 2rem;
@@ -495,7 +495,7 @@
   }
 }
 
-/* Loading */
+
 .loading-container {
   text-align: center;
   padding: 4rem 2rem;
@@ -523,7 +523,7 @@
   }
 }
 
-/* Estado vazio */
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -548,7 +548,7 @@
   }
 }
 
-/* Status badges */
+
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -587,7 +587,7 @@
   }
 }
 
-/* Tabelas */
+
 .tabela-container {
   background: white;
   border-radius: 12px;
@@ -628,13 +628,13 @@
   }
 }
 
-/* Animações */
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
   .page-header {
     padding: 40px 0;
@@ -698,4 +698,3 @@
     overflow-x: auto;
   }
 }
-

@@ -37,13 +37,13 @@ namespace InovalabAPI.Controllers
                 Console.WriteLine($"🔍 [RelatorioController] Gerando resumo geral");
                 Console.WriteLine($"📅 Parâmetros: dataInicial={dataInicial}, dataFinal={dataFinal}");
                 
-                // Buscar todos os dados
+
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var publicacoes = await _publicacaoService.GetAllAsync();
                 var agendamentos = await _agendamentoService.GetAllAsync();
                 var orcamentos = await _orcamentoService.GetAllAsync();
 
-                // Aplicar filtros de data se fornecidos
+
                 var usuariosFiltrados = usuarios.AsQueryable();
                 var publicacoesFiltradas = publicacoes.AsQueryable();
                 var agendamentosFiltrados = agendamentos.AsQueryable();
@@ -65,7 +65,7 @@ namespace InovalabAPI.Controllers
                     orcamentosFiltrados = orcamentosFiltrados.Where(o => o.CriadoEm <= dataFinal.Value);
                 }
 
-                // Calcular estatísticas
+
                 var resumo = new RelatorioResumoDTO
                 {
                     TotalUsuarios = usuariosFiltrados.Count(),
@@ -117,7 +117,7 @@ namespace InovalabAPI.Controllers
                     }
                 }
                 
-                // Filtrar por data se fornecida
+
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
                     Console.WriteLine($"🔄 Aplicando filtros de data...");
@@ -191,7 +191,7 @@ namespace InovalabAPI.Controllers
                 var publicacoes = await _publicacaoService.GetAllAsync();
                 var publicacoesList = publicacoes.ToList();
                 
-                // Filtrar por data se fornecida
+
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
                     publicacoesList = publicacoesList.Where(p => 
@@ -247,7 +247,7 @@ namespace InovalabAPI.Controllers
                 var agendamentos = await _agendamentoService.GetAllAsync();
                 var agendamentosList = agendamentos.ToList();
                 
-                // Filtrar por data se fornecida
+
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
                     agendamentosList = agendamentosList.Where(a => 
@@ -299,7 +299,7 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine("🧪 [RelatorioController] Endpoint de teste chamado");
                 
-                // Teste simples de conectividade
+
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var publicacoes = await _publicacaoService.GetAllAsync();
                 var agendamentos = await _agendamentoService.GetAllAsync();
@@ -339,7 +339,7 @@ namespace InovalabAPI.Controllers
                 var orcamentos = await _orcamentoService.GetAllAsync();
                 var orcamentosList = orcamentos.ToList();
                 
-                // Filtrar por data se fornecida
+
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
                     orcamentosList = orcamentosList.Where(o => 

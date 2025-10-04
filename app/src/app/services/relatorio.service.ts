@@ -107,7 +107,7 @@ export class RelatorioService {
     return params;
   }
 
-  // Relatório de usuários
+
   getRelatorioUsuarios(filtro?: FiltroRelatorio): Observable<RelatorioResponseDTO<RelatorioUsuarioDTO>> {
     const params = this.buildParams(filtro);
 
@@ -125,7 +125,7 @@ export class RelatorioService {
     );
   }
 
-  // Relatório de publicações
+
   getRelatorioPublicacoes(filtro?: FiltroRelatorio): Observable<RelatorioResponseDTO<RelatorioPublicacaoDTO>> {
     const params = this.buildParams(filtro);
 
@@ -143,7 +143,7 @@ export class RelatorioService {
     );
   }
 
-  // Relatório de agendamentos
+
   getRelatorioAgendamentos(filtro?: FiltroRelatorio): Observable<RelatorioResponseDTO<RelatorioAgendamentoDTO>> {
     const params = this.buildParams(filtro);
 
@@ -161,7 +161,7 @@ export class RelatorioService {
     );
   }
 
-  // Relatório de orçamentos
+
   getRelatorioOrcamentos(filtro?: FiltroRelatorio): Observable<RelatorioResponseDTO<RelatorioOrcamentoDTO>> {
     const params = this.buildParams(filtro);
 
@@ -179,7 +179,7 @@ export class RelatorioService {
     );
   }
 
-  // Relatório resumo geral
+
   getRelatorioResumo(filtro?: FiltroRelatorio): Observable<RelatorioResumoDTO> {
     const params = this.buildParams(filtro);
 

@@ -20,7 +20,7 @@
         >
       </div>
 
-      <!-- Mensagem de feedback -->
+      
       <div *ngIf="message" class="message" [class.error]="isError" [class.success]="!isError">
         <i class="icon" [class]="isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'"></i>
         {{ message }}

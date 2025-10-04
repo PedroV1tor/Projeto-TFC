@@ -37,39 +37,39 @@ export class OrcamentoService {
     }
   }
 
-  // Listar todos os orçamentos
+
   getOrcamentos(): Observable<Orcamento[]> {
     return this.http.get<Orcamento[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  // Obter orçamentos por status
+
   getOrcamentosByStatus(status: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<Orcamento[]> {
     return this.http.get<Orcamento[]>(`${this.apiUrl}/status/${status}`, { headers: this.getHeaders() });
   }
 
-  // Obter orçamento por ID
+
   getOrcamentoById(id: number): Observable<Orcamento> {
     return this.http.get<Orcamento>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  // Obter meus orçamentos
+
   getMeusOrcamentos(): Observable<Orcamento[]> {
     return this.http.get<Orcamento[]>(`${this.apiUrl}/meus`, { headers: this.getHeaders() });
   }
 
-  // Obter estatísticas
+
   getEstatisticas(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/estatisticas`, { headers: this.getHeaders() });
   }
 
-  // Obter orçamentos vencendo
+
   getOrcamentosVencendo(dias: number = 7): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/vencendo?dias=${dias}`, { headers: this.getHeaders() });
   }
 
-  // Criar novo orçamento
+
   criarOrcamento(orcamento: Omit<Orcamento, 'id' | 'criadoEm' | 'status'>): Observable<Orcamento> {
-    // Mapear os campos para o formato esperado pelo backend
+
     const dadosBackend = {
       Titulo: orcamento.titulo,
       Descricao: orcamento.descricao,
@@ -85,39 +85,39 @@ export class OrcamentoService {
     return this.http.post<Orcamento>(this.apiUrl, dadosBackend, { headers: this.getHeaders() });
   }
 
-  // Atualizar orçamento
+
   atualizarOrcamento(id: number, orcamentoAtualizado: Partial<Orcamento>): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, orcamentoAtualizado, { headers: this.getHeaders() });
   }
 
-  // Excluir orçamento
+
   excluirOrcamento(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  // Alterar status do orçamento
+
   alterarStatus(id: number, novoStatus: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { status: novoStatus }, { headers: this.getHeaders() });
   }
 
-  // Aprovar orçamento
+
   aprovarOrcamento(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/aprovar`, {}, { headers: this.getHeaders() });
   }
 
-  // Rejeitar orçamento
+
   rejeitarOrcamento(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/rejeitar`, {}, { headers: this.getHeaders() });
   }
 
-  // Concluir orçamento
+
   concluirOrcamento(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/concluir`, {}, { headers: this.getHeaders() });
   }
 
-  // Filtrar orçamentos
+
   filtrarOrcamentos(filtro: any): Observable<Orcamento[]> {
-    // Mapear os campos para o formato esperado pelo backend
+
     const dadosBackend: any = {};
 
     if (filtro.status !== undefined) {

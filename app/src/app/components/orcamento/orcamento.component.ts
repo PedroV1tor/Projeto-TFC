@@ -21,7 +21,7 @@ export class OrcamentoComponent implements OnInit {
   mostrarEstatisticas = false;
   estatisticas: any = null;
 
-  // Formulário
+
   novoOrcamento = {
     titulo: '',
     descricao: '',
@@ -100,7 +100,7 @@ export class OrcamentoComponent implements OnInit {
       return;
     }
 
-    // Validar datas
+
     const prazoOrcamento = new Date(this.novoOrcamento.prazoOrcamento);
     const prazoEntrega = new Date(this.novoOrcamento.prazoEntrega);
     const hoje = new Date();
@@ -115,13 +115,13 @@ export class OrcamentoComponent implements OnInit {
       return;
     }
 
-    // Validar descrição
+
     if (this.novoOrcamento.descricao.length < 20) {
       alert('A descrição deve ter pelo menos 20 caracteres.');
       return;
     }
 
-    // Validar valor se informado
+
     if (this.novoOrcamento.valor !== undefined && this.novoOrcamento.valor <= 0) {
       alert('O valor deve ser maior que zero.');
       return;
@@ -129,7 +129,7 @@ export class OrcamentoComponent implements OnInit {
 
     try {
       if (this.orcamentoEditando) {
-        // Editando orçamento existente
+
         this.orcamentoService.atualizarOrcamento(
           this.orcamentoEditando.id,
           this.novoOrcamento
@@ -146,7 +146,7 @@ export class OrcamentoComponent implements OnInit {
           }
         });
       } else {
-        // Criando novo orçamento
+
         this.orcamentoService.criarOrcamento(this.novoOrcamento).subscribe({
           next: () => {
             alert('Orçamento criado com sucesso!');

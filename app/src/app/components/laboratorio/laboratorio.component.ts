@@ -18,7 +18,7 @@ export class LaboratorioComponent implements OnInit {
   mostrarFormulario = false;
   agendamentoEditando: Agendamento | null = null;
 
-  // Formulário
+
   novoAgendamento = {
     titulo: '',
     data: '',
@@ -68,7 +68,7 @@ export class LaboratorioComponent implements OnInit {
       return;
     }
 
-    // Validar se a data não é no passado
+
     const dataAgendamento = new Date(this.novoAgendamento.data);
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
@@ -80,7 +80,7 @@ export class LaboratorioComponent implements OnInit {
 
     try {
       if (this.agendamentoEditando) {
-        // Editando agendamento existente
+
         this.agendamentoService.atualizarAgendamento(
           this.agendamentoEditando.id,
           this.novoAgendamento
@@ -96,7 +96,7 @@ export class LaboratorioComponent implements OnInit {
           }
         });
       } else {
-        // Criando novo agendamento
+
         this.agendamentoService.criarAgendamento(this.novoAgendamento).subscribe({
           next: () => {
             alert('Agendamento criado com sucesso!');

@@ -26,15 +26,15 @@ export class HomeComponent implements OnInit {
   publicacoesTimeline: Publicacao[] = [];
   mostrarTodasPublicacoes = false;
 
-  // Popup para visualizar conteúdo completo das publicações
+
   mostrarPopup = false;
   publicacaoSelecionada: Publicacao | null = null;
 
-  // Popup para visualizar conteúdo completo dos cards de inovação
+
   mostrarPopupInovacao = false;
   cardSelecionado: CardInovacao | null = null;
 
-  // Dados dos cards de inovação
+
   cardsInovacao: CardInovacao[] = [
     {
       id: 1,
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
   carregarPublicacoesTimeline() {
     this.publicacaoService.getPublicacoesAtivas().subscribe({
       next: (todasPublicacoes) => {
-        // Mostra apenas as 3 mais recentes inicialmente
+
         this.publicacoesTimeline = this.mostrarTodasPublicacoes
           ? todasPublicacoes
           : todasPublicacoes.slice(0, 3);
@@ -153,29 +153,29 @@ export class HomeComponent implements OnInit {
     return texto.substring(0, limite) + '...';
   }
 
-  // Métodos para controlar a popup
+
   abrirPopup(publicacao: Publicacao): void {
     this.publicacaoSelecionada = publicacao;
     this.mostrarPopup = true;
-    // Prevenir scroll do body quando popup estiver aberta
+
     document.body.style.overflow = 'hidden';
   }
 
   fecharPopup(): void {
     this.mostrarPopup = false;
     this.publicacaoSelecionada = null;
-    // Restaurar scroll do body
+
     document.body.style.overflow = 'auto';
   }
 
-  // Fechar popup ao clicar no overlay
+
   fecharPopupOverlay(event: Event): void {
     if (event.target === event.currentTarget) {
       this.fecharPopup();
     }
   }
 
-  // Métodos auxiliares para a popup
+
   formatarDataCompleta(data: string): string {
     return new Date(data).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -208,29 +208,29 @@ export class HomeComponent implements OnInit {
     return `status-${status}`;
   }
 
-  // Métodos para controlar a popup dos cards de inovação
+
   abrirPopupInovacao(card: CardInovacao): void {
     this.cardSelecionado = card;
     this.mostrarPopupInovacao = true;
-    // Prevenir scroll do body quando popup estiver aberta
+
     document.body.style.overflow = 'hidden';
   }
 
   fecharPopupInovacao(): void {
     this.mostrarPopupInovacao = false;
     this.cardSelecionado = null;
-    // Restaurar scroll do body
+
     document.body.style.overflow = 'auto';
   }
 
-  // Fechar popup dos cards ao clicar no overlay
+
   fecharPopupInovacaoOverlay(event: Event): void {
     if (event.target === event.currentTarget) {
       this.fecharPopupInovacao();
     }
   }
 
-  // Método para obter card por ID
+
   getCardById(id: number): CardInovacao | undefined {
     return this.cardsInovacao.find(card => card.id === id);
   }

@@ -1,5 +1,5 @@
 <div class="publicacoes-container">
-  <!-- Header da página -->
+  
   <div class="page-header">
     <div class="container">
       <h1>📝 Publicações INOVALAB</h1>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <!-- Formulário de publicação (Modal) -->
+  
   <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -73,7 +73,7 @@
     </div>
   </div>
 
-  <!-- Lista de publicações -->
+  
   <div class="publicacoes-section">
     <div class="container">
       <div class="section-title">
@@ -81,7 +81,7 @@
         <span class="total">{{ publicacoes.length }} publicação(ões)</span>
       </div>
 
-      <!-- Timeline de publicações -->
+      
       <div class="publicacoes-timeline" *ngIf="publicacoes.length > 0">
         <div class="timeline-item" *ngFor="let publicacao of publicacoes; let i = index">
           <div class="timeline-marker">
@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <!-- Estado vazio -->
+      
       <div class="empty-state" *ngIf="publicacoes.length === 0">
         <div class="empty-icon">📝</div>
         <h3>Nenhuma publicação encontrada</h3>
@@ -182,7 +182,7 @@
     </div>
   </div>
 
-  <!-- Popup para visualizar conteúdo completo -->
+  
   <div class="popup-overlay" *ngIf="mostrarPopup" (click)="fecharPopupOverlay($event)">
     <div class="popup-container" *ngIf="publicacaoSelecionada">
       <div class="popup-header">

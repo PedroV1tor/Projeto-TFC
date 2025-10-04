@@ -115,13 +115,13 @@ namespace InovalabAPI.Controllers
             return Ok(new { message = "Senha redefinida com sucesso" });
         }
 
-        // ENDPOINT TEMPORÁRIO PARA DEBUG - REMOVER EM PRODUÇÃO
+
         [HttpGet("debug-codigos")]
         public IActionResult DebugCodigos()
         {
             try
             {
-                // Acessar o campo estático diretamente para debug
+
                 var field = typeof(Services.AuthService).GetField("_codigosRecuperacao", 
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                 

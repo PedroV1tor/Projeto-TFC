@@ -9,7 +9,7 @@
     </div>
 
     <div class="perfil-content" *ngIf="usuario">
-      <!-- Visualização do Perfil -->
+      
       <div class="perfil-view" *ngIf="!modoEdicao">
         <div class="perfil-avatar">
           <div class="avatar-placeholder">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="perfil-sections">
-          <!-- Dados Pessoais -->
+          
           <div class="info-section">
             <h3>Dados Pessoais</h3>
             <div class="info-grid">
@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          <!-- Informações Acadêmicas -->
+          
           <div class="info-section">
             <h3>Informações Acadêmicas</h3>
             <div class="info-grid">
@@ -70,7 +70,7 @@
             </div>
           </div>
 
-          <!-- Endereço -->
+          
           <div class="info-section">
             <h3>Endereço</h3>
             <div class="info-grid">
@@ -106,7 +106,7 @@
             </div>
           </div>
 
-          <!-- Informações do Sistema -->
+          
           <div class="info-section">
             <h3>Informações do Sistema</h3>
             <div class="info-grid">
@@ -125,10 +125,10 @@
         </div>
       </div>
 
-      <!-- Formulário de Edição -->
+      
       <div class="perfil-edit" *ngIf="modoEdicao">
         <form class="edit-form" (ngSubmit)="salvarPerfil()">
-          <!-- Dados Pessoais -->
+          
           <div class="form-section">
             <h3>Dados Pessoais</h3>
 
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          <!-- Informações Acadêmicas -->
+          
           <div class="form-section">
             <h3>Informações Acadêmicas</h3>
 
@@ -248,7 +248,7 @@
             </div>
           </div>
 
-          <!-- Endereço -->
+          
           <div class="form-section">
             <h3>Endereço</h3>
 

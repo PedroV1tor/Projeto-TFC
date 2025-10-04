@@ -91,7 +91,7 @@ namespace InovalabAPI.Services
                 Console.WriteLine($"📧 Para: {destinatarioEmail}");
                 Console.WriteLine($"📧 Assunto: {assunto}");
                 
-                // Em caso de erro SMTP, sempre simula o envio em desenvolvimento
+
                 Console.WriteLine($"📧 === CONTEÚDO DO EMAIL (MODO FALLBACK) ===");
                 Console.WriteLine($"📧 Para: {destinatarioEmail}");
                 Console.WriteLine($"📧 Assunto: {assunto}");

@@ -7,16 +7,16 @@ using InovalabAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Entity Framework - PostgreSQL
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// JWT Authentication
+
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres123456";
 
@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Services
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
@@ -57,7 +57,7 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -71,15 +71,15 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Aplicar migrações automaticamente e seed data
+
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     
-    // Aplicar migrações
+
     context.Database.Migrate();
     
-    // Inicializar dados de exemplo
+
     SeedData.Initialize(context);
 }
 

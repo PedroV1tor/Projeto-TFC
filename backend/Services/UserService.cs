@@ -55,7 +55,7 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Soft delete
+
             usuario.Ativo = false;
             return await UpdateUsuarioAsync(usuario);
         }

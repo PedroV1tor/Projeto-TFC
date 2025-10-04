@@ -12,7 +12,7 @@ import { AuthService, CadastroRequest } from '../../services/auth.service';
   styleUrl: './cadastro.component.scss'
 })
 export class CadastroComponent {
-  // Campos obrigatórios
+
   nome: string = '';
   sobrenome: string = '';
   email: string = '';
@@ -23,7 +23,7 @@ export class CadastroComponent {
   rua: string = '';
   bairro: string = '';
 
-  // Campos não obrigatórios
+
   matricula: string = '';
   numero: string = '';
   referencia: string = '';
@@ -32,14 +32,14 @@ export class CadastroComponent {
   constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit() {
-    // Validação básica dos campos obrigatórios
+
     if (!this.nome || !this.sobrenome || !this.email || !this.senha ||
         !this.usuario || !this.telefone || !this.cep || !this.rua || !this.bairro) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    // Cria objeto de cadastro
+
     const dadosCadastro: CadastroRequest = {
       nome: this.nome,
       sobrenome: this.sobrenome,
@@ -56,7 +56,7 @@ export class CadastroComponent {
       complemento: this.complemento || undefined
     };
 
-    // Chama a API de cadastro
+
     this.authService.cadastro(dadosCadastro).subscribe({
       next: (response) => {
         alert('Cadastro realizado com sucesso!');

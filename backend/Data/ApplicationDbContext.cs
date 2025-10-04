@@ -18,7 +18,7 @@ namespace InovalabAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurações do modelo Usuario
+
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -35,7 +35,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Bairro).IsRequired();
             });
 
-            // Configurações do modelo Agendamento
+
             modelBuilder.Entity<Agendamento>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -52,7 +52,7 @@ namespace InovalabAPI.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Configurações do modelo Publicacao
+
             modelBuilder.Entity<Publicacao>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -69,7 +69,7 @@ namespace InovalabAPI.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Configurações do modelo Orcamento
+
             modelBuilder.Entity<Orcamento>(entity =>
             {
                 entity.HasKey(e => e.Id);

@@ -27,32 +27,32 @@ export class RedefinirSenhaComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Recebe o email e código da query string
+
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || '';
       this.codigo = params['codigo'] || '';
 
       if (!this.email || !this.codigo) {
-        // Se não há email ou código, redireciona para recuperar senha
+
         this.router.navigate(['/recuperar-senha']);
       }
     });
   }
 
   onRedefinir() {
-    // Validação básica
+
     if (!this.novaSenha || !this.confirmarSenha) {
       this.showMessage('Por favor, preencha todos os campos.', true);
       return;
     }
 
-    // Validação de tamanho mínimo
+
     if (this.novaSenha.length < 6) {
       this.showMessage('A senha deve ter pelo menos 6 caracteres.', true);
       return;
     }
 
-    // Validação se as senhas coincidem
+
     if (this.novaSenha !== this.confirmarSenha) {
       this.showMessage('As senhas não coincidem. Tente novamente.', true);
       return;
@@ -66,7 +66,7 @@ export class RedefinirSenhaComponent implements OnInit {
         this.isLoading = false;
         this.showMessage('Senha redefinida com sucesso!', false);
 
-        // Aguarda 2 segundos e redireciona para login
+
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 2000);

@@ -34,7 +34,7 @@ namespace InovalabAPI.Services
                 return null;
             }
 
-            // Atualiza último login
+
             usuario.UltimoLogin = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
@@ -52,13 +52,13 @@ namespace InovalabAPI.Services
 
         public async Task<bool> CadastroAsync(CadastroRequest request)
         {
-            // Verifica se email já existe
+
             if (await _context.Usuarios.AnyAsync(u => u.Email == request.Email))
             {
                 return false;
             }
 
-            // Verifica se nome de usuário já existe
+
             if (await _context.Usuarios.AnyAsync(u => u.NomeUsuario == request.NomeUsuario))
             {
                 return false;
@@ -99,16 +99,16 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Gera código de 5 dígitos
+
             var codigo = new Random().Next(10000, 99999).ToString();
             var expiracao = DateTime.UtcNow.AddMinutes(15); // Expira em 15 minutos
             
             Console.WriteLine($"✅ Código gerado para {email}: {codigo} (expira em 15min)");
             
-            // Limpa códigos expirados
+
             LimparCodigosExpirados();
             
-            // Armazena o código com expiração
+
             _codigosRecuperacao[email] = (codigo, expiracao);
 
             var appName = _configuration["App:Name"] ?? "Inovalab";
@@ -168,14 +168,14 @@ namespace InovalabAPI.Services
 
         public async Task<bool> VerificarCodigoAsync(VerificarCodigoRequest request)
         {
-            // Limpa espaços em branco do código recebido
+
             var codigoLimpo = request.Codigo?.Trim();
             
             Console.WriteLine($"🔍 Verificando código para {request.Email}");
             Console.WriteLine($"   Código recebido: '{request.Codigo}' (original)");
             Console.WriteLine($"   Código limpo: '{codigoLimpo}'");
             
-            // Limpa códigos expirados antes de verificar
+
             LimparCodigosExpirados();
 
             var usuario = await _context.Usuarios
@@ -187,7 +187,7 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Verifica se existe código para este email
+
             if (!_codigosRecuperacao.ContainsKey(request.Email))
             {
                 Console.WriteLine($"❌ Nenhum código encontrado para: {request.Email}");
@@ -200,7 +200,7 @@ namespace InovalabAPI.Services
             Console.WriteLine($"   Expira em: {expiracao}");
             Console.WriteLine($"   Agora: {DateTime.UtcNow}");
 
-            // Verifica se o código expirou
+
             if (DateTime.UtcNow > expiracao)
             {
                 Console.WriteLine($"❌ Código expirado para: {request.Email}");
@@ -208,7 +208,7 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Verifica se o código está correto (comparação exata)
+
             var resultado = codigoArmazenado == codigoLimpo;
             Console.WriteLine($"   Comparação: '{codigoArmazenado}' == '{codigoLimpo}' = {resultado}");
             Console.WriteLine($"{(resultado ? "✅" : "❌")} Verificação: {request.Email} - {(resultado ? "SUCESSO" : "FALHOU")}");
@@ -226,10 +226,10 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Limpa códigos expirados
+
             LimparCodigosExpirados();
 
-            // Verifica o código novamente
+
             if (!_codigosRecuperacao.ContainsKey(request.Email))
             {
                 return false;
@@ -237,17 +237,17 @@ namespace InovalabAPI.Services
 
             var (codigoArmazenado, expiracao) = _codigosRecuperacao[request.Email];
             
-            // Verifica se o código expirou
+
             if (DateTime.UtcNow > expiracao || codigoArmazenado != request.Codigo)
             {
                 return false;
             }
 
-            // Atualiza a senha
+
             usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(request.NovaSenha);
             await _context.SaveChangesAsync();
 
-            // Remove o código usado
+
             _codigosRecuperacao.Remove(request.Email);
 
             return true;

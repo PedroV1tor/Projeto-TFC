@@ -1,6 +1,6 @@
 namespace InovalabAPI.Models.DTOs
 {
-    // DTO base para respostas de relatórios
+
     public class RelatorioResponseDTO<T>
     {
         public int Total { get; set; }
@@ -10,7 +10,7 @@ namespace InovalabAPI.Models.DTOs
         public DateTime GeradoEm { get; set; }
     }
 
-    // DTO para relatório de usuários
+
     public class RelatorioUsuarioDTO
     {
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace InovalabAPI.Models.DTOs
         public DateTime CriadoEm { get; set; }
     }
 
-    // DTO para relatório de publicações
+
     public class RelatorioPublicacaoDTO
     {
         public int Id { get; set; }
@@ -33,7 +33,7 @@ namespace InovalabAPI.Models.DTOs
         public DateTime CriadoEm { get; set; }
     }
 
-    // DTO para relatório de agendamentos
+
     public class RelatorioAgendamentoDTO
     {
         public int Id { get; set; }
@@ -44,7 +44,7 @@ namespace InovalabAPI.Models.DTOs
         public DateTime CriadoEm { get; set; }
     }
 
-    // DTO para relatório de orçamentos
+
     public class RelatorioOrcamentoDTO
     {
         public int Id { get; set; }
@@ -55,7 +55,7 @@ namespace InovalabAPI.Models.DTOs
         public DateTime CriadoEm { get; set; }
     }
 
-    // DTO para resumo geral
+
     public class RelatorioResumoDTO
     {
         public int TotalUsuarios { get; set; }

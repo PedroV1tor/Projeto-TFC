@@ -29,7 +29,7 @@ namespace InovalabAPI.Models
 
         public DateTime? AtualizadoEm { get; set; }
 
-        // Relacionamento com usuário
+
         public int UsuarioId { get; set; }
         public virtual Usuario UsuarioCriador { get; set; } = null!;
     }

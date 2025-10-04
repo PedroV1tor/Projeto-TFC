@@ -22,14 +22,14 @@ export class RecuperarSenhaComponent {
     private router: Router
   ) {}
 
-  // Método para submeter o formulário de recuperação
+
   onSubmit() {
     if (!this.email) {
       this.showMessage('Por favor, digite seu e-mail.', true);
       return;
     }
 
-    // Validação básica de e-mail
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
       this.showMessage('Por favor, digite um e-mail válido.', true);
@@ -44,7 +44,7 @@ export class RecuperarSenhaComponent {
         this.isLoading = false;
         this.showMessage('Código de verificação enviado para seu e-mail!', false);
 
-        // Aguarda 2 segundos e redireciona para verificar código
+
         setTimeout(() => {
           this.router.navigate(['/verificar-codigo'], {
             queryParams: { email: this.email }

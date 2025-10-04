@@ -60,7 +60,7 @@ namespace InovalabAPI.Controllers
                 if (publicacao == null)
                     return NotFound(new { message = "Publicação não encontrada" });
 
-                // Incrementa visualizações quando alguém acessa a publicação
+
                 await _publicacaoService.IncrementarVisualizacoesAsync(id);
 
                 return Ok(publicacao);

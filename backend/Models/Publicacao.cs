@@ -34,7 +34,7 @@ namespace InovalabAPI.Models
 
         public int Curtidas { get; set; } = 0;
 
-        // Relacionamento com usuário
+
         public int UsuarioId { get; set; }
         public virtual Usuario UsuarioCriador { get; set; } = null!;
     }

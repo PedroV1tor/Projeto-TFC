@@ -135,10 +135,10 @@ export class ContatoComponent implements OnInit {
   }
 
   startMapAnimation() {
-    // Com apenas 1 escritório, não precisamos de animação
-    // this.mapAnimationInterval = setInterval(() => {
-    //   this.currentOfficeIndex = (this.currentOfficeIndex + 1) % this.offices.length;
-    // }, 4000);
+
+
+
+
   }
 
   selectOffice(index: number) {
