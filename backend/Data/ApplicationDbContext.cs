@@ -11,6 +11,8 @@ namespace InovalabAPI.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<EnderecoUsuario> EnderecosUsuario { get; set; }
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<EnderecoEmpresa> EnderecosEmpresa { get; set; }
         public DbSet<Agendamento> Agendamentos { get; set; }
         public DbSet<Publicacao> Publicacoes { get; set; }
         public DbSet<Orcamento> Orcamentos { get; set; }
@@ -39,6 +41,37 @@ namespace InovalabAPI.Data
             });
 
             modelBuilder.Entity<EnderecoUsuario>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.CEP).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.Rua).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Bairro).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Numero).HasMaxLength(10);
+                entity.Property(e => e.Referencia).HasMaxLength(255);
+                entity.Property(e => e.Complemento).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Empresa>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.CNPJ).IsUnique();
+                entity.Property(e => e.RazaoSocial).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.NomeFantasia).HasMaxLength(200);
+                entity.Property(e => e.CNPJ).IsRequired().HasMaxLength(18);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.SenhaHash).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Telefone).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.ResponsavelNome).HasMaxLength(100);
+                entity.Property(e => e.ResponsavelTelefone).HasMaxLength(20);
+                
+                entity.HasOne(e => e.Endereco)
+                      .WithOne(e => e.Empresa)
+                      .HasForeignKey<EnderecoEmpresa>(e => e.EmpresaId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<EnderecoEmpresa>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.CEP).IsRequired().HasMaxLength(10);

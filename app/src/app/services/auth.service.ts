@@ -50,6 +50,27 @@ export interface CadastroRequest {
   endereco: EnderecoUsuario;
 }
 
+export interface EnderecoEmpresa {
+  cep: string;
+  rua: string;
+  bairro: string;
+  numero?: string;
+  complemento?: string;
+  referencia?: string;
+}
+
+export interface CadastroEmpresaRequest {
+  razaoSocial: string;
+  nomeFantasia?: string;
+  cnpj: string;
+  email: string;
+  senha: string;
+  telefone: string;
+  responsavelNome?: string;
+  responsavelTelefone?: string;
+  endereco: EnderecoEmpresa;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -191,6 +212,10 @@ export class AuthService {
 
   cadastro(dados: CadastroRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/cadastro`, dados);
+  }
+
+  cadastroEmpresa(dados: CadastroEmpresaRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cadastro-empresa`, dados);
   }
 
   getPerfil(): Observable<Usuario> {

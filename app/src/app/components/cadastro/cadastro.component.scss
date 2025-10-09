@@ -71,6 +71,52 @@
   }
 }
 
+.tipo-cadastro-select {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+
+  .tipo-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+
+    input[type="radio"] {
+      margin-right: 8px;
+    }
+
+    span {
+      font-weight: 500;
+      color: #666;
+    }
+
+    &:hover {
+      border-color: #12bb20;
+      background: #f8fff9;
+    }
+
+    &.active {
+      border-color: #12bb20;
+      background: linear-gradient(135deg, #12bb20 0%, #1556ce 100%);
+
+      span {
+        color: white;
+      }
+
+      input[type="radio"] {
+        accent-color: white;
+      }
+    }
+  }
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

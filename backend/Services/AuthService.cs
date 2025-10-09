@@ -26,28 +26,50 @@ namespace InovalabAPI.Services
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
+            // Tentar login como usuário
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == request.Email && u.Ativo);
 
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(request.Senha, usuario.SenhaHash))
+            if (usuario != null && BCrypt.Net.BCrypt.Verify(request.Senha, usuario.SenhaHash))
             {
-                return null;
+                usuario.UltimoLogin = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                var token = GenerateJwtToken(usuario.Id, usuario.Email, usuario.Nome, usuario.NomeUsuario);
+                
+                return new LoginResponse
+                {
+                    Token = token,
+                    Email = usuario.Email,
+                    Nome = usuario.Nome,
+                    NomeUsuario = usuario.NomeUsuario,
+                    ExpiresAt = DateTime.UtcNow.AddHours(24)
+                };
             }
 
+            // Tentar login como empresa
+            var empresa = await _context.Empresas
+                .FirstOrDefaultAsync(e => e.Email == request.Email && e.Ativo);
 
-            usuario.UltimoLogin = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-
-            var token = GenerateJwtToken(usuario.Id, usuario.Email, usuario.Nome, usuario.NomeUsuario);
-            
-            return new LoginResponse
+            if (empresa != null && BCrypt.Net.BCrypt.Verify(request.Senha, empresa.SenhaHash))
             {
-                Token = token,
-                Email = usuario.Email,
-                Nome = usuario.Nome,
-                NomeUsuario = usuario.NomeUsuario,
-                ExpiresAt = DateTime.UtcNow.AddHours(24)
-            };
+                empresa.UltimoLogin = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                var token = GenerateJwtToken(empresa.Id, empresa.Email, empresa.RazaoSocial, empresa.NomeFantasia ?? empresa.RazaoSocial);
+                
+                return new LoginResponse
+                {
+                    Token = token,
+                    Email = empresa.Email,
+                    Nome = empresa.RazaoSocial,
+                    NomeUsuario = empresa.NomeFantasia ?? empresa.RazaoSocial,
+                    ExpiresAt = DateTime.UtcNow.AddHours(24)
+                };
+            }
+
+            // Nenhum encontrado ou senha incorreta
+            return null;
         }
 
         public async Task<bool> CadastroAsync(CadastroRequest request)
@@ -88,6 +110,55 @@ namespace InovalabAPI.Services
             };
 
             _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CadastroEmpresaAsync(CadastroEmpresaRequest request)
+        {
+            // Verificar se o email já existe (tanto em Usuarios quanto em Empresas)
+            if (await _context.Usuarios.AnyAsync(u => u.Email == request.Email))
+            {
+                return false;
+            }
+
+            if (await _context.Empresas.AnyAsync(e => e.Email == request.Email))
+            {
+                return false;
+            }
+
+            // Verificar se o CNPJ já existe
+            if (await _context.Empresas.AnyAsync(e => e.CNPJ == request.CNPJ))
+            {
+                return false;
+            }
+
+            var empresa = new Empresa
+            {
+                RazaoSocial = request.RazaoSocial,
+                NomeFantasia = request.NomeFantasia,
+                CNPJ = request.CNPJ,
+                Email = request.Email,
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword(request.Senha),
+                Telefone = request.Telefone,
+                ResponsavelNome = request.ResponsavelNome,
+                ResponsavelTelefone = request.ResponsavelTelefone,
+                DataCriacao = DateTime.UtcNow,
+                Ativo = true,
+                Endereco = new EnderecoEmpresa
+                {
+                    CEP = request.Endereco.CEP,
+                    Rua = request.Endereco.Rua,
+                    Bairro = request.Endereco.Bairro,
+                    Numero = request.Endereco.Numero,
+                    Referencia = request.Endereco.Referencia,
+                    Complemento = request.Endereco.Complemento,
+                    DataCriacao = DateTime.UtcNow
+                }
+            };
+
+            _context.Empresas.Add(empresa);
             await _context.SaveChangesAsync();
 
             return true;

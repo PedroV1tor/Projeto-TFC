@@ -51,6 +51,24 @@ namespace InovalabAPI.Controllers
             return Ok(new { message = "Usuário cadastrado com sucesso" });
         }
 
+        [HttpPost("cadastro-empresa")]
+        public async Task<IActionResult> CadastroEmpresa([FromBody] CadastroEmpresaRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var success = await _authService.CadastroEmpresaAsync(request);
+            
+            if (!success)
+            {
+                return BadRequest(new { message = "Email ou CNPJ já existe" });
+            }
+
+            return Ok(new { message = "Empresa cadastrada com sucesso" });
+        }
+
         [HttpPost("recuperar-senha")]
         public async Task<IActionResult> RecuperarSenha([FromBody] RecuperarSenhaRequest request)
         {

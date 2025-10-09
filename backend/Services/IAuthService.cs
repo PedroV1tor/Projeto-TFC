@@ -6,6 +6,7 @@ namespace InovalabAPI.Services
     {
         Task<LoginResponse?> LoginAsync(LoginRequest request);
         Task<bool> CadastroAsync(CadastroRequest request);
+        Task<bool> CadastroEmpresaAsync(CadastroEmpresaRequest request);
         Task<bool> SolicitarRecuperacaoSenhaAsync(string email);
         Task<bool> VerificarCodigoAsync(VerificarCodigoRequest request);
         Task<bool> RedefinirSenhaAsync(RedefinirSenhaRequest request);
