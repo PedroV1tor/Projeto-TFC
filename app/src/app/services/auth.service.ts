@@ -4,6 +4,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
+export interface EnderecoUsuario {
+  cep: string;
+  rua: string;
+  bairro: string;
+  numero?: string;
+  complemento?: string;
+  referencia?: string;
+}
+
 export interface Usuario {
   id?: number;
   email: string;
@@ -12,12 +21,7 @@ export interface Usuario {
   nomeUsuario?: string;
   telefone?: string;
   matricula?: string;
-  cep?: string;
-  rua?: string;
-  bairro?: string;
-  numero?: string;
-  complemento?: string;
-  referencia?: string;
+  endereco?: EnderecoUsuario;
   dataCriacao?: string;
   ultimoLogin?: string;
 }
@@ -43,12 +47,7 @@ export interface CadastroRequest {
   senha: string;
   nomeUsuario: string;
   telefone: string;
-  cep: string;
-  rua: string;
-  bairro: string;
-  numero?: string;
-  referencia?: string;
-  complemento?: string;
+  endereco: EnderecoUsuario;
 }
 
 @Injectable({
@@ -59,17 +58,14 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
 
-
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-
     this.checkStoredUser();
   }
 
   private checkStoredUser() {
-
     if (typeof window !== 'undefined' && window.localStorage) {
       const storedUser = localStorage.getItem('currentUser');
       const storedToken = localStorage.getItem('authToken');
@@ -92,7 +88,6 @@ export class AuthService {
           next: (response) => {
             console.log('AuthService: login bem-sucedido para', email);
 
-
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.setItem('authToken', response.token);
               localStorage.setItem('currentUser', JSON.stringify({
@@ -102,8 +97,6 @@ export class AuthService {
               }));
               console.log('AuthService: token salvo no localStorage:', response.token.substring(0, 20) + '...');
             }
-
-
             this.currentUserSubject.next({
               email: response.email,
               nome: response.nome,
@@ -120,21 +113,17 @@ export class AuthService {
       );
   }
 
-
   solicitarRecuperacaoSenha(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/recuperar-senha`, { email });
   }
-
 
   verificarCodigo(email: string, codigo: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verificar-codigo`, { email, codigo });
   }
 
-
   redefinirSenha(email: string, codigo: string, novaSenha: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/redefinir-senha`, { email, codigo, novaSenha });
   }
-
 
   loginSync(email: string, senha: string): boolean {
     this.login(email, senha).subscribe({
@@ -145,24 +134,18 @@ export class AuthService {
   }
 
   logout() {
-
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem('currentUser');
       localStorage.removeItem('authToken');
     }
-
-
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
   }
 
   private extractNameFromEmail(email: string): string {
-
     const name = email.split('@')[0];
-
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
-
 
   updateProfile(updatedData: Partial<Usuario>): boolean {
     const currentUser = this.currentUserSubject.value;
@@ -177,16 +160,12 @@ export class AuthService {
       email: currentUser.email // Email não pode ser alterado
     };
 
-
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem('currentUser', JSON.stringify(updatedUser));
     }
-
-
     this.currentUserSubject.next(updatedUser);
     return true;
   }
-
 
   get isLoggedIn(): boolean {
     return this.isLoggedInSubject.value;
@@ -210,11 +189,9 @@ export class AuthService {
     return null;
   }
 
-
   cadastro(dados: CadastroRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/cadastro`, dados);
   }
-
 
   getPerfil(): Observable<Usuario> {
     const headers = new HttpHeaders({
@@ -224,7 +201,6 @@ export class AuthService {
     return this.http.get<Usuario>(`${environment.apiUrl}/user/perfil`, { headers });
   }
 
-
   updatePerfil(dados: Partial<Usuario>): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.getToken()}`
@@ -232,7 +208,6 @@ export class AuthService {
 
     return this.http.put(`${environment.apiUrl}/user/atualizar`, dados, { headers });
   }
-
 
   diagnosticarAutenticacao(): void {
     console.log('=== DIAGNÓSTICO DE AUTENTICAÇÃO ===');

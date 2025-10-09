@@ -9,7 +9,7 @@
     </div>
 
     <div class="perfil-content" *ngIf="usuario">
-      
+
       <div class="perfil-view" *ngIf="!modoEdicao">
         <div class="perfil-avatar">
           <div class="avatar-placeholder">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="perfil-sections">
-          
+
           <div class="info-section">
             <h3>Dados Pessoais</h3>
             <div class="info-grid">
@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          
+
           <div class="info-section">
             <h3>Informações Acadêmicas</h3>
             <div class="info-grid">
@@ -70,43 +70,43 @@
             </div>
           </div>
 
-          
+
           <div class="info-section">
             <h3>Endereço</h3>
             <div class="info-grid">
               <div class="info-item">
                 <label>CEP:</label>
-                <span>{{ usuario.cep || 'Não informado' }}</span>
+                <span>{{ usuario.endereco?.cep || 'Não informado' }}</span>
               </div>
 
               <div class="info-item">
                 <label>Rua:</label>
-                <span>{{ usuario.rua || 'Não informada' }}</span>
+                <span>{{ usuario.endereco?.rua || 'Não informada' }}</span>
               </div>
 
               <div class="info-item">
                 <label>Bairro:</label>
-                <span>{{ usuario.bairro || 'Não informado' }}</span>
+                <span>{{ usuario.endereco?.bairro || 'Não informado' }}</span>
               </div>
 
               <div class="info-item">
                 <label>Número:</label>
-                <span>{{ usuario.numero || 'Não informado' }}</span>
+                <span>{{ usuario.endereco?.numero || 'Não informado' }}</span>
               </div>
 
               <div class="info-item">
                 <label>Complemento:</label>
-                <span>{{ usuario.complemento || 'Não informado' }}</span>
+                <span>{{ usuario.endereco?.complemento || 'Não informado' }}</span>
               </div>
 
               <div class="info-item">
                 <label>Referência:</label>
-                <span>{{ usuario.referencia || 'Não informada' }}</span>
+                <span>{{ usuario.endereco?.referencia || 'Não informada' }}</span>
               </div>
             </div>
           </div>
 
-          
+
           <div class="info-section">
             <h3>Informações do Sistema</h3>
             <div class="info-grid">
@@ -125,10 +125,10 @@
         </div>
       </div>
 
-      
+
       <div class="perfil-edit" *ngIf="modoEdicao">
         <form class="edit-form" (ngSubmit)="salvarPerfil()">
-          
+
           <div class="form-section">
             <h3>Dados Pessoais</h3>
 
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          
+
           <div class="form-section">
             <h3>Informações Acadêmicas</h3>
 
@@ -248,7 +248,7 @@
             </div>
           </div>
 
-          
+
           <div class="form-section">
             <h3>Endereço</h3>
 

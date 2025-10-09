@@ -73,14 +73,18 @@ namespace InovalabAPI.Services
                 SenhaHash = BCrypt.Net.BCrypt.HashPassword(request.Senha),
                 NomeUsuario = request.NomeUsuario,
                 Telefone = request.Telefone,
-                CEP = request.CEP,
-                Rua = request.Rua,
-                Bairro = request.Bairro,
-                Numero = request.Numero,
-                Referencia = request.Referencia,
-                Complemento = request.Complemento,
                 DataCriacao = DateTime.UtcNow,
-                Ativo = true
+                Ativo = true,
+                Endereco = new EnderecoUsuario
+                {
+                    CEP = request.Endereco.CEP,
+                    Rua = request.Endereco.Rua,
+                    Bairro = request.Endereco.Bairro,
+                    Numero = request.Endereco.Numero,
+                    Referencia = request.Endereco.Referencia,
+                    Complemento = request.Endereco.Complemento,
+                    DataCriacao = DateTime.UtcNow
+                }
             };
 
             _context.Usuarios.Add(usuario);

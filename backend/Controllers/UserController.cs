@@ -45,12 +45,15 @@ namespace InovalabAPI.Controllers
                 usuario.Matricula,
                 usuario.NomeUsuario,
                 usuario.Telefone,
-                usuario.CEP,
-                usuario.Rua,
-                usuario.Bairro,
-                usuario.Numero,
-                usuario.Referencia,
-                usuario.Complemento,
+                Endereco = usuario.Endereco != null ? new
+                {
+                    usuario.Endereco.CEP,
+                    usuario.Endereco.Rua,
+                    usuario.Endereco.Bairro,
+                    usuario.Endereco.Numero,
+                    usuario.Endereco.Referencia,
+                    usuario.Endereco.Complemento
+                } : null,
                 usuario.DataCriacao,
                 usuario.UltimoLogin
             };
@@ -108,12 +111,30 @@ namespace InovalabAPI.Controllers
             usuario.Email = request.Email;
             usuario.NomeUsuario = request.NomeUsuario;
             usuario.Telefone = request.Telefone;
-            usuario.CEP = request.CEP;
-            usuario.Rua = request.Rua;
-            usuario.Bairro = request.Bairro;
-            usuario.Numero = request.Numero;
-            usuario.Referencia = request.Referencia;
-            usuario.Complemento = request.Complemento;
+
+            if (usuario.Endereco == null)
+            {
+                usuario.Endereco = new InovalabAPI.Models.EnderecoUsuario
+                {
+                    UsuarioId = usuario.Id,
+                    CEP = request.Endereco.CEP,
+                    Rua = request.Endereco.Rua,
+                    Bairro = request.Endereco.Bairro,
+                    Numero = request.Endereco.Numero,
+                    Referencia = request.Endereco.Referencia,
+                    Complemento = request.Endereco.Complemento,
+                    DataCriacao = DateTime.UtcNow
+                };
+            }
+            else
+            {
+                usuario.Endereco.CEP = request.Endereco.CEP;
+                usuario.Endereco.Rua = request.Endereco.Rua;
+                usuario.Endereco.Bairro = request.Endereco.Bairro;
+                usuario.Endereco.Numero = request.Endereco.Numero;
+                usuario.Endereco.Referencia = request.Endereco.Referencia;
+                usuario.Endereco.Complemento = request.Endereco.Complemento;
+            }
 
             var success = await _userService.UpdateUsuarioAsync(usuario);
             

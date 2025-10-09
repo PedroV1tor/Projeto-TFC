@@ -24,26 +24,7 @@ namespace InovalabAPI.Models.DTOs
         [Phone(ErrorMessage = "Formato de telefone inválido")]
         public string Telefone { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "CEP é obrigatório")]
-        [RegularExpression(@"^\d{5}-?\d{3}$", ErrorMessage = "CEP deve estar no formato 00000-000")]
-        public string CEP { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Rua é obrigatória")]
-        [StringLength(200, ErrorMessage = "Rua deve ter no máximo 200 caracteres")]
-        public string Rua { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Bairro é obrigatório")]
-        [StringLength(100, ErrorMessage = "Bairro deve ter no máximo 100 caracteres")]
-        public string Bairro { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Número é obrigatório")]
-        [StringLength(10, ErrorMessage = "Número deve ter no máximo 10 caracteres")]
-        public string Numero { get; set; } = string.Empty;
-
-        [StringLength(100, ErrorMessage = "Referência deve ter no máximo 100 caracteres")]
-        public string? Referencia { get; set; }
-
-        [StringLength(100, ErrorMessage = "Complemento deve ter no máximo 100 caracteres")]
-        public string? Complemento { get; set; }
+        [Required(ErrorMessage = "O endereço é obrigatório")]
+        public EnderecoUsuarioDTO Endereco { get; set; } = new EnderecoUsuarioDTO();
     }
 }

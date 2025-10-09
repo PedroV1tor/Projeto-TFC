@@ -101,12 +101,12 @@ export class PerfilComponent implements OnInit, OnDestroy {
         instituicao: '',
         curso: '',
         bio: '',
-        cep: this.usuario.cep || '',
-        rua: this.usuario.rua || '',
-        bairro: this.usuario.bairro || '',
-        numero: this.usuario.numero || '',
-        complemento: this.usuario.complemento || '',
-        referencia: this.usuario.referencia || ''
+        cep: this.usuario.endereco?.cep || '',
+        rua: this.usuario.endereco?.rua || '',
+        bairro: this.usuario.endereco?.bairro || '',
+        numero: this.usuario.endereco?.numero || '',
+        complemento: this.usuario.endereco?.complemento || '',
+        referencia: this.usuario.endereco?.referencia || ''
       };
     }
   }
@@ -140,12 +140,14 @@ export class PerfilComponent implements OnInit, OnDestroy {
       nomeUsuario: this.perfilForm.usuario.trim(),
       telefone: this.perfilForm.telefone.trim(),
       matricula: this.perfilForm.matricula.trim(),
-      cep: this.perfilForm.cep.trim(),
-      rua: this.perfilForm.rua.trim(),
-      bairro: this.perfilForm.bairro.trim(),
-      numero: this.perfilForm.numero.trim(),
-      complemento: this.perfilForm.complemento.trim(),
-      referencia: this.perfilForm.referencia.trim()
+      endereco: {
+        cep: this.perfilForm.cep.trim(),
+        rua: this.perfilForm.rua.trim(),
+        bairro: this.perfilForm.bairro.trim(),
+        numero: this.perfilForm.numero.trim(),
+        complemento: this.perfilForm.complemento.trim(),
+        referencia: this.perfilForm.referencia.trim()
+      }
     }).subscribe({
       next: () => {
         alert('Perfil atualizado com sucesso!');

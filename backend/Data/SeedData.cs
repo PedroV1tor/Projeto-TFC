@@ -26,12 +26,16 @@ namespace InovalabAPI.Data
                     NomeUsuario = "admin",
                     SenhaHash = BCrypt.Net.BCrypt.HashPassword("123456"),
                     Telefone = "(11) 99999-9999",
-                    CEP = "01000-000",
-                    Rua = "Rua da Administração",
-                    Bairro = "Centro",
-                    Numero = "100",
                     Ativo = true,
-                    DataCriacao = DateTime.UtcNow
+                    DataCriacao = DateTime.UtcNow,
+                    Endereco = new EnderecoUsuario
+                    {
+                        CEP = "01000-000",
+                        Rua = "Rua da Administração",
+                        Bairro = "Centro",
+                        Numero = "100",
+                        DataCriacao = DateTime.UtcNow
+                    }
                 },
                 new Usuario
                 {
@@ -42,12 +46,16 @@ namespace InovalabAPI.Data
                     Matricula = "2024001",
                     SenhaHash = BCrypt.Net.BCrypt.HashPassword("123456"),
                     Telefone = "(11) 98888-8888",
-                    CEP = "02000-000",
-                    Rua = "Rua das Flores",
-                    Bairro = "Jardim",
-                    Numero = "200",
                     Ativo = true,
-                    DataCriacao = DateTime.UtcNow
+                    DataCriacao = DateTime.UtcNow,
+                    Endereco = new EnderecoUsuario
+                    {
+                        CEP = "02000-000",
+                        Rua = "Rua das Flores",
+                        Bairro = "Jardim",
+                        Numero = "200",
+                        DataCriacao = DateTime.UtcNow
+                    }
                 },
                 new Usuario
                 {
@@ -58,13 +66,17 @@ namespace InovalabAPI.Data
                     Matricula = "2024002",
                     SenhaHash = BCrypt.Net.BCrypt.HashPassword("123456"),
                     Telefone = "(11) 97777-7777",
-                    CEP = "03000-000",
-                    Rua = "Avenida Principal",
-                    Bairro = "Vila Nova",
-                    Numero = "300",
-                    Complemento = "Apto 101",
                     Ativo = true,
-                    DataCriacao = DateTime.UtcNow
+                    DataCriacao = DateTime.UtcNow,
+                    Endereco = new EnderecoUsuario
+                    {
+                        CEP = "03000-000",
+                        Rua = "Avenida Principal",
+                        Bairro = "Vila Nova",
+                        Numero = "300",
+                        Complemento = "Apto 101",
+                        DataCriacao = DateTime.UtcNow
+                    }
                 }
             };
 

@@ -48,12 +48,14 @@ export class CadastroComponent {
       senha: this.senha,
       nomeUsuario: this.usuario,
       telefone: this.telefone,
-      cep: this.cep,
-      rua: this.rua,
-      bairro: this.bairro,
-      numero: this.numero || undefined,
-      referencia: this.referencia || undefined,
-      complemento: this.complemento || undefined
+      endereco: {
+        cep: this.cep,
+        rua: this.rua,
+        bairro: this.bairro,
+        numero: this.numero || undefined,
+        referencia: this.referencia || undefined,
+        complemento: this.complemento || undefined
+      }
     };
 
 

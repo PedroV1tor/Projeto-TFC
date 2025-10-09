@@ -10,6 +10,7 @@ namespace InovalabAPI.Data
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<EnderecoUsuario> EnderecosUsuario { get; set; }
         public DbSet<Agendamento> Agendamentos { get; set; }
         public DbSet<Publicacao> Publicacoes { get; set; }
         public DbSet<Orcamento> Orcamentos { get; set; }
@@ -30,9 +31,22 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Sobrenome).IsRequired();
                 entity.Property(e => e.NomeUsuario).IsRequired();
                 entity.Property(e => e.Telefone).IsRequired();
-                entity.Property(e => e.CEP).IsRequired();
-                entity.Property(e => e.Rua).IsRequired();
-                entity.Property(e => e.Bairro).IsRequired();
+                
+                entity.HasOne(e => e.Endereco)
+                      .WithOne(e => e.Usuario)
+                      .HasForeignKey<EnderecoUsuario>(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<EnderecoUsuario>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.CEP).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.Rua).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Bairro).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Numero).HasMaxLength(10);
+                entity.Property(e => e.Referencia).HasMaxLength(255);
+                entity.Property(e => e.Complemento).HasMaxLength(100);
             });
 
 

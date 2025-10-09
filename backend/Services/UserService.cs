@@ -16,18 +16,21 @@ namespace InovalabAPI.Services
         public async Task<Usuario?> GetUsuarioByEmailAsync(string email)
         {
             return await _context.Usuarios
+                .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Email == email && u.Ativo);
         }
 
         public async Task<Usuario?> GetUsuarioByIdAsync(int id)
         {
             return await _context.Usuarios
+                .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Id == id && u.Ativo);
         }
 
         public async Task<IEnumerable<Usuario>> GetAllUsuariosAsync()
         {
             return await _context.Usuarios
+                .Include(u => u.Endereco)
                 .Where(u => u.Ativo)
                 .OrderBy(u => u.Nome)
                 .ToListAsync();
