@@ -13,13 +13,14 @@
       <div class="perfil-view" *ngIf="!modoEdicao">
         <div class="perfil-avatar">
           <div class="avatar-placeholder">
-            <span class="avatar-text">{{ (usuario.nome?.charAt(0) || 'U') + (usuario.sobrenome?.charAt(0) || '') }}</span>
+            <span class="avatar-text">{{ getAvatarText() }}</span>
           </div>
         </div>
 
         <div class="perfil-sections">
 
-          <div class="info-section">
+          <!-- Perfil de Pessoa Física -->
+          <div *ngIf="usuario.tipo === 'usuario'" class="info-section">
             <h3>Dados Pessoais</h3>
             <div class="info-grid">
               <div class="info-item">
@@ -49,24 +50,50 @@
             </div>
           </div>
 
-
-          <div class="info-section">
-            <h3>Informações Acadêmicas</h3>
+          <!-- Perfil de Empresa -->
+          <div *ngIf="usuario.tipo === 'empresa'" class="info-section">
+            <h3>Dados da Empresa</h3>
             <div class="info-grid">
               <div class="info-item">
-                <label>Instituição:</label>
-                <span>{{ 'Não informada' }}</span>
+                <label>Razão Social:</label>
+                <span>{{ usuario.razaoSocial || 'Não informada' }}</span>
               </div>
 
               <div class="info-item">
-                <label>Curso:</label>
-                <span>{{ 'Não informado' }}</span>
+                <label>Nome Fantasia:</label>
+                <span>{{ usuario.nomeFantasia || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>CNPJ:</label>
+                <span>{{ usuario.cnpj || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Email:</label>
+                <span>{{ usuario.email }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Telefone:</label>
+                <span>{{ usuario.telefone || 'Não informado' }}</span>
               </div>
             </div>
+          </div>
 
-            <div class="info-item bio-item">
-              <label>Biografia:</label>
-              <div class="bio-content">{{ 'Nenhuma biografia adicionada.' }}</div>
+          <!-- Informações do Responsável (só para empresas) -->
+          <div *ngIf="usuario.tipo === 'empresa'" class="info-section">
+            <h3>Responsável Legal</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Nome do Responsável:</label>
+                <span>{{ usuario.responsavelNome || 'Não informado' }}</span>
+              </div>
+
+              <div class="info-item">
+                <label>Telefone do Responsável:</label>
+                <span>{{ usuario.responsavelTelefone || 'Não informado' }}</span>
+              </div>
             </div>
           </div>
 
@@ -339,3 +366,4 @@
     </div>
   </div>
 </div>
+

@@ -40,7 +40,7 @@ export class PublicacoesComponent implements OnInit {
   }
 
   carregarPublicacoes() {
-    this.publicacaoService.getPublicacoes().subscribe({
+    this.publicacaoService.getMinhasPublicacoes().subscribe({
       next: (publicacoes) => this.publicacoes = publicacoes,
       error: (error) => console.error('Erro ao carregar publicações:', error)
     });

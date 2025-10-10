@@ -65,16 +65,34 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   carregarPerfil() {
+    console.log('🔄 Carregando perfil do usuário...');
+    console.log('🔑 Token atual:', this.authService.getToken()?.substring(0, 20) + '...');
+    console.log('👤 Estado de login:', this.authService.isLoggedIn);
+
     this.authService.getPerfil().subscribe({
       next: (usuario) => {
+        console.log('✅ Perfil carregado com sucesso:', usuario);
         this.usuario = usuario;
         this.resetarFormulario();
       },
       error: (error) => {
-        console.error('Erro ao carregar perfil:', error);
+        console.error('❌ Erro ao carregar perfil:', error);
+        console.error('Status do erro:', error.status);
+        console.error('Mensagem do erro:', error.message);
+        console.error('Detalhes completos:', error);
+
         if (error.status === 401) {
+          console.warn('⚠️ Token inválido ou expirado, redirecionando para login...');
           this.authService.logout();
           this.router.navigate(['/login']);
+        } else if (error.status === 404) {
+          console.error('❌ Usuário não encontrado no banco de dados');
+          alert('Erro: Usuário não encontrado. Faça login novamente.');
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        } else {
+          console.error('❌ Erro desconhecido ao carregar perfil');
+          alert('Erro ao carregar perfil. Tente novamente.');
         }
       }
     });
@@ -203,5 +221,24 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   voltarInicio() {
     this.router.navigate(['/']);
+  }
+
+  getAvatarText(): string {
+    if (!this.usuario) return 'U';
+
+    if (this.usuario.tipo === 'empresa') {
+      // Para empresa, pega as primeiras letras da Razão Social
+      const razaoSocial = this.usuario.razaoSocial || 'E';
+      const palavras = razaoSocial.split(' ');
+      if (palavras.length >= 2) {
+        return (palavras[0].charAt(0) + palavras[1].charAt(0)).toUpperCase();
+      }
+      return razaoSocial.substring(0, 2).toUpperCase();
+    } else {
+      // Para pessoa física, usa nome e sobrenome
+      const nome = this.usuario.nome?.charAt(0) || 'U';
+      const sobrenome = this.usuario.sobrenome?.charAt(0) || '';
+      return (nome + sobrenome).toUpperCase();
+    }
   }
 }

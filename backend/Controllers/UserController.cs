@@ -21,44 +21,88 @@ namespace InovalabAPI.Controllers
         [HttpGet("perfil")]
         public async Task<IActionResult> GetPerfil()
         {
+            // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
             
             if (string.IsNullOrEmpty(email))
             {
-                return Unauthorized();
+                Console.WriteLine("⚠️ [Perfil] Tentativa de acesso sem email no token JWT");
+                return Unauthorized(new { message = "Token inválido ou ausente" });
             }
 
+            Console.WriteLine($"🔐 [Perfil] Usuário/Empresa autenticado solicitando perfil: {email}");
+
+            // Primeiro tenta buscar como usuário pessoa física
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
             
-            if (usuario == null)
+            if (usuario != null)
             {
-                return NotFound();
+                Console.WriteLine($"✅ [Perfil] Retornando dados do usuário ID: {usuario.Id}, Email: {email}");
+
+                // Retorna dados de pessoa física
+                var perfilUsuario = new
+                {
+                    Tipo = "usuario",
+                    usuario.Id,
+                    usuario.Nome,
+                    usuario.Sobrenome,
+                    usuario.Email,
+                    usuario.Matricula,
+                    usuario.NomeUsuario,
+                    usuario.Telefone,
+                    Endereco = usuario.Endereco != null ? new
+                    {
+                        usuario.Endereco.CEP,
+                        usuario.Endereco.Rua,
+                        usuario.Endereco.Bairro,
+                        usuario.Endereco.Numero,
+                        usuario.Endereco.Referencia,
+                        usuario.Endereco.Complemento
+                    } : null,
+                    usuario.DataCriacao,
+                    usuario.UltimoLogin
+                };
+
+                return Ok(perfilUsuario);
             }
 
-
-            var perfil = new
+            // Se não encontrou como pessoa física, busca como empresa
+            var empresa = await _userService.GetEmpresaByEmailAsync(email);
+            
+            if (empresa != null)
             {
-                usuario.Id,
-                usuario.Nome,
-                usuario.Sobrenome,
-                usuario.Email,
-                usuario.Matricula,
-                usuario.NomeUsuario,
-                usuario.Telefone,
-                Endereco = usuario.Endereco != null ? new
-                {
-                    usuario.Endereco.CEP,
-                    usuario.Endereco.Rua,
-                    usuario.Endereco.Bairro,
-                    usuario.Endereco.Numero,
-                    usuario.Endereco.Referencia,
-                    usuario.Endereco.Complemento
-                } : null,
-                usuario.DataCriacao,
-                usuario.UltimoLogin
-            };
+                Console.WriteLine($"✅ [Perfil] Retornando dados da empresa ID: {empresa.Id}, Email: {email}");
 
-            return Ok(perfil);
+                // Retorna dados de empresa
+                var perfilEmpresa = new
+                {
+                    Tipo = "empresa",
+                    empresa.Id,
+                    empresa.RazaoSocial,
+                    empresa.NomeFantasia,
+                    empresa.CNPJ,
+                    empresa.Email,
+                    empresa.Telefone,
+                    empresa.ResponsavelNome,
+                    empresa.ResponsavelTelefone,
+                    Endereco = empresa.Endereco != null ? new
+                    {
+                        empresa.Endereco.CEP,
+                        empresa.Endereco.Rua,
+                        empresa.Endereco.Bairro,
+                        empresa.Endereco.Numero,
+                        empresa.Endereco.Referencia,
+                        empresa.Endereco.Complemento
+                    } : null,
+                    empresa.DataCriacao,
+                    empresa.UltimoLogin
+                };
+
+                return Ok(perfilEmpresa);
+            }
+
+            Console.WriteLine($"❌ [Perfil] Nenhum usuário ou empresa encontrado para email: {email}");
+            return NotFound(new { message = "Perfil não encontrado" });
         }
 
         [HttpGet("todos")]
@@ -91,24 +135,32 @@ namespace InovalabAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
             
             if (string.IsNullOrEmpty(email))
             {
-                return Unauthorized();
+                Console.WriteLine("⚠️ [Atualizar Perfil] Tentativa de atualização sem email no token JWT");
+                return Unauthorized(new { message = "Token inválido ou ausente" });
             }
 
+            Console.WriteLine($"🔐 [Atualizar Perfil] Usuário autenticado solicitando atualização: {email}");
+
+            // Busca APENAS o usuário autenticado pelo email do token
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
             
             if (usuario == null)
             {
+                Console.WriteLine($"❌ [Atualizar Perfil] Usuário não encontrado para email: {email}");
                 return NotFound(new { message = "Usuário não encontrado" });
             }
 
+            Console.WriteLine($"✅ [Atualizar Perfil] Atualizando dados do usuário ID: {usuario.Id}, Email: {email}");
 
+            // Atualiza APENAS os dados permitidos (email NÃO pode ser alterado)
             usuario.Nome = request.Nome;
             usuario.Sobrenome = request.Sobrenome;
-            usuario.Email = request.Email;
+            // usuario.Email NÃO é atualizado por segurança (é usado para autenticação)
             usuario.NomeUsuario = request.NomeUsuario;
             usuario.Telefone = request.Telefone;
 

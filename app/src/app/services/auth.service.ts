@@ -14,13 +14,22 @@ export interface EnderecoUsuario {
 }
 
 export interface Usuario {
+  tipo?: 'usuario' | 'empresa';
   id?: number;
   email: string;
+  // Campos de Pessoa Física
   nome?: string;
   sobrenome?: string;
   nomeUsuario?: string;
   telefone?: string;
   matricula?: string;
+  // Campos de Empresa
+  razaoSocial?: string;
+  nomeFantasia?: string;
+  cnpj?: string;
+  responsavelNome?: string;
+  responsavelTelefone?: string;
+  // Comum
   endereco?: EnderecoUsuario;
   dataCriacao?: string;
   ultimoLogin?: string;
@@ -220,10 +229,15 @@ export class AuthService {
 
   getPerfil(): Observable<Usuario> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.getToken()}`
+      'Authorization': `Bearer ${this.getToken()}`,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
     });
 
-    return this.http.get<Usuario>(`${environment.apiUrl}/user/perfil`, { headers });
+    // Adiciona timestamp para evitar cache do navegador
+    const timestamp = new Date().getTime();
+    return this.http.get<Usuario>(`${environment.apiUrl}/user/perfil?t=${timestamp}`, { headers });
   }
 
   updatePerfil(dados: Partial<Usuario>): Observable<any> {
