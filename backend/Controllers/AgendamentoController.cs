@@ -114,7 +114,9 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                var agendamentos = await _agendamentoService.GetProximosEventosAsync(dias);
+                // Retorna próximos eventos apenas do usuário logado
+                var usuarioId = GetCurrentUserId();
+                var agendamentos = await _agendamentoService.GetProximosEventosPorUsuarioAsync(usuarioId, dias);
                 return Ok(agendamentos);
             }
             catch (Exception ex)
@@ -204,6 +206,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
+                // Força o filtro a incluir apenas agendamentos do usuário logado
+                var usuarioId = GetCurrentUserId();
+                filtro.UsuarioId = usuarioId;
+                
                 var agendamentos = await _agendamentoService.GetByFiltroAsync(filtro);
                 return Ok(agendamentos);
             }

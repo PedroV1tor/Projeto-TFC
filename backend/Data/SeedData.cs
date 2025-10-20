@@ -27,6 +27,7 @@ namespace InovalabAPI.Data
                     SenhaHash = BCrypt.Net.BCrypt.HashPassword("123456"),
                     Telefone = "(11) 99999-9999",
                     Ativo = true,
+                    IsAdmin = true,
                     DataCriacao = DateTime.UtcNow,
                     Endereco = new EnderecoUsuario
                     {

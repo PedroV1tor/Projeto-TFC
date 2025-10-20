@@ -1,5 +1,5 @@
 <div class="laboratorio-container">
-  
+
   <div class="page-header">
     <div class="container">
       <h1>🔬 Laboratório INOVALAB</h1>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  
+
   <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -34,13 +34,14 @@
         </div>
 
         <div class="form-group">
-          <label for="data">Data *</label>
+          <label for="data">Data * (mínimo: amanhã)</label>
           <input
             type="date"
             id="data"
             [(ngModel)]="novoAgendamento.data"
             name="data"
             required
+            [min]="getDataMinima()"
             class="form-input"
           >
         </div>
@@ -70,7 +71,7 @@
     </div>
   </div>
 
-  
+
   <div class="agendamentos-section">
     <div class="container">
       <div class="section-title">
@@ -78,7 +79,7 @@
         <span class="total">{{ agendamentos.length }} agendamento(s)</span>
       </div>
 
-      
+
       <div class="agendamentos-grid" *ngIf="agendamentos.length > 0">
         <div class="agendamento-card" *ngFor="let agendamento of agendamentos">
           <div class="card-header">
@@ -104,41 +105,60 @@
           </div>
 
           <div class="card-actions">
-            <button
-              class="btn-action btn-editar"
-              (click)="editarAgendamento(agendamento)"
-              [disabled]="agendamento.status === 'cancelado'"
-            >
-              <i class="icon">✏️</i>
-              Editar
-            </button>
-
-            
-            <div class="status-dropdown">
-              <select
-                [value]="agendamento.status"
-                (change)="alterarStatus(agendamento.id, $any($event.target).value)"
-                class="status-select"
-                title="Alterar status do agendamento"
-              >
-                <option value="ativo">Ativo</option>
-                <option value="concluido">Concluído</option>
-                <option value="cancelado">Cancelado</option>
-              </select>
+            <!-- Botões de status (apenas para admin) -->
+            <div class="status-actions" *ngIf="isAdmin">
+              <label>Alterar Status:</label>
+              <div class="status-buttons">
+                <button
+                  class="btn-status btn-aprovado"
+                  [disabled]="agendamento.status.toLowerCase() === 'aprovado'"
+                  (click)="alterarStatusAgendamento(agendamento, 'aprovado')"
+                  title="Aprovar agendamento"
+                >
+                  ✓ Aprovado
+                </button>
+                <button
+                  class="btn-status btn-pendente"
+                  [disabled]="agendamento.status.toLowerCase() === 'pendente'"
+                  (click)="alterarStatusAgendamento(agendamento, 'pendente')"
+                  title="Marcar como pendente"
+                >
+                  ⏳ Pendente
+                </button>
+                <button
+                  class="btn-status btn-reprovado"
+                  [disabled]="agendamento.status.toLowerCase() === 'reprovado'"
+                  (click)="alterarStatusAgendamento(agendamento, 'reprovado')"
+                  title="Reprovar agendamento"
+                >
+                  ✗ Reprovado
+                </button>
+              </div>
             </div>
 
-            <button
-              class="btn-action btn-excluir"
-              (click)="excluirAgendamento(agendamento.id)"
-            >
-              <i class="icon">🗑️</i>
-              Excluir
-            </button>
+            <!-- Botões de ação -->
+            <div class="action-buttons">
+              <button
+                class="btn-action btn-editar"
+                (click)="editarAgendamento(agendamento)"
+              >
+                <i class="icon">✏️</i>
+                Editar
+              </button>
+
+              <button
+                class="btn-action btn-excluir"
+                (click)="excluirAgendamento(agendamento.id)"
+              >
+                <i class="icon">🗑️</i>
+                Excluir
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      
+
       <div class="empty-state" *ngIf="agendamentos.length === 0">
         <div class="empty-icon">📅</div>
         <h3>Nenhum agendamento encontrado</h3>
@@ -146,6 +166,93 @@
         <button class="btn-criar-primeiro" (click)="abrirFormulario()">
           Criar Primeiro Agendamento
         </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Seção de Publicações (apenas para admins) -->
+  <div class="publicacoes-section" *ngIf="isAdmin">
+    <div class="container">
+      <div class="section-title">
+        <h2>📰 Gerenciamento de Publicações</h2>
+        <span class="total">{{ publicacoes.length }} publicação(ões)</span>
+      </div>
+
+      <div class="publicacoes-grid" *ngIf="publicacoes.length > 0">
+        <div class="publicacao-card" *ngFor="let publicacao of publicacoes">
+          <div class="card-header">
+            <h3>{{ publicacao.titulo }}</h3>
+            <span class="status-badge" [class]="getStatusClassPublicacao(publicacao.status)">
+              {{ getStatusTextPublicacao(publicacao.status) }}
+            </span>
+          </div>
+
+          <div class="card-content">
+            <div class="publicacao-info">
+              <div class="info-item">
+                <i class="icon">📅</i>
+                <span>{{ formatarDataPublicacao(publicacao.criadoEm) }}</span>
+              </div>
+              <div class="info-item" *ngIf="publicacao.autor">
+                <i class="icon">👤</i>
+                <span>{{ publicacao.autor }}</span>
+              </div>
+              <div class="info-item" *ngIf="publicacao.visualizacoes !== undefined">
+                <i class="icon">👁️</i>
+                <span>{{ publicacao.visualizacoes }} visualizações</span>
+              </div>
+            </div>
+
+            <p class="resumo">{{ publicacao.resumo }}</p>
+          </div>
+
+          <div class="card-actions">
+            <div class="status-actions">
+              <label>Alterar Status:</label>
+              <div class="status-buttons">
+                <button
+                  class="btn-status btn-ativa"
+                  [disabled]="publicacao.status === 'ativa'"
+                  (click)="alterarStatusPublicacao(publicacao, 'ativa')"
+                  title="Ativar publicação"
+                >
+                  ✓ Ativa
+                </button>
+                <button
+                  class="btn-status btn-rascunho"
+                  [disabled]="publicacao.status === 'rascunho'"
+                  (click)="alterarStatusPublicacao(publicacao, 'rascunho')"
+                  title="Marcar como rascunho"
+                >
+                  ✎ Rascunho
+                </button>
+                <button
+                  class="btn-status btn-arquivada"
+                  [disabled]="publicacao.status === 'arquivada'"
+                  (click)="alterarStatusPublicacao(publicacao, 'arquivada')"
+                  title="Arquivar publicação"
+                >
+                  📦 Arquivada
+                </button>
+              </div>
+            </div>
+
+            <button
+              class="btn-action btn-excluir-pub"
+              (click)="excluirPublicacao(publicacao.id)"
+            >
+              <i class="icon">🗑️</i>
+              Excluir Publicação
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="publicacoes.length === 0">
+        <div class="empty-icon">📰</div>
+        <h3>Nenhuma publicação encontrada</h3>
+        <p>Não há publicações cadastradas no sistema.</p>
       </div>
     </div>
   </div>

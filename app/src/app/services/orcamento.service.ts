@@ -39,12 +39,13 @@ export class OrcamentoService {
 
 
   getOrcamentos(): Observable<Orcamento[]> {
-    return this.http.get<Orcamento[]>(this.apiUrl, { headers: this.getHeaders() });
+    return this.http.get<Orcamento[]>(`${this.apiUrl}/meus`, { headers: this.getHeaders() });
   }
 
 
   getOrcamentosByStatus(status: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<Orcamento[]> {
-    return this.http.get<Orcamento[]>(`${this.apiUrl}/status/${status}`, { headers: this.getHeaders() });
+    // Usa o endpoint de filtro para garantir que retorna apenas orçamentos do usuário logado
+    return this.filtrarOrcamentos({ status: status });
   }
 
 

@@ -114,7 +114,9 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                var estatisticas = await _orcamentoService.GetEstatisticasAsync();
+                // Retorna estatísticas apenas do usuário logado
+                var usuarioId = GetCurrentUserId();
+                var estatisticas = await _orcamentoService.GetEstatisticasPorUsuarioAsync(usuarioId);
                 return Ok(estatisticas);
             }
             catch (Exception ex)
@@ -128,7 +130,9 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                var orcamentos = await _orcamentoService.GetOrcamentosVencendoAsync(dias);
+                // Retorna orçamentos vencendo apenas do usuário logado
+                var usuarioId = GetCurrentUserId();
+                var orcamentos = await _orcamentoService.GetOrcamentosVencendoPorUsuarioAsync(usuarioId, dias);
                 return Ok(orcamentos);
             }
             catch (Exception ex)
@@ -218,6 +222,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
+                // Força o filtro a incluir apenas orçamentos do usuário logado
+                var usuarioId = GetCurrentUserId();
+                filtro.UsuarioId = usuarioId;
+                
                 var orcamentos = await _orcamentoService.GetByFiltroAsync(filtro);
                 return Ok(orcamentos);
             }

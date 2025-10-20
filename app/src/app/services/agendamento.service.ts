@@ -39,6 +39,11 @@ export class AgendamentoService {
 
 
   getAgendamentos(): Observable<Agendamento[]> {
+    return this.http.get<Agendamento[]>(`${this.apiUrl}/meus`, { headers: this.getHeaders() });
+  }
+
+  // Retorna TODOS os agendamentos (apenas para admin)
+  getTodosAgendamentos(): Observable<Agendamento[]> {
     return this.http.get<Agendamento[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
@@ -49,7 +54,8 @@ export class AgendamentoService {
 
 
   getAgendamentosByStatus(status: string): Observable<Agendamento[]> {
-    return this.http.get<Agendamento[]>(`${this.apiUrl}/status/${status}`, { headers: this.getHeaders() });
+    // Usa o endpoint de filtro para garantir que retorna apenas agendamentos do usuário logado
+    return this.filtrarAgendamentos({ status: status });
   }
 
 

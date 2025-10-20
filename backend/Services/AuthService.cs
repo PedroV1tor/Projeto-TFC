@@ -35,7 +35,7 @@ namespace InovalabAPI.Services
                 usuario.UltimoLogin = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
-                var token = GenerateJwtToken(usuario.Id, usuario.Email, usuario.Nome, usuario.NomeUsuario);
+                var token = GenerateJwtToken(usuario.Id, usuario.Email, usuario.Nome, usuario.NomeUsuario, usuario.IsAdmin);
                 
                 return new LoginResponse
                 {
@@ -43,6 +43,7 @@ namespace InovalabAPI.Services
                     Email = usuario.Email,
                     Nome = usuario.Nome,
                     NomeUsuario = usuario.NomeUsuario,
+                    IsAdmin = usuario.IsAdmin,
                     ExpiresAt = DateTime.UtcNow.AddHours(24)
                 };
             }
@@ -56,7 +57,7 @@ namespace InovalabAPI.Services
                 empresa.UltimoLogin = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
-                var token = GenerateJwtToken(empresa.Id, empresa.Email, empresa.RazaoSocial, empresa.NomeFantasia ?? empresa.RazaoSocial);
+                var token = GenerateJwtToken(empresa.Id, empresa.Email, empresa.RazaoSocial, empresa.NomeFantasia ?? empresa.RazaoSocial, false);
                 
                 return new LoginResponse
                 {
@@ -64,6 +65,7 @@ namespace InovalabAPI.Services
                     Email = empresa.Email,
                     Nome = empresa.RazaoSocial,
                     NomeUsuario = empresa.NomeFantasia ?? empresa.RazaoSocial,
+                    IsAdmin = false,
                     ExpiresAt = DateTime.UtcNow.AddHours(24)
                 };
             }
@@ -343,14 +345,14 @@ namespace InovalabAPI.Services
             }
         }
 
-        public string GenerateJwtToken(int userId, string email, string nome, string nomeUsuario)
+        public string GenerateJwtToken(int userId, string email, string nome, string nomeUsuario, bool isAdmin = false)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"] ?? "MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres123456";
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, email),
@@ -358,9 +360,15 @@ namespace InovalabAPI.Services
                 new Claim(ClaimTypes.Email, email),
                 new Claim("nome", nome),
                 new Claim("nomeUsuario", nomeUsuario),
+                new Claim("isAdmin", isAdmin.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };
+
+            if (isAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],

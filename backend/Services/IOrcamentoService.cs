@@ -13,7 +13,9 @@ namespace InovalabAPI.Services
         Task<IEnumerable<OrcamentoDTO>> GetByStatusAsync(string status);
         Task<IEnumerable<OrcamentoDTO>> GetByUsuarioAsync(int usuarioId);
         Task<EstatisticasOrcamentoDTO> GetEstatisticasAsync();
+        Task<EstatisticasOrcamentoDTO> GetEstatisticasPorUsuarioAsync(int usuarioId);
         Task<IEnumerable<OrcamentoResumoDTO>> GetOrcamentosVencendoAsync(int diasProximos = 7);
+        Task<IEnumerable<OrcamentoResumoDTO>> GetOrcamentosVencendoPorUsuarioAsync(int usuarioId, int diasProximos = 7);
         Task<IEnumerable<OrcamentoDTO>> GetByFiltroAsync(FiltroOrcamentoDTO filtro);
     }
 }

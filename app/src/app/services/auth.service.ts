@@ -33,6 +33,7 @@ export interface Usuario {
   endereco?: EnderecoUsuario;
   dataCriacao?: string;
   ultimoLogin?: string;
+  isAdmin?: boolean;
 }
 
 export interface LoginRequest {
@@ -45,6 +46,7 @@ export interface LoginResponse {
   email: string;
   nome: string;
   nomeUsuario: string;
+  isAdmin: boolean;
   expiresAt: string;
 }
 
@@ -123,14 +125,16 @@ export class AuthService {
               localStorage.setItem('currentUser', JSON.stringify({
                 email: response.email,
                 nome: response.nome,
-                nomeUsuario: response.nomeUsuario
+                nomeUsuario: response.nomeUsuario,
+                isAdmin: response.isAdmin
               }));
               console.log('AuthService: token salvo no localStorage:', response.token.substring(0, 20) + '...');
             }
             this.currentUserSubject.next({
               email: response.email,
               nome: response.nome,
-              nomeUsuario: response.nomeUsuario
+              nomeUsuario: response.nomeUsuario,
+              isAdmin: response.isAdmin
             });
             this.isLoggedInSubject.next(true);
 
@@ -203,6 +207,11 @@ export class AuthService {
 
   get currentUser(): Usuario | null {
     return this.currentUserSubject.value;
+  }
+
+  get isAdmin(): boolean {
+    const user = this.currentUserSubject.value;
+    return user?.isAdmin === true;
   }
 
   getToken(): string | null {

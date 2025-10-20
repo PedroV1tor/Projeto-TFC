@@ -132,9 +132,25 @@ namespace InovalabAPI.Services
             return agendamentos.Select(a => MapToDTO(a));
         }
 
+        public async Task<IEnumerable<AgendamentoDTO>> GetProximosEventosPorUsuarioAsync(int usuarioId, int diasProximos = 7)
+        {
+            var dataLimite = DateTime.UtcNow.AddDays(diasProximos);
+            
+            var agendamentos = await _context.Agendamentos
+                .Include(a => a.UsuarioCriador)
+                .Where(a => a.UsuarioId == usuarioId && a.Status == "ativo" && a.Data >= DateTime.UtcNow && a.Data <= dataLimite)
+                .OrderBy(a => a.Data)
+                .ToListAsync();
+
+            return agendamentos.Select(a => MapToDTO(a));
+        }
+
         public async Task<IEnumerable<AgendamentoDTO>> GetByFiltroAsync(FiltroAgendamentoDTO filtro)
         {
             var query = _context.Agendamentos.Include(a => a.UsuarioCriador).AsQueryable();
+
+            if (filtro.UsuarioId.HasValue)
+                query = query.Where(a => a.UsuarioId == filtro.UsuarioId.Value);
 
             if (!string.IsNullOrEmpty(filtro.Status))
                 query = query.Where(a => a.Status == filtro.Status);

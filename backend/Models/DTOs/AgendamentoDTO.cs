@@ -63,5 +63,6 @@ namespace InovalabAPI.Models.DTOs
         public DateTime? DataFim { get; set; }
         public bool? ProximosEventos { get; set; }
         public int? ProximosDias { get; set; }
+        public int? UsuarioId { get; set; }
     }
 }

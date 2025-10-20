@@ -14,6 +14,7 @@ namespace InovalabAPI.Services
         Task<IEnumerable<AgendamentoDTO>> GetByStatusAsync(string status);
         Task<IEnumerable<AgendamentoDTO>> GetByUsuarioAsync(int usuarioId);
         Task<IEnumerable<AgendamentoDTO>> GetProximosEventosAsync(int diasProximos = 7);
+        Task<IEnumerable<AgendamentoDTO>> GetProximosEventosPorUsuarioAsync(int usuarioId, int diasProximos = 7);
         Task<IEnumerable<AgendamentoDTO>> GetByFiltroAsync(FiltroAgendamentoDTO filtro);
     }
 }

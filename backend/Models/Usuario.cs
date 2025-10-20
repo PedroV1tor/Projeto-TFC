@@ -40,6 +40,8 @@ namespace InovalabAPI.Models
 
         public bool Ativo { get; set; } = true;
 
+        public bool IsAdmin { get; set; } = false;
+
         // Relacionamento com EnderecoUsuario
         public EnderecoUsuario? Endereco { get; set; }
     }

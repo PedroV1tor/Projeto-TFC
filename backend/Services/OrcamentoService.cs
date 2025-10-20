@@ -148,6 +148,53 @@ namespace InovalabAPI.Services
             return estatisticas;
         }
 
+        public async Task<EstatisticasOrcamentoDTO> GetEstatisticasPorUsuarioAsync(int usuarioId)
+        {
+            var orcamentos = await _context.Orcamentos
+                .Where(o => o.UsuarioId == usuarioId)
+                .ToListAsync();
+
+            var estatisticas = new EstatisticasOrcamentoDTO
+            {
+                Total = orcamentos.Count,
+                Pendentes = orcamentos.Count(o => o.Status == "pendente"),
+                Aprovados = orcamentos.Count(o => o.Status == "aprovado"),
+                Rejeitados = orcamentos.Count(o => o.Status == "rejeitado"),
+                Concluidos = orcamentos.Count(o => o.Status == "concluido"),
+                ValorTotal = orcamentos.Where(o => o.Valor.HasValue && (o.Status == "aprovado" || o.Status == "concluido"))
+                                     .Sum(o => o.Valor ?? 0),
+                OrcamentosVencendo = (await GetOrcamentosVencendoPorUsuarioAsync(usuarioId)).ToList()
+            };
+
+            estatisticas.ValorMedio = estatisticas.Total > 0 
+                ? orcamentos.Where(o => o.Valor.HasValue).Average(o => o.Valor ?? 0)
+                : 0;
+
+            return estatisticas;
+        }
+
+        public async Task<IEnumerable<OrcamentoResumoDTO>> GetOrcamentosVencendoPorUsuarioAsync(int usuarioId, int diasProximos = 7)
+        {
+            var dataLimite = DateTime.UtcNow.AddDays(diasProximos);
+
+            var orcamentos = await _context.Orcamentos
+                .Where(o => o.UsuarioId == usuarioId && o.Status == "pendente" && o.PrazoOrcamento <= dataLimite)
+                .OrderBy(o => o.PrazoOrcamento)
+                .ToListAsync();
+
+            return orcamentos.Select(o => new OrcamentoResumoDTO
+            {
+                Id = o.Id,
+                Titulo = o.Titulo,
+                Cliente = o.Cliente,
+                PrazoOrcamento = o.PrazoOrcamento,
+                PrazoEntrega = o.PrazoEntrega,
+                Status = o.Status,
+                DiasRestantes = (int)(o.PrazoOrcamento - DateTime.UtcNow).TotalDays,
+                PrazoVencido = o.PrazoOrcamento < DateTime.UtcNow
+            });
+        }
+
         public async Task<IEnumerable<OrcamentoResumoDTO>> GetOrcamentosVencendoAsync(int diasProximos = 7)
         {
             var dataLimite = DateTime.UtcNow.AddDays(diasProximos);
@@ -173,6 +220,9 @@ namespace InovalabAPI.Services
         public async Task<IEnumerable<OrcamentoDTO>> GetByFiltroAsync(FiltroOrcamentoDTO filtro)
         {
             var query = _context.Orcamentos.Include(o => o.UsuarioCriador).AsQueryable();
+
+            if (filtro.UsuarioId.HasValue)
+                query = query.Where(o => o.UsuarioId == filtro.UsuarioId.Value);
 
             if (!string.IsNullOrEmpty(filtro.Status))
                 query = query.Where(o => o.Status == filtro.Status.ToLower());

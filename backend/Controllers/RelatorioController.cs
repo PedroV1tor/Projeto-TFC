@@ -36,13 +36,11 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine($"🔍 [RelatorioController] Gerando resumo geral");
                 Console.WriteLine($"📅 Parâmetros: dataInicial={dataInicial}, dataFinal={dataFinal}");
-                
 
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var publicacoes = await _publicacaoService.GetAllAsync();
                 var agendamentos = await _agendamentoService.GetAllAsync();
                 var orcamentos = await _orcamentoService.GetAllAsync();
-
 
                 var usuariosFiltrados = usuarios.AsQueryable();
                 var publicacoesFiltradas = publicacoes.AsQueryable();
@@ -65,11 +63,10 @@ namespace InovalabAPI.Controllers
                     orcamentosFiltrados = orcamentosFiltrados.Where(o => o.CriadoEm <= dataFinal.Value);
                 }
 
-
                 var resumo = new RelatorioResumoDTO
                 {
                     TotalUsuarios = usuariosFiltrados.Count(),
-                    UsuariosAtivos = usuariosFiltrados.Count(), // Todos os usuários que acessam são considerados ativos
+                    UsuariosAtivos = usuariosFiltrados.Count(),
                     TotalPublicacoes = publicacoesFiltradas.Count(),
                     PublicacoesAtivas = publicacoesFiltradas.Count(p => p.Status == "ativa"),
                     TotalAgendamentos = agendamentosFiltrados.Count(),
@@ -83,7 +80,6 @@ namespace InovalabAPI.Controllers
                 };
 
                 Console.WriteLine($"✅ [RelatorioController] Resumo gerado: {resumo.TotalUsuarios} usuários, {resumo.TotalPublicacoes} publicações");
-                
                 return Ok(resumo);
             }
             catch (Exception ex)
@@ -102,50 +98,49 @@ namespace InovalabAPI.Controllers
             {
                 Console.WriteLine($"🔍 [RelatorioController] Iniciando busca de usuários");
                 Console.WriteLine($"📅 Parâmetros: dataInicial={dataInicial}, dataFinal={dataFinal}");
-                
+
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var usuariosList = usuarios.ToList();
-                
+
                 Console.WriteLine($"📊 Total de usuários encontrados no banco: {usuariosList.Count}");
-                
+
                 if (usuariosList.Any())
                 {
                     Console.WriteLine($"📋 Primeiros usuários:");
                     foreach (var u in usuariosList.Take(3))
                     {
-                        Console.WriteLine($"   - {u.Nome} {u.Sobrenome} (Criado em: {u.DataCriacao:yyyy-MM-dd})");
+                        Console.WriteLine($" - {u.Nome} {u.Sobrenome} (Criado em: {u.DataCriacao:yyyy-MM-dd})");
                     }
                 }
-                
 
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
                     Console.WriteLine($"🔄 Aplicando filtros de data...");
                     var usuariosAntesDoFiltro = usuariosList.Count;
-                    
-                    usuariosList = usuariosList.Where(u => 
+
+                    usuariosList = usuariosList.Where(u =>
                     {
                         var dataCriacao = u.DataCriacao.Date;
                         var incluir = true;
-                        
+
                         Console.WriteLine($"🗓️ Verificando usuário {u.Nome}: dataCriacao={dataCriacao:yyyy-MM-dd}, dataInicial={dataInicial:yyyy-MM-dd}, dataFinal={dataFinal:yyyy-MM-dd}");
-                        
+
                         if (dataInicial.HasValue)
                         {
                             incluir = incluir && dataCriacao >= dataInicial.Value.Date;
-                            Console.WriteLine($"   ➡️ Filtro dataInicial: {dataCriacao >= dataInicial.Value.Date} (incluir={incluir})");
+                            Console.WriteLine($" ➡️ Filtro dataInicial: {dataCriacao >= dataInicial.Value.Date} (incluir={incluir})");
                         }
-                            
+
                         if (dataFinal.HasValue)
                         {
                             incluir = incluir && dataCriacao <= dataFinal.Value.Date;
-                            Console.WriteLine($"   ➡️ Filtro dataFinal: {dataCriacao <= dataFinal.Value.Date} (incluir={incluir})");
+                            Console.WriteLine($" ➡️ Filtro dataFinal: {dataCriacao <= dataFinal.Value.Date} (incluir={incluir})");
                         }
-                            
-                        Console.WriteLine($"   ✅ Resultado final para {u.Nome}: {incluir}");
+
+                        Console.WriteLine($" ✅ Resultado final para {u.Nome}: {incluir}");
                         return incluir;
                     }).ToList();
-                    
+
                     Console.WriteLine($"📈 Usuários após filtro: {usuariosList.Count} (eram {usuariosAntesDoFiltro})");
                 }
                 else
@@ -190,21 +185,20 @@ namespace InovalabAPI.Controllers
             {
                 var publicacoes = await _publicacaoService.GetAllAsync();
                 var publicacoesList = publicacoes.ToList();
-                
 
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
-                    publicacoesList = publicacoesList.Where(p => 
+                    publicacoesList = publicacoesList.Where(p =>
                     {
                         var dataCriacao = p.CriadoEm.Date;
                         var incluir = true;
-                        
+
                         if (dataInicial.HasValue)
                             incluir = incluir && dataCriacao >= dataInicial.Value.Date;
-                            
+
                         if (dataFinal.HasValue)
                             incluir = incluir && dataCriacao <= dataFinal.Value.Date;
-                            
+
                         return incluir;
                     }).ToList();
                 }
@@ -246,21 +240,20 @@ namespace InovalabAPI.Controllers
             {
                 var agendamentos = await _agendamentoService.GetAllAsync();
                 var agendamentosList = agendamentos.ToList();
-                
 
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
-                    agendamentosList = agendamentosList.Where(a => 
+                    agendamentosList = agendamentosList.Where(a =>
                     {
                         var dataCriacao = a.CriadoEm.Date;
                         var incluir = true;
-                        
+
                         if (dataInicial.HasValue)
                             incluir = incluir && dataCriacao >= dataInicial.Value.Date;
-                            
+
                         if (dataFinal.HasValue)
                             incluir = incluir && dataCriacao <= dataFinal.Value.Date;
-                            
+
                         return incluir;
                     }).ToList();
                 }
@@ -292,43 +285,6 @@ namespace InovalabAPI.Controllers
             }
         }
 
-        [HttpGet("teste")]
-        public async Task<ActionResult> TestConnection()
-        {
-            try
-            {
-                Console.WriteLine("🧪 [RelatorioController] Endpoint de teste chamado");
-                
-
-                var usuarios = await _userService.GetAllUsuariosAsync();
-                var publicacoes = await _publicacaoService.GetAllAsync();
-                var agendamentos = await _agendamentoService.GetAllAsync();
-                var orcamentos = await _orcamentoService.GetAllAsync();
-                
-                var resultado = new
-                {
-                    status = "success",
-                    timestamp = DateTime.Now,
-                    dados = new
-                    {
-                        totalUsuarios = usuarios.Count(),
-                        totalPublicacoes = publicacoes.Count(),
-                        totalAgendamentos = agendamentos.Count(),
-                        totalOrcamentos = orcamentos.Count()
-                    }
-                };
-                
-                Console.WriteLine($"✅ [RelatorioController] Teste concluído: {resultado.dados.totalUsuarios} usuários, {resultado.dados.totalPublicacoes} publicações, {resultado.dados.totalAgendamentos} agendamentos, {resultado.dados.totalOrcamentos} orçamentos");
-                
-                return Ok(resultado);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ [RelatorioController] Erro no teste: {ex.Message}");
-                return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
-            }
-        }
-
         [HttpGet("orcamentos")]
         public async Task<ActionResult<RelatorioResponseDTO<RelatorioOrcamentoDTO>>> GetRelatorioOrcamentos(
             [FromQuery] DateTime? dataInicial,
@@ -338,21 +294,20 @@ namespace InovalabAPI.Controllers
             {
                 var orcamentos = await _orcamentoService.GetAllAsync();
                 var orcamentosList = orcamentos.ToList();
-                
 
                 if (dataInicial.HasValue || dataFinal.HasValue)
                 {
-                    orcamentosList = orcamentosList.Where(o => 
+                    orcamentosList = orcamentosList.Where(o =>
                     {
                         var dataCriacao = o.CriadoEm.Date;
                         var incluir = true;
-                        
+
                         if (dataInicial.HasValue)
                             incluir = incluir && dataCriacao >= dataInicial.Value.Date;
-                            
+
                         if (dataFinal.HasValue)
                             incluir = incluir && dataCriacao <= dataFinal.Value.Date;
-                            
+
                         return incluir;
                     }).ToList();
                 }
@@ -381,6 +336,41 @@ namespace InovalabAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("teste")]
+        public async Task<ActionResult> TestConnection()
+        {
+            try
+            {
+                Console.WriteLine("🧪 [RelatorioController] Endpoint de teste chamado");
+
+                var usuarios = await _userService.GetAllUsuariosAsync();
+                var publicacoes = await _publicacaoService.GetAllAsync();
+                var agendamentos = await _agendamentoService.GetAllAsync();
+                var orcamentos = await _orcamentoService.GetAllAsync();
+
+                var resultado = new
+                {
+                    status = "success",
+                    timestamp = DateTime.Now,
+                    dados = new
+                    {
+                        totalUsuarios = usuarios.Count(),
+                        totalPublicacoes = publicacoes.Count(),
+                        totalAgendamentos = agendamentos.Count(),
+                        totalOrcamentos = orcamentos.Count()
+                    }
+                };
+
+                Console.WriteLine($"✅ [RelatorioController] Teste concluído: {resultado.dados.totalUsuarios} usuários, {resultado.dados.totalPublicacoes} publicações, {resultado.dados.totalAgendamentos} agendamentos, {resultado.dados.totalOrcamentos} orçamentos");
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ [RelatorioController] Erro no teste: {ex.Message}");
+                return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
     }

@@ -115,5 +115,6 @@ namespace InovalabAPI.Models.DTOs
         public decimal? ValorMaximo { get; set; }
         public bool? PrazosVencidos { get; set; }
         public int? DiasPrazo { get; set; }
+        public int? UsuarioId { get; set; }
     }
 }
