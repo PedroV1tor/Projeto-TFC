@@ -88,12 +88,12 @@ namespace InovalabAPI.Controllers
         }
 
         [HttpPost("verificar-codigo")]
-        public async Task<IActionResult> VerificarCodigo([FromBody] VerificarCodigoRequest request)
+        public async Task<IActionResult> VerificarCodigo([FromBody] VerificarCodigoRequest? request)
         {
             Console.WriteLine($"🌐 API VerificarCodigo chamada para: {request?.Email}");
             Console.WriteLine($"🌐 Código recebido: '{request?.Codigo}'");
             
-            if (!ModelState.IsValid)
+            if (request == null || !ModelState.IsValid)
             {
                 Console.WriteLine($"❌ ModelState inválido:");
                 foreach (var error in ModelState)

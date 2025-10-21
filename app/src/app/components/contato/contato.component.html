@@ -1,5 +1,5 @@
 <div class="contato-container">
-  
+
   <section class="hero-section">
     <div class="hero-content">
       <h1 class="hero-title">
@@ -18,7 +18,7 @@
     </div>
   </section>
 
-  
+
   <section class="contact-methods-section">
     <div class="container">
       <h2 class="section-title">Formas de Contato</h2>
@@ -46,7 +46,7 @@
   </section>
 
 
-  
+
   <section class="offices-section">
     <div class="container">
       <h2 class="section-title">Nossa Localização</h2>
@@ -79,17 +79,22 @@
 
         <div class="map-placeholder">
           <div class="map-container">
+            <div class="map-background">
+              <div class="map-grid"></div>
+              <div class="location-pulse"></div>
+            </div>
+
             <div class="map-pin"
                  [style.animation-delay.s]="currentOfficeIndex * 0.2">
               📍
             </div>
-            <div class="map-info">
+
+            <div class="map-info" *ngIf="currentOffice">
               <h4>{{ currentOffice.name }}</h4>
               <p>{{ currentOffice.address }}</p>
-            </div>
-            <div class="map-background">
-              <div class="map-grid"></div>
-              <div class="location-pulse"></div>
+              <p class="coordinates-text">
+                🌍 {{ currentOffice.coordinates.lat }}, {{ currentOffice.coordinates.lng }}
+              </p>
             </div>
           </div>
         </div>
@@ -97,7 +102,7 @@
     </div>
   </section>
 
-  
+
   <section class="faq-section">
     <div class="container">
       <h2 class="section-title">Perguntas Frequentes</h2>
@@ -117,24 +122,6 @@
     </div>
   </section>
 
-  
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Ainda tem dúvidas?</h2>
-        <p>
-          Nossa equipe de especialistas está pronta para ajudar você.
-          Entre em contato e descubra como podemos contribuir para o seu sucesso.
-        </p>
-        <div class="cta-buttons">
-          <a href="tel:+551134567890" class="cta-btn primary">
-            📞 Ligar Agora
-          </a>
-          <a href="https://wa.me/5511999998888" target="_blank" rel="noopener" class="cta-btn secondary">
-            💬 WhatsApp
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+
+
 </div>

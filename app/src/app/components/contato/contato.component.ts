@@ -72,7 +72,7 @@ export class ContatoComponent implements OnInit {
       title: 'Endereço',
       description: 'Visite nosso escritório principal',
       icon: '📍',
-      value: 'Av. Paulista, 1000 - São Paulo, SP',
+      value: 'Fazenda Fontes do Saber, s/n, Rio Verde - GO',
       color: '#FF9800'
     }
   ];
@@ -81,10 +81,10 @@ export class ContatoComponent implements OnInit {
     {
       id: 1,
       name: 'INOVALAB',
-      address: 'Av. Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100',
+      address: 'Fazenda Fontes do Saber, s/n, Rio Verde - GO',
       phone: '+55 (11) 3456-7890',
       email: 'contato@inovalab.com',
-      coordinates: { lat: -23.5505, lng: -46.6333 },
+      coordinates: { lat: -17.785303, lng: -50.964869 },
       isMainOffice: true
     }
   ];
@@ -114,12 +114,7 @@ export class ContatoComponent implements OnInit {
       answer: 'Você pode solicitar um orçamento através deste formulário de contato, ligando para um de nossos telefones, enviando um email ou acessando nossa plataforma online através da área do cliente.',
       isOpen: false
     },
-    {
-      id: 5,
-      question: 'Vocês oferecem consultoria técnica?',
-      answer: 'Sim! Oferecemos consultoria técnica especializada para implementação de sistemas de qualidade, otimização de processos, treinamentos e auditorias. Nossa equipe de especialistas está pronta para ajudar.',
-      isOpen: false
-    }
+
   ];
 
   constructor() {}
@@ -150,6 +145,8 @@ export class ContatoComponent implements OnInit {
   }
 
   get currentOffice() {
-    return this.offices[this.currentOfficeIndex];
+    const office = this.offices[this.currentOfficeIndex];
+    console.log('Current Office:', office);
+    return office;
   }
 }
