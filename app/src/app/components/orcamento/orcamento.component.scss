@@ -2,17 +2,17 @@
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  min-height: calc(100vh - 90px); 
+  min-height: calc(100vh - 90px);
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 
   @media (max-width: 768px) {
     padding: 1rem;
-    min-height: calc(100vh - 80px); 
+    min-height: calc(100vh - 80px);
   }
 
   @media (max-width: 480px) {
     padding: 0.5rem;
-    min-height: calc(100vh - 75px); 
+    min-height: calc(100vh - 75px);
   }
 }
 
@@ -321,74 +321,87 @@
   }
 }
 
-.actions-menu {
-  position: relative;
+.actions-section {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 
-  .btn-menu {
-    background: none;
+  .btn-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
     border: none;
-    padding: 0.5rem;
+    border-radius: 8px;
     cursor: pointer;
-    color: #6c757d;
-    border-radius: 50%;
+    font-size: 0.9rem;
+    font-weight: 600;
     transition: all 0.3s ease;
+    text-decoration: none;
+    min-width: 80px;
+    justify-content: center;
 
-    &:hover {
-      background: #f8f9fa;
-      color: #495057;
-    }
-  }
-
-  .dropdown-content {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    min-width: 150px;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-
-    button {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: none;
-      background: none;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.3s ease;
+    i {
       font-size: 0.9rem;
+    }
+
+    &.btn-edit {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &.disabled,
+      &:disabled {
+        background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+        color: #7f8c8d;
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: 0.6;
+
+        &:hover {
+          background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+          transform: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    &.btn-delete {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
 
       &:hover {
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
       }
 
-      &.btn-danger:hover {
-        background: #f8d7da;
-        color: #721c24;
-      }
-
-      &:first-child {
-        border-radius: 10px 10px 0 0;
-      }
-
-      &:last-child {
-        border-radius: 0 0 10px 10px;
+      &:active {
+        transform: translateY(0);
       }
     }
   }
 
-  &:hover .dropdown-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.3rem;
+
+    .btn-action {
+      width: 100%;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+    }
   }
 }
 

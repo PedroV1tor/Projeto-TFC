@@ -11,7 +11,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
 
   let requestToSend = req;
 
-
   const publicUrls = [
     '/api/auth/login',
     '/api/auth/cadastro',
@@ -47,14 +46,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
       error: (err) => {
         if (err instanceof HttpErrorResponse && err.status === 401) {
           console.warn('AuthInterceptor: resposta 401 para', req.url);
-
-
           if (!isPublicUrl) {
             console.log('AuthInterceptor: token expirado ou inválido, fazendo logout e redirecionando para login');
 
-
             authService.logout();
-
 
             if (!router.url.includes('/login')) {
               router.navigate(['/login']);
@@ -65,3 +60,5 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
     })
   );
 };
+
+

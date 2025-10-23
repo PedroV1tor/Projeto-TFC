@@ -171,6 +171,12 @@ export class OrcamentoComponent implements OnInit {
   }
 
   editarOrcamento(orcamento: Orcamento) {
+    // Verificar se o orçamento pode ser editado (apenas status pendente)
+    if (orcamento.status !== 'pendente') {
+      alert('Apenas orçamentos com status "Pendente" podem ser editados.');
+      return;
+    }
+
     this.orcamentoEditando = orcamento;
     this.novoOrcamento = {
       titulo: orcamento.titulo,
@@ -199,37 +205,6 @@ export class OrcamentoComponent implements OnInit {
     }
   }
 
-  alterarStatus(id: number, novoStatus: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido') {
-    this.orcamentoService.alterarStatus(id, novoStatus).subscribe({
-      next: () => {
-        alert(`Status alterado para ${this.getStatusText(novoStatus)}!`);
-        this.carregarOrcamentos();
-        this.carregarEstatisticas();
-      },
-      error: (error) => {
-        alert('Erro ao alterar status.');
-        console.error(error);
-      }
-    });
-  }
-
-  aprovarOrcamento(id: number) {
-    if (confirm('Tem certeza que deseja aprovar este orçamento?')) {
-      this.alterarStatus(id, 'aprovado');
-    }
-  }
-
-  rejeitarOrcamento(id: number) {
-    if (confirm('Tem certeza que deseja rejeitar este orçamento?')) {
-      this.alterarStatus(id, 'rejeitado');
-    }
-  }
-
-  concluirOrcamento(id: number) {
-    if (confirm('Tem certeza que deseja marcar este orçamento como concluído?')) {
-      this.alterarStatus(id, 'concluido');
-    }
-  }
 
   toggleEstatisticas() {
     this.mostrarEstatisticas = !this.mostrarEstatisticas;

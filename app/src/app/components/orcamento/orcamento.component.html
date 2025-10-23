@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  
+
   <div class="estatisticas-section" *ngIf="mostrarEstatisticas">
     <div class="stats-grid">
       <div class="stat-card">
@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  
+
   <div class="filter-section">
     <div class="filter-tabs">
       <button
@@ -100,7 +100,7 @@
     </div>
   </div>
 
-  
+
   <div class="orcamentos-list">
     <div *ngIf="orcamentos.length === 0" class="empty-state">
       <i class="fas fa-clipboard-list"></i>
@@ -116,27 +116,20 @@
             {{ getStatusText(orcamento.status) }}
           </span>
         </div>
-        <div class="actions-menu">
-          <button class="btn-menu" title="Mais opções" aria-label="Menu de ações do orçamento">
-            <i class="fas fa-ellipsis-v"></i>
+        <div class="actions-section">
+          <button
+            class="btn-action btn-edit"
+            [class.disabled]="orcamento.status !== 'pendente'"
+            [disabled]="orcamento.status !== 'pendente'"
+            (click)="editarOrcamento(orcamento)"
+            [title]="orcamento.status !== 'pendente' ? 'Apenas orçamentos pendentes podem ser editados' : 'Editar orçamento'">
+            <i class="fas fa-edit"></i>
+            Editar
           </button>
-          <div class="dropdown-content">
-            <button (click)="editarOrcamento(orcamento)">
-              <i class="fas fa-edit"></i> Editar
-            </button>
-            <button *ngIf="orcamento.status === 'pendente'" (click)="aprovarOrcamento(orcamento.id)">
-              <i class="fas fa-check"></i> Aprovar
-            </button>
-            <button *ngIf="orcamento.status === 'pendente'" (click)="rejeitarOrcamento(orcamento.id)">
-              <i class="fas fa-times"></i> Rejeitar
-            </button>
-            <button *ngIf="orcamento.status === 'aprovado'" (click)="concluirOrcamento(orcamento.id)">
-              <i class="fas fa-flag-checkered"></i> Concluir
-            </button>
-            <button (click)="excluirOrcamento(orcamento.id)" class="btn-danger">
-              <i class="fas fa-trash"></i> Excluir
-            </button>
-          </div>
+          <button class="btn-action btn-delete" (click)="excluirOrcamento(orcamento.id)" title="Excluir orçamento">
+            <i class="fas fa-trash"></i>
+            Excluir
+          </button>
         </div>
       </div>
 
