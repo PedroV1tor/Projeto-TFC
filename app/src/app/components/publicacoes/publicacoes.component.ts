@@ -17,7 +17,7 @@ export class PublicacoesComponent implements OnInit {
   publicacoes: Publicacao[] = [];
   mostrarFormulario = false;
   publicacaoEditando: Publicacao | null = null;
-
+  isAdmin = false;
 
   mostrarPopup = false;
   publicacaoSelecionada: Publicacao | null = null;
@@ -36,11 +36,17 @@ export class PublicacoesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin;
     this.carregarPublicacoes();
   }
 
   carregarPublicacoes() {
-    this.publicacaoService.getMinhasPublicacoes().subscribe({
+    // Admin vê todas as publicações, usuários normais veem apenas as suas
+    const observable = this.isAdmin
+      ? this.publicacaoService.getPublicacoes()
+      : this.publicacaoService.getMinhasPublicacoes();
+
+    observable.subscribe({
       next: (publicacoes) => this.publicacoes = publicacoes,
       error: (error) => console.error('Erro ao carregar publicações:', error)
     });
@@ -270,5 +276,26 @@ export class PublicacoesComponent implements OnInit {
   truncarTexto(texto: string, limite: number): string {
     if (texto.length <= limite) return texto;
     return texto.substring(0, limite) + '...';
+  }
+
+  // Métodos para gerenciamento administrativo de publicações
+  alterarStatusPublicacao(publicacao: Publicacao, novoStatus: 'ativa' | 'rascunho' | 'arquivada') {
+    if (confirm(`Deseja alterar o status desta publicação para "${this.getStatusText(novoStatus)}"?`)) {
+      this.publicacaoService.alterarStatus(publicacao.id, novoStatus).subscribe({
+        next: () => {
+          alert('Status da publicação alterado com sucesso!');
+          this.carregarPublicacoes();
+        },
+        error: (error) => {
+          alert('Erro ao alterar status da publicação.');
+          console.error(error);
+        }
+      });
+    }
+  }
+
+  formatarDataPublicacao(data: string): string {
+    if (!data) return 'Data não informada';
+    return new Date(data).toLocaleDateString('pt-BR');
   }
 }

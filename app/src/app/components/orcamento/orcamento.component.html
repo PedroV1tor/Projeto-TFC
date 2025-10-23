@@ -2,7 +2,7 @@
   <div class="header-section">
     <h1 class="page-title">
       <i class="fas fa-calculator"></i>
-      Gestão de Orçamentos
+      {{ isAdmin ? 'Gestão Administrativa de Orçamentos' : 'Gestão de Orçamentos' }}
     </h1>
     <div class="header-actions">
       <button class="btn btn-estatisticas" (click)="toggleEstatisticas()">
@@ -16,6 +16,12 @@
     </div>
   </div>
 
+  <div class="admin-info" *ngIf="isAdmin">
+    <div class="admin-badge">
+      <i class="fas fa-shield-alt"></i>
+      <span>Modo Administrador - Visualizando todos os orçamentos</span>
+    </div>
+  </div>
 
   <div class="estatisticas-section" *ngIf="mostrarEstatisticas">
     <div class="stats-grid">
@@ -182,6 +188,47 @@
             <div>
               <span class="label">Criado em:</span>
               <span class="value">{{ formatarDataHora(orcamento.criadoEm) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção de alteração de status (apenas para administradores) -->
+        <div class="status-actions" *ngIf="isAdmin">
+          <div class="status-section">
+            <h4><i class="fas fa-cogs"></i> Alterar Status (Admin)</h4>
+            <div class="status-buttons">
+              <button
+                class="btn-status btn-pendente"
+                [disabled]="orcamento.status === 'pendente'"
+                (click)="alterarStatusOrcamento(orcamento, 'pendente')"
+                title="Marcar como pendente">
+                <i class="fas fa-clock"></i>
+                Pendente
+              </button>
+              <button
+                class="btn-status btn-aprovado"
+                [disabled]="orcamento.status === 'aprovado'"
+                (click)="alterarStatusOrcamento(orcamento, 'aprovado')"
+                title="Aprovar orçamento">
+                <i class="fas fa-check"></i>
+                Aprovado
+              </button>
+              <button
+                class="btn-status btn-rejeitado"
+                [disabled]="orcamento.status === 'rejeitado'"
+                (click)="alterarStatusOrcamento(orcamento, 'rejeitado')"
+                title="Rejeitar orçamento">
+                <i class="fas fa-times"></i>
+                Rejeitado
+              </button>
+              <button
+                class="btn-status btn-concluido"
+                [disabled]="orcamento.status === 'concluido'"
+                (click)="alterarStatusOrcamento(orcamento, 'concluido')"
+                title="Marcar como concluído">
+                <i class="fas fa-flag-checkered"></i>
+                Concluído
+              </button>
             </div>
           </div>
         </div>

@@ -4,9 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
-import { PublicacaoService } from '../../services/publicacao.service';
 import { Agendamento } from '../../models/agendamento.model';
-import { Publicacao } from '../../models/publicacao.model';
 
 @Component({
   selector: 'app-laboratorio',
@@ -17,7 +15,6 @@ import { Publicacao } from '../../models/publicacao.model';
 })
 export class LaboratorioComponent implements OnInit {
   agendamentos: Agendamento[] = [];
-  publicacoes: Publicacao[] = [];
   mostrarFormulario = false;
   agendamentoEditando: Agendamento | null = null;
   isAdmin = false;
@@ -32,17 +29,12 @@ export class LaboratorioComponent implements OnInit {
   constructor(
     private agendamentoService: AgendamentoService,
     private authService: AuthService,
-    private publicacaoService: PublicacaoService,
     private router: Router
   ) {}
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin;
     this.carregarAgendamentos();
-
-    if (this.isAdmin) {
-      this.carregarPublicacoes();
-    }
   }
 
   carregarAgendamentos() {
@@ -60,12 +52,6 @@ export class LaboratorioComponent implements OnInit {
     });
   }
 
-  carregarPublicacoes() {
-    this.publicacaoService.getPublicacoes().subscribe({
-      next: (publicacoes) => this.publicacoes = publicacoes,
-      error: (error) => console.error('Erro ao carregar publicações:', error)
-    });
-  }
 
   abrirFormulario() {
     this.mostrarFormulario = true;
@@ -244,67 +230,5 @@ export class LaboratorioComponent implements OnInit {
         }
       });
     }
-  }
-
-  // Métodos para gerenciar publicações (apenas para admin)
-  getStatusClassPublicacao(status: string): string {
-    switch (status) {
-      case 'ativa':
-        return 'status-ativa';
-      case 'rascunho':
-        return 'status-rascunho';
-      case 'arquivada':
-        return 'status-arquivada';
-      default:
-        return 'status-rascunho';
-    }
-  }
-
-  getStatusTextPublicacao(status: string): string {
-    switch (status) {
-      case 'ativa':
-        return 'Ativa';
-      case 'rascunho':
-        return 'Rascunho';
-      case 'arquivada':
-        return 'Arquivada';
-      default:
-        return 'Rascunho';
-    }
-  }
-
-  alterarStatusPublicacao(publicacao: Publicacao, novoStatus: 'ativa' | 'rascunho' | 'arquivada') {
-    if (confirm(`Deseja alterar o status desta publicação para "${this.getStatusTextPublicacao(novoStatus)}"?`)) {
-      this.publicacaoService.alterarStatus(publicacao.id, novoStatus).subscribe({
-        next: () => {
-          alert('Status da publicação alterado com sucesso!');
-          this.carregarPublicacoes();
-        },
-        error: (error) => {
-          alert('Erro ao alterar status da publicação.');
-          console.error(error);
-        }
-      });
-    }
-  }
-
-  excluirPublicacao(id: number) {
-    if (confirm('Tem certeza que deseja excluir esta publicação?')) {
-      this.publicacaoService.excluirPublicacao(id).subscribe({
-        next: () => {
-          alert('Publicação excluída com sucesso!');
-          this.carregarPublicacoes();
-        },
-        error: (error) => {
-          alert('Erro ao excluir publicação.');
-          console.error(error);
-        }
-      });
-    }
-  }
-
-  formatarDataPublicacao(data: string): string {
-    if (!data) return 'Data não informada';
-    return new Date(data).toLocaleDateString('pt-BR');
   }
 }

@@ -42,10 +42,20 @@ export class OrcamentoService {
     return this.http.get<Orcamento[]>(`${this.apiUrl}/meus`, { headers: this.getHeaders() });
   }
 
+  // Retorna TODOS os orçamentos (apenas para admin)
+  getTodosOrcamentos(): Observable<Orcamento[]> {
+    return this.http.get<Orcamento[]>(this.apiUrl, { headers: this.getHeaders() });
+  }
+
 
   getOrcamentosByStatus(status: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<Orcamento[]> {
     // Usa o endpoint de filtro para garantir que retorna apenas orçamentos do usuário logado
     return this.filtrarOrcamentos({ status: status });
+  }
+
+  // Retorna TODOS os orçamentos por status (apenas para admin)
+  getTodosOrcamentosByStatus(status: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<Orcamento[]> {
+    return this.http.get<Orcamento[]>(`${this.apiUrl}/status/${status}`, { headers: this.getHeaders() });
   }
 
 
@@ -98,7 +108,10 @@ export class OrcamentoService {
 
 
   alterarStatus(id: number, novoStatus: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { status: novoStatus }, { headers: this.getHeaders() });
+    // Converter para primeira letra maiúscula conforme esperado pelo backend
+    const statusCapitalizado = novoStatus.charAt(0).toUpperCase() + novoStatus.slice(1);
+
+    return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { status: statusCapitalizado }, { headers: this.getHeaders() });
   }
 
 

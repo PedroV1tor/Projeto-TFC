@@ -405,6 +405,117 @@
   }
 }
 
+// Seção de alteração de status (apenas para administradores)
+.status-actions {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 10px;
+  border-left: 4px solid #2B5CE6;
+
+  .status-section {
+    h4 {
+      margin: 0 0 1rem 0;
+      color: #2c3e50;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      i {
+        color: #2B5CE6;
+      }
+    }
+
+    .status-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      .btn-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 100px;
+        justify-content: center;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        i {
+          font-size: 0.9rem;
+        }
+
+        &.btn-pendente {
+          background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+          }
+        }
+
+        &.btn-aprovado {
+          background: linear-gradient(135deg, #12bb20 0%, #0ea517 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(18, 187, 32, 0.3);
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #0ea517 0%, #0c8a12 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(18, 187, 32, 0.4);
+          }
+        }
+
+        &.btn-rejeitado {
+          background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+          }
+        }
+
+        &.btn-concluido {
+          background: linear-gradient(135deg, #2B5CE6 0%, #1e49cc 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(43, 92, 230, 0.3);
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1e49cc 0%, #1a3fb8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(43, 92, 230, 0.4);
+          }
+        }
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+
+        .btn-status {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
 .card-content {
   padding: 1.5rem;
 }
@@ -634,6 +745,63 @@
 
   @media (max-width: 768px) {
     flex-direction: column;
+  }
+}
+
+// Badge de administrador
+.admin-info {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+
+  .admin-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    animation: pulse 2s infinite;
+
+    i {
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+
+      span {
+        display: none;
+      }
+
+      i {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.4rem 0.8rem;
+
+      i {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(102, 126, 234, 0.5);
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   }
 }
 

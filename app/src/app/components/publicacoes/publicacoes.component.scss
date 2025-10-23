@@ -1008,3 +1008,206 @@
     justify-content: center;
   }
 }
+// Estilos para seção administrativa
+.admin-section {
+  padding: 60px 0;
+  background: #f0f2f5;
+  border-top: 2px solid #e9ecef;
+
+  .section-title h2 {
+    color: #d63384;
+  }
+}
+
+.publicacoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.publicacao-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-left-color: #d63384;
+  }
+
+  .card-content {
+    padding: 20px;
+  }
+
+  .publicacao-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #666;
+
+      .icon {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .resumo {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+    margin: 0;
+  }
+
+  .card-actions {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .status-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .status-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+
+        .btn-status {
+          padding: 6px 12px;
+          border: none;
+          border-radius: 6px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+
+          &.btn-ativa {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+
+            &:hover:not(:disabled) {
+              background: #c3e6cb;
+            }
+          }
+
+          &.btn-rascunho {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+
+            &:hover:not(:disabled) {
+              background: #ffeaa7;
+            }
+          }
+
+          &.btn-arquivada {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+
+            &:hover:not(:disabled) {
+              background: #f5c6cb;
+            }
+          }
+        }
+      }
+    }
+
+    .btn-action {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+
+      &.btn-excluir-pub {
+        background: #dc3545;
+        color: white;
+
+        &:hover {
+          background: #c82333;
+        }
+      }
+
+      .icon {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Status badges para a seção administrativa
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.status-ativa {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  &.status-rascunho {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.status-arquivada {
+    background: #f8d7da;
+    color: #721c24;
+  }
+}
+
+@media (max-width: 768px) {
+  .publicacoes-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .publicacao-card {
+    .card-actions {
+      .status-buttons {
+        flex-direction: column;
+
+        .btn-status {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+

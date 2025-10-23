@@ -20,6 +20,7 @@ export class OrcamentoComponent implements OnInit {
   filtroStatus = 'todos';
   mostrarEstatisticas = false;
   estatisticas: any = null;
+  isAdmin = false;
 
 
   novoOrcamento = {
@@ -38,20 +39,29 @@ export class OrcamentoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin;
     this.carregarOrcamentos();
     this.carregarEstatisticas();
   }
 
   carregarOrcamentos() {
     if (this.filtroStatus === 'todos') {
-      this.orcamentoService.getOrcamentos().subscribe({
+      // Admin vê todos os orçamentos, usuários normais veem apenas os seus
+      const observable = this.isAdmin
+        ? this.orcamentoService.getTodosOrcamentos()
+        : this.orcamentoService.getOrcamentos();
+
+      observable.subscribe({
         next: (orcamentos) => this.orcamentos = orcamentos,
         error: (error) => console.error('Erro ao carregar orçamentos:', error)
       });
     } else {
-      this.orcamentoService.getOrcamentosByStatus(
-        this.filtroStatus as 'pendente' | 'aprovado' | 'rejeitado' | 'concluido'
-      ).subscribe({
+      // Admin vê todos os orçamentos por status, usuários normais veem apenas os seus
+      const observable = this.isAdmin
+        ? this.orcamentoService.getTodosOrcamentosByStatus(this.filtroStatus as 'pendente' | 'aprovado' | 'rejeitado' | 'concluido')
+        : this.orcamentoService.getOrcamentosByStatus(this.filtroStatus as 'pendente' | 'aprovado' | 'rejeitado' | 'concluido');
+
+      observable.subscribe({
         next: (orcamentos) => this.orcamentos = orcamentos,
         error: (error) => console.error('Erro ao carregar orçamentos:', error)
       });
@@ -273,5 +283,28 @@ export class OrcamentoComponent implements OnInit {
     const prazo = new Date(data);
     const diffTime = prazo.getTime() - hoje.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  // Método para alterar status do orçamento (apenas para administradores)
+  alterarStatusOrcamento(orcamento: Orcamento, novoStatus: 'pendente' | 'aprovado' | 'rejeitado' | 'concluido') {
+    if (!this.isAdmin) {
+      alert('Apenas administradores podem alterar o status dos orçamentos.');
+      return;
+    }
+
+    const confirmacao = confirm(`Deseja alterar o status deste orçamento para "${this.getStatusText(novoStatus)}"?`);
+    if (!confirmacao) return;
+
+    this.orcamentoService.alterarStatus(orcamento.id, novoStatus).subscribe({
+      next: () => {
+        alert('Status do orçamento alterado com sucesso!');
+        this.carregarOrcamentos();
+        this.carregarEstatisticas();
+      },
+      error: (error) => {
+        console.error('Erro ao alterar status do orçamento:', error);
+        alert(`Erro ao alterar status do orçamento: ${error.message || 'Erro desconhecido'}`);
+      }
+    });
   }
 }
