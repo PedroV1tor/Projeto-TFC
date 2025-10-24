@@ -4,18 +4,12 @@
     <div class="hero-content">
       <h1 class="hero-title">
         <span class="gradient-text">INOVALAB</span>
-        <span class="subtitle">Inovação em Laboratórios</span>
+        <span class="subtitle">Inovações e Laboratórios</span>
       </h1>
       <p class="hero-description">
-        Transformando a ciência através da tecnologia e inovação.
-        Oferecemos soluções completas para laboratórios com excelência e qualidade.
+        Centro de excelência em pesquisa e desenvolvimento tecnológico.
+        Equipamentos de ponta e soluções inovadoras para laboratórios modernos.
       </p>
-      <div class="floating-elements">
-        <div class="float-element element-1">🔬</div>
-        <div class="float-element element-2">⚗️</div>
-        <div class="float-element element-3">🧪</div>
-        <div class="float-element element-4">🔬</div>
-      </div>
     </div>
   </section>
 
@@ -99,18 +93,37 @@
 
   <section class="services-section">
     <div class="container">
-      <h2 class="section-title">Nossos Serviços</h2>
+      <div class="section-header">
+        <h2 class="section-title">Nossos Equipamentos</h2>
+        <p class="section-subtitle">Tecnologia de ponta para resultados excepcionais</p>
+      </div>
       <div class="services-grid">
         <div class="service-card" *ngFor="let service of services; let i = index"
              [style.animation-delay]="i * 0.2 + 's'">
-          <div class="service-icon">{{ service.icon }}</div>
-          <h3 class="service-name">{{ service.name }}</h3>
-          <p class="service-description">{{ service.description }}</p>
-          <ul class="service-features">
-            <li *ngFor="let feature of service.features">{{ feature }}</li>
-          </ul>
-          <div class="service-price">{{ service.price }}</div>
-          <button class="service-btn" title="Saiba mais sobre este serviço">Saiba Mais</button>
+          <div class="service-header">
+            <div class="service-icon-container">
+              <div class="service-icon">{{ service.icon }}</div>
+              <div class="service-badge">Equipamento</div>
+            </div>
+            <div class="service-title-section">
+              <h3 class="service-name">{{ service.name }}</h3>
+              <div class="service-price">{{ service.price }}</div>
+            </div>
+          </div>
+
+          <div class="service-body">
+            <p class="service-description">{{ service.description }}</p>
+
+            <div class="service-features-section">
+              <h4 class="features-title">Características Principais</h4>
+              <ul class="service-features">
+                <li *ngFor="let feature of service.features" class="feature-item">
+                  <span class="feature-check">✓</span>
+                  <span class="feature-text">{{ feature }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

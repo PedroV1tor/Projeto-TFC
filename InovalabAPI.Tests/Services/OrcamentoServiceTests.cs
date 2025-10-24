@@ -378,5 +378,237 @@ namespace InovalabAPI.Tests.Services
             result.Should().HaveCount(1);
             result.Should().OnlyContain(o => o.Titulo == "Orcamento Usuario Teste");
         }
+
+        [Fact]
+        public async Task Create_ComValorZero_DeveCriarOrcamento()
+        {
+            // Arrange
+            var criarOrcamentoDto = new CriarOrcamentoDTO
+            {
+                Titulo = "Orcamento Zero",
+                Descricao = "Descricao do orcamento",
+                Valor = 0.00m, // Valor zero
+                PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                PrazoOrcamento = DateTime.UtcNow.AddDays(7)
+            };
+
+            // Act
+            var result = await _orcamentoService.CreateAsync(criarOrcamentoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Valor.Should().Be(0.00m);
+        }
+
+        [Fact]
+        public async Task Create_ComValorNegativo_DeveCriarOrcamento()
+        {
+            // Arrange
+            var criarOrcamentoDto = new CriarOrcamentoDTO
+            {
+                Titulo = "Orcamento Negativo",
+                Descricao = "Descricao do orcamento",
+                Valor = -100.00m, // Valor negativo
+                PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                PrazoOrcamento = DateTime.UtcNow.AddDays(7)
+            };
+
+            // Act
+            var result = await _orcamentoService.CreateAsync(criarOrcamentoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Valor.Should().Be(-100.00m);
+        }
+
+        [Fact]
+        public async Task Update_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var atualizarOrcamentoDto = new AtualizarOrcamentoDTO
+            {
+                Titulo = "Titulo Atualizado",
+                Descricao = "Descricao atualizada",
+                Valor = 1500.00m,
+                PrazoEntrega = DateTime.UtcNow.AddDays(45),
+                PrazoOrcamento = DateTime.UtcNow.AddDays(10)
+            };
+
+            // Act
+            var result = await _orcamentoService.UpdateAsync(999, atualizarOrcamentoDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Delete_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Act
+            var result = await _orcamentoService.DeleteAsync(999);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusInvalido_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _orcamentoService.GetByStatusAsync("status-inexistente");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var alterarStatusDto = new AlterarStatusOrcamentoDTO
+            {
+                Status = "aprovado"
+            };
+
+            // Act
+            var result = await _orcamentoService.AlterarStatusAsync(999, alterarStatusDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetByFiltro_ComValorMaximo_DeveRetornarOrcamentos()
+        {
+            // Arrange
+            var orcamentos = new List<Orcamento>
+            {
+                new Orcamento
+                {
+                    Titulo = "Orcamento Alto",
+                    Descricao = "Descricao 1",
+                    Valor = 5000.00m,
+                    PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                    PrazoOrcamento = DateTime.UtcNow.AddDays(7),
+                    UsuarioId = _usuarioTeste.Id,
+                    Status = "pendente"
+                },
+                new Orcamento
+                {
+                    Titulo = "Orcamento Baixo",
+                    Descricao = "Descricao 2",
+                    Valor = 1000.00m,
+                    PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                    PrazoOrcamento = DateTime.UtcNow.AddDays(7),
+                    UsuarioId = _usuarioTeste.Id,
+                    Status = "pendente"
+                }
+            };
+            _context.Orcamentos.AddRange(orcamentos);
+            await _context.SaveChangesAsync();
+
+            var filtro = new FiltroOrcamentoDTO
+            {
+                ValorMaximo = 2000.00m
+            };
+
+            // Act
+            var result = await _orcamentoService.GetByFiltroAsync(filtro);
+
+            // Assert
+            result.Should().HaveCount(1);
+            result.Should().OnlyContain(o => o.Titulo == "Orcamento Baixo");
+        }
+
+        [Fact]
+        public async Task GetAll_ComListaVazia_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _orcamentoService.GetAllAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Update_ComDadosNull_DeveAtualizarOrcamento()
+        {
+            // Arrange
+            var orcamento = new Orcamento
+            {
+                Titulo = "Orcamento Original",
+                Descricao = "Descricao original",
+                Valor = 1000.00m,
+                PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                PrazoOrcamento = DateTime.UtcNow.AddDays(7),
+                UsuarioId = _usuarioTeste.Id,
+                Status = "pendente"
+            };
+            _context.Orcamentos.Add(orcamento);
+            await _context.SaveChangesAsync();
+
+            var atualizarOrcamentoDto = new AtualizarOrcamentoDTO
+            {
+                Titulo = null!, // Título null
+                Descricao = null! // Descrição null
+            };
+
+            // Act
+            var result = await _orcamentoService.UpdateAsync(orcamento.Id, atualizarOrcamentoDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var orcamentoAtualizado = await _context.Orcamentos.FindAsync(orcamento.Id);
+            orcamentoAtualizado.Should().NotBeNull();
+            orcamentoAtualizado!.Titulo.Should().BeNull();
+            orcamentoAtualizado.Descricao.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusNull_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _orcamentoService.GetByStatusAsync(""); // Usar string vazia em vez de null
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComStatusVazio_DeveAlterarStatus()
+        {
+            // Arrange
+            var orcamento = new Orcamento
+            {
+                Titulo = "Orcamento Teste",
+                Descricao = "Descricao teste",
+                Valor = 2500.00m,
+                PrazoEntrega = DateTime.UtcNow.AddDays(30),
+                PrazoOrcamento = DateTime.UtcNow.AddDays(7),
+                UsuarioId = _usuarioTeste.Id,
+                Status = "pendente"
+            };
+            _context.Orcamentos.Add(orcamento);
+            await _context.SaveChangesAsync();
+
+            var alterarStatusDto = new AlterarStatusOrcamentoDTO
+            {
+                Status = "" // Status vazio em vez de null
+            };
+
+            // Act
+            var result = await _orcamentoService.AlterarStatusAsync(orcamento.Id, alterarStatusDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var orcamentoAtualizado = await _context.Orcamentos.FindAsync(orcamento.Id);
+            orcamentoAtualizado.Should().NotBeNull();
+            orcamentoAtualizado!.Status.Should().Be("");
+        }
     }
 }

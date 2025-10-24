@@ -508,6 +508,297 @@ namespace InovalabAPI.Tests.Services
             // Assert
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public async Task UpdateUsuario_ComEnderecoCompleto_DeveAtualizarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true,
+                Endereco = new EnderecoUsuario
+                {
+                    CEP = "01000-000",
+                    Rua = "Rua Antiga",
+                    Bairro = "Centro",
+                    Numero = "100"
+                }
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Modificar endereço completo
+            usuario.Endereco!.CEP = "01234-567";
+            usuario.Endereco.Rua = "Rua Nova";
+            usuario.Endereco.Bairro = "Jardim";
+            usuario.Endereco.Numero = "200";
+            usuario.Endereco.Complemento = "Apto 45";
+            usuario.Endereco.Referencia = "Próximo ao shopping";
+
+            // Act
+            var result = await _userService.UpdateUsuarioAsync(usuario);
+
+            // Assert
+            result.Should().BeTrue();
+            
+            var usuarioAtualizado = await _context.Usuarios
+                .Include(u => u.Endereco)
+                .FirstOrDefaultAsync(u => u.Id == usuario.Id);
+            
+            usuarioAtualizado.Should().NotBeNull();
+            usuarioAtualizado!.Endereco.Should().NotBeNull();
+            usuarioAtualizado.Endereco!.CEP.Should().Be("01234-567");
+            usuarioAtualizado.Endereco.Rua.Should().Be("Rua Nova");
+            usuarioAtualizado.Endereco.Complemento.Should().Be("Apto 45");
+        }
+
+        [Fact]
+        public async Task UpdateUsuario_ComEnderecoNull_DeveAtualizarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true,
+                Endereco = new EnderecoUsuario
+                {
+                    CEP = "01000-000",
+                    Rua = "Rua Antiga",
+                    Bairro = "Centro"
+                }
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Modificar para endereço null
+            usuario.Endereco = null;
+
+            // Act
+            var result = await _userService.UpdateUsuarioAsync(usuario);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetUsuarioByEmail_ComEmailCaseSensitive_DeveRetornarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _userService.GetUsuarioByEmailAsync("teste@email.com"); // Usar o mesmo case do email cadastrado
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Email.Should().Be("teste@email.com");
+        }
+
+        [Fact]
+        public async Task GetAllUsuarios_ComUsuariosComEnderecos_DeveRetornarUsuariosComEnderecos()
+        {
+            // Arrange
+            var usuarios = new List<Usuario>
+            {
+                new Usuario
+                {
+                    Nome = "Usuario1",
+                    Sobrenome = "ComEndereco",
+                    Email = "usuario1@email.com",
+                    NomeUsuario = "usuario1",
+                    SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                    Telefone = "(11) 99999-9991",
+                    Ativo = true,
+                    Endereco = new EnderecoUsuario
+                    {
+                        CEP = "01000-000",
+                        Rua = "Rua Teste 1",
+                        Bairro = "Centro"
+                    }
+                },
+                new Usuario
+                {
+                    Nome = "Usuario2",
+                    Sobrenome = "SemEndereco",
+                    Email = "usuario2@email.com",
+                    NomeUsuario = "usuario2",
+                    SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                    Telefone = "(11) 99999-9992",
+                    Ativo = true
+                }
+            };
+            _context.Usuarios.AddRange(usuarios);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _userService.GetAllUsuariosAsync();
+
+            // Assert
+            result.Should().HaveCount(2);
+            result.Should().Contain(u => u.Email == "usuario1@email.com");
+            result.Should().Contain(u => u.Email == "usuario2@email.com");
+        }
+
+        [Fact]
+        public async Task UpdateUsuario_ComSenhaHash_DeveAtualizarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Modificar senha hash
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword("novaSenha123");
+
+            // Act
+            var result = await _userService.UpdateUsuarioAsync(usuario);
+
+            // Assert
+            result.Should().BeTrue();
+            
+            var usuarioAtualizado = await _context.Usuarios.FindAsync(usuario.Id);
+            usuarioAtualizado.Should().NotBeNull();
+            usuarioAtualizado!.SenhaHash.Should().Be(usuario.SenhaHash);
+        }
+
+        [Fact]
+        public async Task GetUsuarioById_ComUsuarioComEndereco_DeveRetornarUsuarioComEndereco()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true,
+                Endereco = new EnderecoUsuario
+                {
+                    CEP = "01000-000",
+                    Rua = "Rua Teste",
+                    Bairro = "Centro",
+                    Numero = "100",
+                    Complemento = "Apto 1"
+                }
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _userService.GetUsuarioByIdAsync(usuario.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Email.Should().Be("teste@email.com");
+            result.Endereco.Should().NotBeNull();
+            result.Endereco!.CEP.Should().Be("01000-000");
+        }
+
+        [Fact]
+        public async Task UpdateUsuario_ComIsAdminTrue_DeveAtualizarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true,
+                IsAdmin = false
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Modificar para admin
+            usuario.IsAdmin = true;
+
+            // Act
+            var result = await _userService.UpdateUsuarioAsync(usuario);
+
+            // Assert
+            result.Should().BeTrue();
+            
+            var usuarioAtualizado = await _context.Usuarios.FindAsync(usuario.Id);
+            usuarioAtualizado.Should().NotBeNull();
+            usuarioAtualizado!.IsAdmin.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetAllUsuarios_ComUsuariosAdmin_DeveRetornarTodosUsuarios()
+        {
+            // Arrange
+            var usuarios = new List<Usuario>
+            {
+                new Usuario
+                {
+                    Nome = "Usuario",
+                    Sobrenome = "Normal",
+                    Email = "normal@email.com",
+                    NomeUsuario = "usuarionormal",
+                    SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                    Telefone = "(11) 99999-9991",
+                    Ativo = true,
+                    IsAdmin = false
+                },
+                new Usuario
+                {
+                    Nome = "Usuario",
+                    Sobrenome = "Admin",
+                    Email = "admin@email.com",
+                    NomeUsuario = "usuarioadmin",
+                    SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                    Telefone = "(11) 99999-9992",
+                    Ativo = true,
+                    IsAdmin = true
+                }
+            };
+            _context.Usuarios.AddRange(usuarios);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _userService.GetAllUsuariosAsync();
+
+            // Assert
+            result.Should().HaveCount(2);
+            result.Should().Contain(u => u.Email == "normal@email.com");
+            result.Should().Contain(u => u.Email == "admin@email.com");
+        }
     }
 }
 

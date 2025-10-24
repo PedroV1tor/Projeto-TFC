@@ -303,5 +303,203 @@ namespace InovalabAPI.Tests.Services
             agendamentoAtualizado.Should().NotBeNull();
             agendamentoAtualizado!.Status.Should().Be("aprovado");
         }
+
+        [Fact]
+        public async Task Create_ComDataPassada_DeveCriarAgendamento()
+        {
+            // Arrange
+            var dataPassada = DateTime.UtcNow.AddDays(-1);
+            var criarAgendamentoDto = new CriarAgendamentoDTO
+            {
+                Titulo = "Agendamento Passado",
+                Descricao = "Descricao do agendamento",
+                Data = dataPassada // Data no passado
+            };
+
+            // Act
+            var result = await _agendamentoService.CreateAsync(criarAgendamentoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeCloseTo(dataPassada, TimeSpan.FromSeconds(1)); // Usar BeCloseTo para tolerar diferenças de milissegundos
+        }
+
+        [Fact]
+        public async Task Create_ComTituloVazio_DeveCriarAgendamento()
+        {
+            // Arrange
+            var criarAgendamentoDto = new CriarAgendamentoDTO
+            {
+                Titulo = "", // Título vazio
+                Descricao = "Descricao do agendamento",
+                Data = DateTime.UtcNow.AddDays(1)
+            };
+
+            // Act
+            var result = await _agendamentoService.CreateAsync(criarAgendamentoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Titulo.Should().Be("");
+        }
+
+        [Fact]
+        public async Task Update_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var atualizarAgendamentoDto = new AtualizarAgendamentoDTO
+            {
+                Titulo = "Titulo Atualizado",
+                Descricao = "Descricao atualizada",
+                Data = DateTime.UtcNow.AddDays(2)
+            };
+
+            // Act
+            var result = await _agendamentoService.UpdateAsync(999, atualizarAgendamentoDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Delete_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Act
+            var result = await _agendamentoService.DeleteAsync(999);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusInvalido_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _agendamentoService.GetByStatusAsync("status-inexistente");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var alterarStatusDto = new AlterarStatusAgendamentoDTO
+            {
+                Status = "aprovado"
+            };
+
+            // Act
+            var result = await _agendamentoService.AlterarStatusAsync(999, alterarStatusDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetByFiltro_ComDataInvalida_DeveRetornarListaVazia()
+        {
+            // Arrange
+            var filtro = new FiltroAgendamentoDTO
+            {
+                DataInicio = DateTime.UtcNow.AddDays(10),
+                DataFim = DateTime.UtcNow.AddDays(5) // Data fim antes da data início
+            };
+
+            // Act
+            var result = await _agendamentoService.GetByFiltroAsync(filtro);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task GetAll_ComListaVazia_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _agendamentoService.GetAllAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Update_ComDadosNull_DeveAtualizarAgendamento()
+        {
+            // Arrange
+            var agendamento = new Agendamento
+            {
+                Titulo = "Agendamento Original",
+                Descricao = "Descricao original",
+                Data = DateTime.UtcNow.AddDays(1),
+                UsuarioId = _usuarioTeste.Id,
+                Status = "pendente"
+            };
+            _context.Agendamentos.Add(agendamento);
+            await _context.SaveChangesAsync();
+
+            var atualizarAgendamentoDto = new AtualizarAgendamentoDTO
+            {
+                Titulo = null!, // Título null
+                Descricao = null! // Descrição null
+            };
+
+            // Act
+            var result = await _agendamentoService.UpdateAsync(agendamento.Id, atualizarAgendamentoDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var agendamentoAtualizado = await _context.Agendamentos.FindAsync(agendamento.Id);
+            agendamentoAtualizado.Should().NotBeNull();
+            agendamentoAtualizado!.Titulo.Should().BeNull();
+            agendamentoAtualizado.Descricao.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusNull_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _agendamentoService.GetByStatusAsync(null!);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComStatusNull_DeveAlterarStatus()
+        {
+            // Arrange
+            var agendamento = new Agendamento
+            {
+                Titulo = "Agendamento Teste",
+                Descricao = "Descricao teste",
+                Data = DateTime.UtcNow.AddDays(1),
+                UsuarioId = _usuarioTeste.Id,
+                Status = "pendente"
+            };
+            _context.Agendamentos.Add(agendamento);
+            await _context.SaveChangesAsync();
+
+            var alterarStatusDto = new AlterarStatusAgendamentoDTO
+            {
+                Status = null! // Status null
+            };
+
+            // Act
+            var result = await _agendamentoService.AlterarStatusAsync(agendamento.Id, alterarStatusDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var agendamentoAtualizado = await _context.Agendamentos.FindAsync(agendamento.Id);
+            agendamentoAtualizado.Should().NotBeNull();
+            agendamentoAtualizado!.Status.Should().BeNull();
+        }
     }
 }

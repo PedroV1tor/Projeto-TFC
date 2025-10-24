@@ -562,6 +562,218 @@ namespace InovalabAPI.Tests.Services
             usuarioNoBanco.Endereco.Rua.Should().Be("Rua Teste");
             usuarioNoBanco.Endereco.Bairro.Should().Be("Centro");
         }
+
+        [Fact]
+        public async Task Login_ComSenhaComEspacos_DeveRetornarNull()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            var loginRequest = new LoginRequest
+            {
+                Email = "teste@email.com",
+                Senha = " senha123 " // Senha com espaços
+            };
+
+            // Act
+            var result = await _authService.LoginAsync(loginRequest);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task Login_ComEmailComEspacos_DeveRetornarNull()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            var loginRequest = new LoginRequest
+            {
+                Email = " teste@email.com ", // Email com espaços
+                Senha = "senha123"
+            };
+
+            // Act
+            var result = await _authService.LoginAsync(loginRequest);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task Cadastro_ComTelefoneFormatoInvalido_DeveCriarUsuario()
+        {
+            // Arrange
+            var cadastroRequest = new CadastroRequest
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                Senha = "senha123",
+                Telefone = "telefone-invalido" // Telefone inválido
+            };
+
+            // Act
+            var result = await _authService.CadastroAsync(cadastroRequest);
+
+            // Assert
+            result.Should().BeTrue(); // O serviço cria mesmo com telefone inválido
+        }
+
+        [Fact]
+        public async Task Cadastro_ComNomeUsuarioComEspacos_DeveCriarUsuario()
+        {
+            // Arrange
+            var cadastroRequest = new CadastroRequest
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "usuario com espacos", // Nome de usuário com espaços
+                Senha = "senha123",
+                Telefone = "(11) 99999-9999"
+            };
+
+            // Act
+            var result = await _authService.CadastroAsync(cadastroRequest);
+
+            // Assert
+            result.Should().BeTrue(); // O serviço cria mesmo com espaços no nome de usuário
+        }
+
+        [Fact]
+        public async Task SolicitarRecuperacaoSenha_ComEmailComEspacos_DeveRetornarFalse()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _authService.SolicitarRecuperacaoSenhaAsync(" teste@email.com "); // Email com espaços
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Login_ComUsuarioComCaracteresEspeciais_DeveRetornarToken()
+        {
+            // Arrange
+            var usuario = new Usuario
+            {
+                Nome = "João",
+                Sobrenome = "Silva-Santos",
+                Email = "joao.silva@email.com",
+                NomeUsuario = "joao_silva",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha@123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            var loginRequest = new LoginRequest
+            {
+                Email = "joao.silva@email.com",
+                Senha = "senha@123"
+            };
+
+            // Act
+            var result = await _authService.LoginAsync(loginRequest);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Token.Should().NotBeNullOrEmpty();
+            result.Email.Should().Be("joao.silva@email.com");
+        }
+
+        [Fact]
+        public async Task Cadastro_ComEnderecoNull_DeveCriarUsuario()
+        {
+            // Arrange
+            var cadastroRequest = new CadastroRequest
+            {
+                Nome = "Teste",
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                Senha = "senha123",
+                Telefone = "(11) 99999-9999"
+                // Endereco não é definido (será null por padrão)
+            };
+
+            // Act
+            var result = await _authService.CadastroAsync(cadastroRequest);
+
+            // Assert
+            result.Should().BeTrue(); // O serviço cria mesmo sem endereço
+        }
+
+        [Fact]
+        public async Task Login_ComUsuarioComNomeMuitoLongo_DeveRetornarToken()
+        {
+            // Arrange
+            var nomeLongo = new string('A', 100);
+            var usuario = new Usuario
+            {
+                Nome = nomeLongo,
+                Sobrenome = "Usuario",
+                Email = "teste@email.com",
+                NomeUsuario = "testusuario",
+                SenhaHash = BCrypt.Net.BCrypt.HashPassword("senha123"),
+                Telefone = "(11) 99999-9999",
+                Ativo = true
+            };
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            var loginRequest = new LoginRequest
+            {
+                Email = "teste@email.com",
+                Senha = "senha123"
+            };
+
+            // Act
+            var result = await _authService.LoginAsync(loginRequest);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Token.Should().NotBeNullOrEmpty();
+        }
     }
 }
 

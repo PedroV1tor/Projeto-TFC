@@ -94,27 +94,65 @@ export class InfoComponent implements OnInit, OnDestroy {
   services: ServiceInfo[] = [
     {
       id: 1,
-      name: 'Análises Laboratoriais',
-      description: 'Análises completas com resultados precisos e confiáveis',
-      features: ['Análises químicas', 'Microbiologia', 'Toxicologia', 'Controle de qualidade'],
-      price: 'A partir de R$ 150',
-      icon: '🧪'
+      name: 'TM-340',
+      description: 'Impressora profissional de alta performance para produção de materiais de marketing e impressões CAD com qualidade superior. Ideal para ambientes corporativos que demandam produtividade e confiabilidade.',
+      features: [
+        'Qualidade profissional de impressão',
+        'Produtividade confiável e constante',
+        'Interface intuitiva e fácil de usar',
+        'Processos sustentáveis',
+        'Linhas nítidas e cores vibrantes',
+        'Suporte a impressões CAD precisas'
+      ],
+      price: 'Sob consulta',
+      icon: '🖨️'
     },
     {
       id: 2,
-      name: 'Consultoria Técnica',
-      description: 'Consultoria especializada para otimização de processos',
-      features: ['Implementação de sistemas', 'Treinamentos', 'Auditorias', 'Validação'],
+      name: 'Máquina a Laser MF139',
+      description: 'Equipamento laser de precisão para corte e gravação em diversos materiais. Área de trabalho de 1300x900mm permite projetos de todos os tamanhos com acabamento profissional.',
+      features: [
+        'Área de trabalho: 1300x900mm',
+        'Cortes limpos e precisos',
+        'Gravações detalhadas',
+        'Múltiplos materiais: MDF, acrílico, couro, tecido, madeira',
+        'Aplicações versáteis',
+        'Alta durabilidade e confiabilidade'
+      ],
       price: 'Sob consulta',
-      icon: '📋'
+      icon: '⚡'
     },
     {
       id: 3,
-      name: 'Desenvolvimento P&D',
-      description: 'Pesquisa e desenvolvimento de soluções customizadas',
-      features: ['Projetos customizados', 'Prototipagem', 'Testes piloto', 'Validação'],
-      price: 'Projeto personalizado',
-      icon: '⚗️'
+      name: 'Creality K1C',
+      description: 'Impressora 3D FDM/FFF de alta velocidade para protótipos e peças técnicas. Suporte a filamentos avançados e tecnologia de ponta para resultados profissionais.',
+      features: [
+        'Tecnologia FDM/FFF avançada',
+        'Alta velocidade de impressão',
+        'Suporte a filamentos especiais',
+        'Ideal para protótipos',
+        'Peças técnicas de qualidade',
+        'Interface amigável',
+        'Precisão dimensional'
+      ],
+      price: 'Sob consulta',
+      icon: '🔧'
+    },
+    {
+      id: 4,
+      name: 'Máquina de Corte Nagano',
+      description: 'Cortadora elétrica de papel e cartões para acabamento gráfico de alta precisão. Equipamento profissional para corte automatizado com tecnologia avançada de controle.',
+      features: [
+        'Corte elétrico automatizado',
+        'Alta precisão no acabamento',
+        'Ideal para papel e cartões',
+        'Tecnologia de controle avançada',
+        'Aplicações em acabamento gráfico',
+        'Eficiência e rapidez no processo',
+        'Qualidade profissional de corte'
+      ],
+      price: 'Sob consulta',
+      icon: '✂️'
     }
   ];
 

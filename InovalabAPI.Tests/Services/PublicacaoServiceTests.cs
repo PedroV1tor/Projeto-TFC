@@ -259,5 +259,196 @@ namespace InovalabAPI.Tests.Services
             publicacaoAtualizada.Should().NotBeNull();
             publicacaoAtualizada!.Status.Should().Be("rascunho");
         }
+
+        [Fact]
+        public async Task Create_ComTituloVazio_DeveCriarPublicacao()
+        {
+            // Arrange
+            var criarPublicacaoDto = new CriarPublicacaoDTO
+            {
+                Titulo = "", // Título vazio
+                Descricao = "Descricao da publicacao"
+            };
+
+            // Act
+            var result = await _publicacaoService.CreateAsync(criarPublicacaoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Titulo.Should().Be("");
+        }
+
+        [Fact]
+        public async Task Create_ComDescricaoVazia_DeveCriarPublicacao()
+        {
+            // Arrange
+            var criarPublicacaoDto = new CriarPublicacaoDTO
+            {
+                Titulo = "Titulo da Publicacao",
+                Descricao = "" // Descrição vazia
+            };
+
+            // Act
+            var result = await _publicacaoService.CreateAsync(criarPublicacaoDto, _usuarioTeste.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Descricao.Should().Be("");
+        }
+
+        [Fact]
+        public async Task Update_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var atualizarPublicacaoDto = new AtualizarPublicacaoDTO
+            {
+                Titulo = "Titulo Atualizado",
+                Descricao = "Descricao atualizada"
+            };
+
+            // Act
+            var result = await _publicacaoService.UpdateAsync(999, atualizarPublicacaoDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Delete_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Act
+            var result = await _publicacaoService.DeleteAsync(999);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusInvalido_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _publicacaoService.GetByStatusAsync("status-inexistente");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComIdInvalido_DeveRetornarFalse()
+        {
+            // Arrange
+            var alterarStatusDto = new AlterarStatusDTO
+            {
+                Status = "rascunho"
+            };
+
+            // Act
+            var result = await _publicacaoService.AlterarStatusAsync(999, alterarStatusDto);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Create_ComUsuarioIdInvalido_DeveLancarExcecao()
+        {
+            // Arrange
+            var criarPublicacaoDto = new CriarPublicacaoDTO
+            {
+                Titulo = "Nova Publicacao",
+                Descricao = "Descricao da nova publicacao"
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => 
+                _publicacaoService.CreateAsync(criarPublicacaoDto, 999)); // UsuarioId inválido
+        }
+
+        [Fact]
+        public async Task GetAll_ComListaVazia_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _publicacaoService.GetAllAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Update_ComDadosNull_DeveAtualizarPublicacao()
+        {
+            // Arrange
+            var publicacao = new Publicacao
+            {
+                Titulo = "Publicacao Original",
+                Descricao = "Descricao original",
+                UsuarioId = _usuarioTeste.Id,
+                Status = "ativa",
+                CriadoEm = DateTime.UtcNow
+            };
+            _context.Publicacoes.Add(publicacao);
+            await _context.SaveChangesAsync();
+
+            var atualizarPublicacaoDto = new AtualizarPublicacaoDTO
+            {
+                Titulo = null!, // Título null
+                Descricao = null! // Descrição null
+            };
+
+            // Act
+            var result = await _publicacaoService.UpdateAsync(publicacao.Id, atualizarPublicacaoDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var publicacaoAtualizada = await _context.Publicacoes.FindAsync(publicacao.Id);
+            publicacaoAtualizada.Should().NotBeNull();
+            publicacaoAtualizada!.Titulo.Should().BeNull();
+            publicacaoAtualizada.Descricao.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetByStatus_ComStatusNull_DeveRetornarListaVazia()
+        {
+            // Act
+            var result = await _publicacaoService.GetByStatusAsync(null!);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task AlterarStatus_ComStatusNull_DeveAlterarStatus()
+        {
+            // Arrange
+            var publicacao = new Publicacao
+            {
+                Titulo = "Publicacao Teste",
+                Descricao = "Descricao teste",
+                UsuarioId = _usuarioTeste.Id,
+                Status = "ativa",
+                CriadoEm = DateTime.UtcNow
+            };
+            _context.Publicacoes.Add(publicacao);
+            await _context.SaveChangesAsync();
+
+            var alterarStatusDto = new AlterarStatusDTO
+            {
+                Status = null! // Status null
+            };
+
+            // Act
+            var result = await _publicacaoService.AlterarStatusAsync(publicacao.Id, alterarStatusDto);
+
+            // Assert
+            result.Should().BeTrue();
+
+            var publicacaoAtualizada = await _context.Publicacoes.FindAsync(publicacao.Id);
+            publicacaoAtualizada.Should().NotBeNull();
+            publicacaoAtualizada!.Status.Should().BeNull();
+        }
     }
 }
