@@ -164,6 +164,10 @@
   text-align: center;
   padding-top: 20px;
   border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .edit-button {
@@ -180,6 +184,31 @@
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(18, 187, 32, 0.4);
+  }
+}
+
+.delete-button {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+    background: linear-gradient(135deg, #c82333 0%, #a02622 100%);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
@@ -359,6 +388,17 @@
     }
   }
 
+  .perfil-actions {
+    flex-direction: column;
+    gap: 10px;
+
+    .edit-button,
+    .delete-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
   .perfil-avatar .avatar-placeholder {
     width: 80px;
     height: 80px;
@@ -391,5 +431,239 @@
   .edit-button {
     padding: 14px 20px;
     font-size: 1rem;
+  }
+
+  .delete-button {
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .perfil-actions {
+    gap: 10px;
+  }
+}
+
+// Modal de Confirmação de Exclusão
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideInModal 0.3s ease;
+}
+
+.modal-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border-radius: 15px 15px 0 0;
+
+  h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.modal-body {
+  padding: 30px 25px;
+  text-align: center;
+
+  .warning-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  h4 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .warning-text {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .warning-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+    display: inline-block;
+
+    li {
+      padding: 8px 0;
+      color: #dc3545;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      &::before {
+        content: '⚠️';
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .final-warning {
+    color: #dc3545;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+  }
+}
+
+.modal-footer {
+  padding: 20px 25px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 0 0 15px 15px;
+}
+
+.modal-cancel {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+  }
+}
+
+.modal-confirm {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a02622 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Responsividade do Modal
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .modal-body {
+    padding: 25px 20px;
+  }
+
+  .modal-footer {
+    padding: 15px 20px;
+    flex-direction: column;
+
+    .modal-cancel,
+    .modal-confirm {
+      width: 100%;
+    }
+  }
+
+  .warning-list {
+    font-size: 0.9rem;
   }
 }

@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class PerfilComponent implements OnInit, OnDestroy {
   usuario: Usuario | null = null;
   modoEdicao = false;
+  mostrarModalExclusao = false;
   private subscription = new Subscription();
 
 
@@ -240,5 +241,43 @@ export class PerfilComponent implements OnInit, OnDestroy {
       const sobrenome = this.usuario.sobrenome?.charAt(0) || '';
       return (nome + sobrenome).toUpperCase();
     }
+  }
+
+  confirmarExclusao() {
+    this.mostrarModalExclusao = true;
+  }
+
+  cancelarExclusao() {
+    this.mostrarModalExclusao = false;
+  }
+
+  excluirPerfil() {
+    if (!confirm('Tem certeza que deseja excluir seu perfil? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    console.log('🗑️ Iniciando exclusão de perfil...');
+
+    this.authService.deletePerfil().subscribe({
+      next: () => {
+        console.log('✅ Perfil excluído com sucesso');
+        alert('Perfil excluído com sucesso. Você será redirecionado para a página inicial.');
+        this.authService.logout();
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao excluir perfil:', error);
+        if (error.status === 404) {
+          alert('Perfil não encontrado ou já foi excluído.');
+        } else if (error.status === 401) {
+          alert('Sessão expirada. Faça login novamente.');
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        } else {
+          alert('Erro ao excluir perfil. Tente novamente.');
+        }
+        this.mostrarModalExclusao = false;
+      }
+    });
   }
 }

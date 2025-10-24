@@ -149,6 +149,9 @@
           <button class="edit-button" (click)="ativarEdicao()">
             Editar Perfil
           </button>
+          <button class="delete-button" (click)="confirmarExclusao()" title="Excluir perfil permanentemente">
+            🗑️ Excluir Perfil
+          </button>
         </div>
       </div>
 
@@ -362,6 +365,42 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <div class="modal-overlay" *ngIf="mostrarModalExclusao" (click)="cancelarExclusao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>⚠️ Confirmar Exclusão</h3>
+        <button class="modal-close" (click)="cancelarExclusao()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="warning-icon">🚨</div>
+        <h4>Tem certeza que deseja excluir seu perfil?</h4>
+        <p class="warning-text">
+          <strong>Esta ação não pode ser desfeita!</strong> Todos os seus dados serão permanentemente removidos do sistema, incluindo:
+        </p>
+        <ul class="warning-list">
+          <li>Informações pessoais</li>
+          <li>Dados de endereço</li>
+          <li>Histórico de atividades</li>
+          <li>Publicações e agendamentos</li>
+        </ul>
+        <p class="final-warning">
+          Você precisará criar uma nova conta para usar o sistema novamente.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-cancel" (click)="cancelarExclusao()">
+          Cancelar
+        </button>
+        <button class="modal-confirm" (click)="excluirPerfil()">
+          Sim, Excluir Perfil
+        </button>
       </div>
     </div>
   </div>

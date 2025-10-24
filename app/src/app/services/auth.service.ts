@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface EnderecoUsuario {
@@ -255,6 +255,22 @@ export class AuthService {
     });
 
     return this.http.put(`${environment.apiUrl}/user/atualizar`, dados, { headers });
+  }
+
+  deletePerfil(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.getToken()}`
+    });
+
+    // Primeiro busca o perfil para obter o ID
+    return this.getPerfil().pipe(
+      switchMap((usuario) => {
+        if (!usuario.id) {
+          throw new Error('ID do usuário não encontrado');
+        }
+        return this.http.delete(`${environment.apiUrl}/user/${usuario.id}`, { headers });
+      })
+    );
   }
 
   diagnosticarAutenticacao(): void {
