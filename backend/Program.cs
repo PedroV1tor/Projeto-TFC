@@ -78,6 +78,35 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
+// Middleware personalizado para tratar CORS (deve ser o primeiro)
+app.Use(async (context, next) =>
+{
+    // Obter a origem da requisição
+    var origin = context.Request.Headers["Origin"].ToString();
+    
+    if (!string.IsNullOrEmpty(origin))
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Origin", origin);
+    }
+
+    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    context.Response.Headers.Add("Access-Control-Max-Age", "86400");
+
+    // Responder imediatamente a requisições OPTIONS (preflight)
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = 200;
+        await context.Response.CompleteAsync();
+        return;
+    }
+
+    await next();
+});
+
+// IMPORTANTE: CORS deve vir ANTES de UseHttpsRedirection
+app.UseCors("AllowAngularApp");
 
 if (app.Environment.IsDevelopment())
 {
@@ -86,7 +115,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
