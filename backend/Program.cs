@@ -5,6 +5,7 @@ using System.Text;
 using InovalabAPI.Data;
 using InovalabAPI.Services;
 using System.Text.Json;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,19 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        var allowedOrigins = new List<string>
+        {
+            "http://localhost:4200"
+        };
+
+        // Adicionar URL de produção se existir
+        var productionUrl = builder.Configuration["ProductionUrl"];
+        if (!string.IsNullOrEmpty(productionUrl))
+        {
+            allowedOrigins.Add(productionUrl);
+        }
+
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

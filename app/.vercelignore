@@ -1,0 +1,58 @@
+# Node modules - será instalado na Vercel
+node_modules/
+
+# Build output
+dist/
+coverage/
+
+# Angular cache - muito grande!
+.angular/
+
+# Logs
+*.log
+npm-debug.log*
+*.log.*
+lerna-debug.log*
+
+# Arquivos temporários
+*.tmp
+*.cache
+*.tsbuildinfo
+
+# Arquivos do Visual Studio Code
+.vscode/
+.vs/
+
+# Git
+.git/
+.gitignore
+
+# Arquivos de ambiente local
+.env.local
+.env.*.local
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Arquivos de teste
+coverage/
+*.lcov
+
+# Arquivos de documentação grandes
+*.md
+!README.md
+
+# Arquivos grandes de imagem/video
+*.mov
+*.avi
+*.mp4
+*.mkv
+
+# Arquivos compactados
+*.zip
+*.rar
+*.tar.gz
+

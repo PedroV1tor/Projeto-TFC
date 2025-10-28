@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InovalabAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c434699b2385cab37ab0a3b9104b907323df0dd8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31dc3d4b2d15dcc49fd6f98f4668d4d49a055e2c")]
 [assembly: System.Reflection.AssemblyProductAttribute("InovalabAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InovalabAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

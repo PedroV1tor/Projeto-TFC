@@ -1,0 +1,53 @@
+# Backend
+backend/
+InovalabAPI.Tests/
+
+# Documentação
+*.md
+!README.md
+
+# Build files
+app/dist/
+app/coverage/
+app/.angular/
+
+# Node modules (será instalado na Vercel)
+**/node_modules/
+
+# Arquivos de configuração do sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Arquivos temporários
+*.tmp
+*.cache
+
+# Arquivos .vs do Visual Studio
+.vs/
+
+# Bin e obj do backend
+backend/bin/
+backend/obj/
+InovalabAPI.Tests/bin/
+InovalabAPI.Tests/obj/
+
+# Arquivos grandes de cache
+*.avd
+*.qcow2
+*.img
+*.mkv
+*.rofl
+*.rar
+*.exe
+
+# Downloads
+Downloads/
+
+# Arquivos de sistema
+*.cdx
+*.zip
+

@@ -1,5 +1,5 @@
 <div class="relatorios-container">
-  
+
   <div class="page-header">
     <div class="container">
       <h1>📊 Relatórios INOVALAB</h1>
@@ -7,13 +7,13 @@
     </div>
   </div>
 
-  
+
   <section class="principal-section" *ngIf="!relatorioSelecionado && publicacoesAtivas.length === 0">
     <div class="container">
       <h2 class="section-title">📝 Publicações do Sistema</h2>
       <p class="section-description">Visualize todas as publicações ativas do sistema</p>
 
-      
+
       <div class="acao-publicacoes">
         <button class="btn-publicacoes-ativas"
                 (click)="exibirPublicacoesAtivas()"
@@ -26,7 +26,7 @@
     </div>
   </section>
 
-  
+
   <section class="publicacoes-ativas-section" *ngIf="publicacoesAtivas.length > 0 && !relatorioSelecionado">
     <div class="container">
       <h2 class="section-title">📝 Publicações Ativas ({{ publicacoesAtivas.length }})</h2>
@@ -68,7 +68,7 @@
         </div>
       </div>
 
-      
+
       <div class="acao-voltar">
         <button class="btn-voltar-resumo" (click)="publicacoesAtivas = []">
           ← Voltar
@@ -77,7 +77,7 @@
     </div>
   </section>
 
-  
+
   <section class="selecao-relatorios" *ngIf="!relatorioSelecionado">
     <div class="container">
       <h2 class="section-title">📋 Selecione o Tipo de Relatório</h2>
@@ -97,10 +97,10 @@
     </div>
   </section>
 
-  
+
   <section class="relatorio-section" *ngIf="relatorioSelecionado">
     <div class="container">
-      
+
       <div class="relatorio-header">
         <div class="header-info">
           <button class="btn-voltar" (click)="limparFiltros()">
@@ -126,7 +126,7 @@
         </div>
       </div>
 
-      
+
       <div class="filtros-container">
         <h3>🔍 Filtros</h3>
         <div class="filtros-form">
@@ -166,13 +166,13 @@
         </div>
       </div>
 
-      
+
       <div class="loading-container" *ngIf="carregando">
         <div class="loading-spinner large"></div>
         <p>Gerando relatório...</p>
       </div>
 
-      
+
       <div class="empty-state" *ngIf="!carregando && relatorioSelecionado !== 'resumo' && dadosRelatorio.length === 0 && mostrarFiltros">
         <div class="empty-icon">📋</div>
         <h3>Nenhum dado encontrado</h3>
