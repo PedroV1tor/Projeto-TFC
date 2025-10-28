@@ -29,10 +29,13 @@ builder.Services.AddCors(options =>
     {
         var allowedOrigins = new List<string>
         {
-            "http://localhost:4200"
+            "http://localhost:4200",
+            "https://localhost:4200",
+            "https://frontendtfc.vercel.app",
+            "https://projeto-tfc-2uh9.vercel.app"
         };
 
-        // Adicionar URL de produção se existir
+        // Adicionar URL de produção se existir nas configurações
         var productionUrl = builder.Configuration["ProductionUrl"];
         if (!string.IsNullOrEmpty(productionUrl))
         {
