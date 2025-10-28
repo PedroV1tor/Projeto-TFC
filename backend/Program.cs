@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
         };
 
         // Adicionar URL de produção se existir nas configurações
-        var productionUrl = builder.Configuration["ProductionUrl"];
+        var productionUrl = builder.Configuration["https://frontendtfc.vercel.app"];
         if (!string.IsNullOrEmpty(productionUrl))
         {
             allowedOrigins.Add(productionUrl);
