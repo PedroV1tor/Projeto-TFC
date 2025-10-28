@@ -21,7 +21,7 @@ namespace InovalabAPI.Controllers
         private int GetCurrentUserId()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
+
             if (string.IsNullOrEmpty(userIdClaim))
             {
                 throw new UnauthorizedAccessException("Token JWT inválido ou usuário não autenticado");
@@ -135,7 +135,7 @@ namespace InovalabAPI.Controllers
 
                 var usuarioId = GetCurrentUserId();
                 var agendamento = await _agendamentoService.CreateAsync(criarAgendamentoDto, usuarioId);
-                
+
                 return CreatedAtAction(nameof(GetById), new { id = agendamento.Id }, agendamento);
             }
             catch (Exception ex)
@@ -209,7 +209,7 @@ namespace InovalabAPI.Controllers
                 // Força o filtro a incluir apenas agendamentos do usuário logado
                 var usuarioId = GetCurrentUserId();
                 filtro.UsuarioId = usuarioId;
-                
+
                 var agendamentos = await _agendamentoService.GetByFiltroAsync(filtro);
                 return Ok(agendamentos);
             }

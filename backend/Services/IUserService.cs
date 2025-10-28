@@ -9,7 +9,7 @@ namespace InovalabAPI.Services
         Task<IEnumerable<Usuario>> GetAllUsuariosAsync();
         Task<bool> UpdateUsuarioAsync(Usuario usuario);
         Task<bool> DeleteUsuarioAsync(int id);
-        
+
         // Métodos para Empresa
         Task<Empresa?> GetEmpresaByEmailAsync(string email);
         Task<Empresa?> GetEmpresaByIdAsync(int id);

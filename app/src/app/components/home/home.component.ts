@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { HeroComponent } from '../hero/hero.component';
 import { PublicacaoService } from '../../services/publicacao.service';
 import { Publicacao } from '../../models/publicacao.model';
@@ -93,7 +94,10 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  constructor(private publicacaoService: PublicacaoService) {}
+  constructor(
+    private publicacaoService: PublicacaoService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.carregarPublicacoesTimeline();
@@ -233,5 +237,9 @@ export class HomeComponent implements OnInit {
 
   getCardById(id: number): CardInovacao | undefined {
     return this.cardsInovacao.find(card => card.id === id);
+  }
+
+  navegarParaInfo(): void {
+    this.router.navigate(['/info']);
   }
 }

@@ -36,7 +36,7 @@ namespace InovalabAPI.Services
                 await _context.SaveChangesAsync();
 
                 var token = GenerateJwtToken(usuario.Id, usuario.Email, usuario.Nome, usuario.NomeUsuario, usuario.IsAdmin);
-                
+
                 return new LoginResponse
                 {
                     Token = token,
@@ -58,7 +58,7 @@ namespace InovalabAPI.Services
                 await _context.SaveChangesAsync();
 
                 var token = GenerateJwtToken(empresa.Id, empresa.Email, empresa.RazaoSocial, empresa.NomeFantasia ?? empresa.RazaoSocial, false);
-                
+
                 return new LoginResponse
                 {
                     Token = token,
@@ -179,12 +179,12 @@ namespace InovalabAPI.Services
 
             var codigo = new Random().Next(10000, 99999).ToString();
             var expiracao = DateTime.UtcNow.AddMinutes(15); // Expira em 15 minutos
-            
+
             Console.WriteLine($"✅ Código gerado para {email}: {codigo} (expira em 15min)");
-            
+
 
             LimparCodigosExpirados();
-            
+
 
             _codigosRecuperacao[email] = (codigo, expiracao);
 
@@ -247,11 +247,11 @@ namespace InovalabAPI.Services
         {
 
             var codigoLimpo = request.Codigo?.Trim();
-            
+
             Console.WriteLine($"🔍 Verificando código para {request.Email}");
             Console.WriteLine($"   Código recebido: '{request.Codigo}' (original)");
             Console.WriteLine($"   Código limpo: '{codigoLimpo}'");
-            
+
 
             LimparCodigosExpirados();
 
@@ -289,7 +289,7 @@ namespace InovalabAPI.Services
             var resultado = codigoArmazenado == codigoLimpo;
             Console.WriteLine($"   Comparação: '{codigoArmazenado}' == '{codigoLimpo}' = {resultado}");
             Console.WriteLine($"{(resultado ? "✅" : "❌")} Verificação: {request.Email} - {(resultado ? "SUCESSO" : "FALHOU")}");
-            
+
             return resultado;
         }
 
@@ -313,7 +313,7 @@ namespace InovalabAPI.Services
             }
 
             var (codigoArmazenado, expiracao) = _codigosRecuperacao[request.Email];
-            
+
 
             if (DateTime.UtcNow > expiracao || codigoArmazenado != request.Codigo)
             {

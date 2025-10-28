@@ -97,7 +97,7 @@ namespace InovalabAPI.Migrations
             // Inserir usuário admin padrão
             var senhaHash = BCrypt.Net.BCrypt.HashPassword("admin@123");
             var dataAtual = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
-            
+
             migrationBuilder.Sql($@"
                 DO $$
                 DECLARE

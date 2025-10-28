@@ -159,11 +159,11 @@ namespace InovalabAPI.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            
+
             var usuarioAtualizado = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Id == usuario.Id);
-            
+
             usuarioAtualizado.Should().NotBeNull();
             usuarioAtualizado!.Nome.Should().Be("Teste Atualizado");
             usuarioAtualizado.Sobrenome.Should().Be("Usuario Atualizado");
@@ -546,11 +546,11 @@ namespace InovalabAPI.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            
+
             var usuarioAtualizado = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Id == usuario.Id);
-            
+
             usuarioAtualizado.Should().NotBeNull();
             usuarioAtualizado!.Endereco.Should().NotBeNull();
             usuarioAtualizado.Endereco!.CEP.Should().Be("01234-567");
@@ -686,7 +686,7 @@ namespace InovalabAPI.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            
+
             var usuarioAtualizado = await _context.Usuarios.FindAsync(usuario.Id);
             usuarioAtualizado.Should().NotBeNull();
             usuarioAtualizado!.SenhaHash.Should().Be(usuario.SenhaHash);
@@ -753,7 +753,7 @@ namespace InovalabAPI.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            
+
             var usuarioAtualizado = await _context.Usuarios.FindAsync(usuario.Id);
             usuarioAtualizado.Should().NotBeNull();
             usuarioAtualizado!.IsAdmin.Should().BeTrue();

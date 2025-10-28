@@ -141,7 +141,7 @@ namespace InovalabAPI.Services
                 OrcamentosVencendo = (await GetOrcamentosVencendoAsync()).ToList()
             };
 
-            estatisticas.ValorMedio = estatisticas.Total > 0 
+            estatisticas.ValorMedio = estatisticas.Total > 0
                 ? orcamentos.Where(o => o.Valor.HasValue).Average(o => o.Valor ?? 0)
                 : 0;
 
@@ -166,7 +166,7 @@ namespace InovalabAPI.Services
                 OrcamentosVencendo = (await GetOrcamentosVencendoPorUsuarioAsync(usuarioId)).ToList()
             };
 
-            estatisticas.ValorMedio = estatisticas.Total > 0 
+            estatisticas.ValorMedio = estatisticas.Total > 0
                 ? orcamentos.Where(o => o.Valor.HasValue).Average(o => o.Valor ?? 0)
                 : 0;
 

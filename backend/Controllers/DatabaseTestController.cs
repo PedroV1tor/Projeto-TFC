@@ -37,12 +37,12 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando usuários DIRETAMENTE do contexto...");
-                
+
 
                 var usuarios = await _context.Usuarios.ToListAsync();
-                
+
                 Console.WriteLine($"📊 Total de usuários encontrados no banco (direto): {usuarios.Count}");
-                
+
                 var usuariosSimplificados = usuarios.Select(u => new
                 {
                     u.Id,
@@ -80,13 +80,13 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando usuários através do SERVIÇO...");
-                
+
 
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var usuariosList = usuarios.ToList();
-                
+
                 Console.WriteLine($"📊 Total de usuários encontrados no banco (serviço): {usuariosList.Count}");
-                
+
                 var usuariosSimplificados = usuariosList.Select(u => new
                 {
                     u.Id,
@@ -124,11 +124,11 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando publicações DIRETAMENTE do contexto...");
-                
+
                 var publicacoes = await _context.Publicacoes.ToListAsync();
-                
+
                 Console.WriteLine($"📊 Total de publicações encontradas no banco (direto): {publicacoes.Count}");
-                
+
                 var publicacoesSimplificadas = publicacoes.Select(p => new
                 {
                     p.Id,
@@ -166,11 +166,11 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando agendamentos DIRETAMENTE do contexto...");
-                
+
                 var agendamentos = await _context.Agendamentos.ToListAsync();
-                
+
                 Console.WriteLine($"📊 Total de agendamentos encontrados no banco (direto): {agendamentos.Count}");
-                
+
                 var agendamentosSimplificados = agendamentos.Select(a => new
                 {
                     a.Id,
@@ -207,11 +207,11 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Buscando orçamentos DIRETAMENTE do contexto...");
-                
+
                 var orcamentos = await _context.Orcamentos.ToListAsync();
-                
+
                 Console.WriteLine($"📊 Total de orçamentos encontrados no banco (direto): {orcamentos.Count}");
-                
+
                 var orcamentosSimplificados = orcamentos.Select(o => new
                 {
                     o.Id,
@@ -250,7 +250,7 @@ namespace InovalabAPI.Controllers
             try
             {
                 Console.WriteLine("🔍 [DatabaseTest] Gerando estatísticas completas...");
-                
+
 
                 var usuariosPorData = await _context.Usuarios
                     .GroupBy(u => u.DataCriacao.Date)

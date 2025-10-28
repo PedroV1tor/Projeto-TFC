@@ -21,7 +21,7 @@ namespace InovalabAPI.Controllers
         private int GetCurrentUserId()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
+
             if (string.IsNullOrEmpty(userIdClaim))
             {
                 throw new UnauthorizedAccessException("Token JWT inválido ou usuário não autenticado");
@@ -151,7 +151,7 @@ namespace InovalabAPI.Controllers
 
                 var usuarioId = GetCurrentUserId();
                 var orcamento = await _orcamentoService.CreateAsync(criarOrcamentoDto, usuarioId);
-                
+
                 return CreatedAtAction(nameof(GetById), new { id = orcamento.Id }, orcamento);
             }
             catch (Exception ex)
@@ -225,7 +225,7 @@ namespace InovalabAPI.Controllers
                 // Força o filtro a incluir apenas orçamentos do usuário logado
                 var usuarioId = GetCurrentUserId();
                 filtro.UsuarioId = usuarioId;
-                
+
                 var orcamentos = await _orcamentoService.GetByFiltroAsync(filtro);
                 return Ok(orcamentos);
             }

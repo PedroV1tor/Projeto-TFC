@@ -361,7 +361,7 @@ namespace InovalabAPI.Tests.Services
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => 
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _publicacaoService.CreateAsync(criarPublicacaoDto, 999)); // UsuarioId inválido
         }
 

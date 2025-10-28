@@ -150,20 +150,7 @@ export class LaboratorioComponent implements OnInit {
     this.mostrarFormulario = true;
   }
 
-  excluirAgendamento(id: number) {
-    if (confirm('Tem certeza que deseja excluir este agendamento?')) {
-      this.agendamentoService.excluirAgendamento(id).subscribe({
-        next: () => {
-          alert('Agendamento excluído com sucesso!');
-          this.carregarAgendamentos();
-        },
-        error: (error) => {
-          alert('Erro ao excluir agendamento.');
-          console.error(error);
-        }
-      });
-    }
-  }
+
 
   getDataMinima(): string {
     // Retorna a data de amanhã no formato YYYY-MM-DD para o atributo min do input date

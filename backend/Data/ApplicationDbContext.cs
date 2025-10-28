@@ -33,7 +33,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Sobrenome).IsRequired();
                 entity.Property(e => e.NomeUsuario).IsRequired();
                 entity.Property(e => e.Telefone).IsRequired();
-                
+
                 entity.HasOne(e => e.Endereco)
                       .WithOne(e => e.Usuario)
                       .HasForeignKey<EnderecoUsuario>(e => e.UsuarioId)
@@ -64,7 +64,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Telefone).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.ResponsavelNome).HasMaxLength(100);
                 entity.Property(e => e.ResponsavelTelefone).HasMaxLength(20);
-                
+
                 entity.HasOne(e => e.Endereco)
                       .WithOne(e => e.Empresa)
                       .HasForeignKey<EnderecoEmpresa>(e => e.EmpresaId)
@@ -92,7 +92,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Usuario).HasMaxLength(100);
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.CriadoEm).IsRequired();
-                
+
                 entity.HasOne(e => e.UsuarioCriador)
                       .WithMany()
                       .HasForeignKey(e => e.UsuarioId)
@@ -109,7 +109,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Autor).HasMaxLength(100);
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.CriadoEm).IsRequired();
-                
+
                 entity.HasOne(e => e.UsuarioCriador)
                       .WithMany()
                       .HasForeignKey(e => e.UsuarioId)
@@ -129,7 +129,7 @@ namespace InovalabAPI.Data
                 entity.Property(e => e.Responsavel).HasMaxLength(100);
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.CriadoEm).IsRequired();
-                
+
                 entity.HasOne(e => e.UsuarioCriador)
                       .WithMany()
                       .HasForeignKey(e => e.UsuarioId)

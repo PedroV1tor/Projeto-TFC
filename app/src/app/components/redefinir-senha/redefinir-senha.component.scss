@@ -5,7 +5,6 @@
   justify-content: center;
   background: linear-gradient(135deg, #12bb20 0%, #1556ce 100%);
   padding: 20px;
-  margin-top: 80px;
 }
 
 .redefinir-card {
@@ -92,7 +91,7 @@
 
   &.error {
     border-color: #e74c3c;
-    
+
     &:focus {
       border-color: #e74c3c;
       box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);

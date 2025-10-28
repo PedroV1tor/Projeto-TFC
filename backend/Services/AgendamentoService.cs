@@ -122,7 +122,7 @@ namespace InovalabAPI.Services
         public async Task<IEnumerable<AgendamentoDTO>> GetProximosEventosAsync(int diasProximos = 7)
         {
             var dataLimite = DateTime.UtcNow.AddDays(diasProximos);
-            
+
             var agendamentos = await _context.Agendamentos
                 .Include(a => a.UsuarioCriador)
                 .Where(a => a.Status == "ativo" && a.Data >= DateTime.UtcNow && a.Data <= dataLimite)
@@ -135,7 +135,7 @@ namespace InovalabAPI.Services
         public async Task<IEnumerable<AgendamentoDTO>> GetProximosEventosPorUsuarioAsync(int usuarioId, int diasProximos = 7)
         {
             var dataLimite = DateTime.UtcNow.AddDays(diasProximos);
-            
+
             var agendamentos = await _context.Agendamentos
                 .Include(a => a.UsuarioCriador)
                 .Where(a => a.UsuarioId == usuarioId && a.Status == "ativo" && a.Data >= DateTime.UtcNow && a.Data <= dataLimite)

@@ -23,7 +23,7 @@ namespace InovalabAPI.Controllers
         {
             // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
-            
+
             if (string.IsNullOrEmpty(email))
             {
                 Console.WriteLine("⚠️ [Perfil] Tentativa de acesso sem email no token JWT");
@@ -34,7 +34,7 @@ namespace InovalabAPI.Controllers
 
             // Primeiro tenta buscar como usuário pessoa física
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
-            
+
             if (usuario != null)
             {
                 Console.WriteLine($"✅ [Perfil] Retornando dados do usuário ID: {usuario.Id}, Email: {email}");
@@ -68,7 +68,7 @@ namespace InovalabAPI.Controllers
 
             // Se não encontrou como pessoa física, busca como empresa
             var empresa = await _userService.GetEmpresaByEmailAsync(email);
-            
+
             if (empresa != null)
             {
                 Console.WriteLine($"✅ [Perfil] Retornando dados da empresa ID: {empresa.Id}, Email: {email}");
@@ -110,7 +110,7 @@ namespace InovalabAPI.Controllers
         public async Task<IActionResult> GetTodosUsuarios()
         {
             var usuarios = await _userService.GetAllUsuariosAsync();
-            
+
             var usuariosData = usuarios.Select(u => new
             {
                 u.Id,
@@ -137,7 +137,7 @@ namespace InovalabAPI.Controllers
 
             // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
-            
+
             if (string.IsNullOrEmpty(email))
             {
                 Console.WriteLine("⚠️ [Atualizar Perfil] Tentativa de atualização sem email no token JWT");
@@ -148,7 +148,7 @@ namespace InovalabAPI.Controllers
 
             // Busca APENAS o usuário autenticado pelo email do token
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
-            
+
             if (usuario == null)
             {
                 Console.WriteLine($"❌ [Atualizar Perfil] Usuário não encontrado para email: {email}");
@@ -189,7 +189,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _userService.UpdateUsuarioAsync(usuario);
-            
+
             if (!success)
             {
                 return StatusCode(500, new { message = "Erro interno do servidor ao atualizar usuário" });
@@ -203,7 +203,7 @@ namespace InovalabAPI.Controllers
         public async Task<IActionResult> DeleteUsuario(int id)
         {
             var success = await _userService.DeleteUsuarioAsync(id);
-            
+
             if (!success)
             {
                 return NotFound(new { message = "Usuário não encontrado" });

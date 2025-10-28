@@ -185,7 +185,7 @@ namespace InovalabAPI.Tests.Services
             var usuarioNoBanco = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Email == "novo@email.com");
-            
+
             usuarioNoBanco.Should().NotBeNull();
             usuarioNoBanco!.Email.Should().Be("novo@email.com");
             usuarioNoBanco.Nome.Should().Be("Novo");
@@ -265,7 +265,7 @@ namespace InovalabAPI.Tests.Services
             _emailServiceMock.Verify(x => x.EnviarAsync(
                 "teste@email.com",
                 It.IsAny<string>(),
-                It.IsAny<string>()), 
+                It.IsAny<string>()),
                 Times.Once);
         }
 
@@ -280,7 +280,7 @@ namespace InovalabAPI.Tests.Services
             _emailServiceMock.Verify(x => x.EnviarAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
-                It.IsAny<string>()), 
+                It.IsAny<string>()),
                 Times.Never);
         }
 
@@ -514,7 +514,7 @@ namespace InovalabAPI.Tests.Services
             var usuarioNoBanco = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Email == "completo@email.com");
-            
+
             usuarioNoBanco.Should().NotBeNull();
             usuarioNoBanco!.Endereco.Should().NotBeNull();
             usuarioNoBanco.Endereco!.CEP.Should().Be("01234-567");
@@ -555,7 +555,7 @@ namespace InovalabAPI.Tests.Services
             var usuarioNoBanco = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Email == "minimo@email.com");
-            
+
             usuarioNoBanco.Should().NotBeNull();
             usuarioNoBanco!.Endereco.Should().NotBeNull();
             usuarioNoBanco.Endereco!.CEP.Should().Be("01000-000");

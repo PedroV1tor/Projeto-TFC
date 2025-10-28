@@ -24,7 +24,7 @@ namespace InovalabAPI.Controllers
             }
 
             var result = await _authService.LoginAsync(request);
-            
+
             if (result == null)
             {
                 return Unauthorized(new { message = "Credenciais inválidas" });
@@ -42,7 +42,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _authService.CadastroAsync(request);
-            
+
             if (!success)
             {
                 return BadRequest(new { message = "Email ou nome de usuário já existe" });
@@ -60,7 +60,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _authService.CadastroEmpresaAsync(request);
-            
+
             if (!success)
             {
                 return BadRequest(new { message = "Email ou CNPJ já existe" });
@@ -78,7 +78,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _authService.SolicitarRecuperacaoSenhaAsync(request.Email);
-            
+
             if (!success)
             {
                 return NotFound(new { message = "Email não encontrado" });
@@ -92,7 +92,7 @@ namespace InovalabAPI.Controllers
         {
             Console.WriteLine($"🌐 API VerificarCodigo chamada para: {request?.Email}");
             Console.WriteLine($"🌐 Código recebido: '{request?.Codigo}'");
-            
+
             if (request == null || !ModelState.IsValid)
             {
                 Console.WriteLine($"❌ ModelState inválido:");
@@ -104,7 +104,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _authService.VerificarCodigoAsync(request);
-            
+
             if (!success)
             {
                 Console.WriteLine($"❌ Verificação falhou para: {request.Email}");
@@ -124,7 +124,7 @@ namespace InovalabAPI.Controllers
             }
 
             var success = await _authService.RedefinirSenhaAsync(request);
-            
+
             if (!success)
             {
                 return BadRequest(new { message = "Erro ao redefinir senha. Verifique o código." });
@@ -140,37 +140,40 @@ namespace InovalabAPI.Controllers
             try
             {
 
-                var field = typeof(Services.AuthService).GetField("_codigosRecuperacao", 
+                var field = typeof(Services.AuthService).GetField("_codigosRecuperacao",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-                
+
                 if (field?.GetValue(null) is IDictionary<string, (string codigo, DateTime expiracao)> codigos)
                 {
-                    var resultado = codigos.Select(kvp => new 
-                    { 
-                        email = kvp.Key, 
-                        codigo = kvp.Value.codigo, 
+                    var resultado = codigos.Select(kvp => new
+                    {
+                        email = kvp.Key,
+                        codigo = kvp.Value.codigo,
                         expiracao = kvp.Value.expiracao.ToString("yyyy-MM-dd HH:mm:ss"),
                         expirado = DateTime.UtcNow > kvp.Value.expiracao,
                         agora = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
                     }).ToList();
-                    
-                    return Ok(new { 
-                        codigos = resultado, 
+
+                    return Ok(new
+                    {
+                        codigos = resultado,
                         total = resultado.Count,
                         agoraUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
                     });
                 }
-                
-                return Ok(new { 
-                    codigos = new object[0], 
-                    total = 0, 
+
+                return Ok(new
+                {
+                    codigos = new object[0],
+                    total = 0,
                     erro = "Campo não encontrado",
                     agoraUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
                 });
             }
             catch (Exception ex)
             {
-                return Ok(new { 
+                return Ok(new
+                {
                     erro = ex.Message,
                     agoraUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
                 });

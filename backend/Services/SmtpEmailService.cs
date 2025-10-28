@@ -81,7 +81,7 @@ namespace InovalabAPI.Services
                 Console.WriteLine($"=====================");
 
                 await smtp.SendMailAsync(mail);
-                
+
                 Console.WriteLine($"✅ Email enviado com sucesso para {destinatarioEmail}");
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace InovalabAPI.Services
                 Console.WriteLine($"🔄 ATIVANDO MODO FALLBACK para desenvolvimento...");
                 Console.WriteLine($"📧 Para: {destinatarioEmail}");
                 Console.WriteLine($"📧 Assunto: {assunto}");
-                
+
 
                 Console.WriteLine($"📧 === CONTEÚDO DO EMAIL (MODO FALLBACK) ===");
                 Console.WriteLine($"📧 Para: {destinatarioEmail}");
@@ -100,7 +100,7 @@ namespace InovalabAPI.Services
                 Console.WriteLine($"📧 =========================================");
                 Console.WriteLine($"✅ Email simulado com sucesso!");
                 return; // Sempre funciona em modo fallback
-                
+
                 throw new InvalidOperationException($"Falha no envio de email: {ex.Message}", ex);
             }
         }
