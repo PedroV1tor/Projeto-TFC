@@ -24,22 +24,22 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-      options.AddPolicy("AllowProduction", policy =>
-      {
+      options.AddPolicy(name: "AllowProduction",
+       policy =>    {
           policy.WithOrigins("https://frontend-production-0b8e.up.railway.app")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
       });
 
-      options.AddPolicy("AllowDevelopment", policy =>
+      /*options.AddPolicy("AllowDevelopment", policy =>
       {
           policy.WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
+      });*/
       });
-});
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres123456";
@@ -71,16 +71,7 @@ var app = builder.Build();
 
 // --- CONFIGURAÇÃO DE CORS ---
 // Ativa CORS para todos os controladores e endpoints
-app.UseCors(options =>
-{
-    options.WithOrigins(
-        "https://frontend-production-0b8e.up.railway.app",
-        "http://localhost:4200"
-    )
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials();
-});
+app.UseCors("AllowProduction");
 
 if (app.Environment.IsDevelopment())
 {
