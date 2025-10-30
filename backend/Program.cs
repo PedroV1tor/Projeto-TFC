@@ -5,36 +5,50 @@ using System.Text;
 using InovalabAPI.Data;
 using InovalabAPI.Services;
 using System.Text.Json;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ Configuração de CORS correta
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins(
+        var allowedOrigins = new List<string>
+        {
             "http://localhost:4200",
             "https://localhost:4200",
-            "https://frontendtfc.vercel.app"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
+            "https://frontendtfc.vercel.app",
+            "https://projeto-tfc-2uh9.vercel.app"
+        };
+
+        // Adicionar URL de produção se existir nas configurações
+        var productionUrl = builder.Configuration["ProductionUrl"];
+        if (!string.IsNullOrEmpty(productionUrl))
+        {
+            allowedOrigins.Add(productionUrl);
+        }
+
+        policy.WithOrigins(allowedOrigins.ToArray())
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
+
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres123456";
@@ -54,7 +68,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Serviços da aplicação
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
@@ -64,8 +78,10 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
-// ✅ O CORS deve vir antes da autenticação e autorização
-app.UseCors("AllowFrontend");
+
+
+// IMPORTANTE: CORS deve vir ANTES de UseHttpsRedirection
+app.UseCors("AllowAngularApp");
 
 if (app.Environment.IsDevelopment())
 {
@@ -74,17 +90,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-// Atualiza o banco e popula dados iniciais
+
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+
     context.Database.Migrate();
+
+
     SeedData.Initialize(context);
 }
 
