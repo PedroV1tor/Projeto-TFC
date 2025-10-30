@@ -69,62 +69,29 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
-using Microsoft.AspNetCore.HttpOverrides;
+// --- CONFIGURAÇÃO DE CORS ---
+// Ativa CORS para todos os controladores e endpoints
+app.UseCors("AllowProduction");
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
-
-
-// ========================================
-// CORS precisa vir logo no início do pipeline
-// ========================================
-app.UseCors(policy =>
-{
-    policy.WithOrigins("https://frontend-production-0b8e.up.railway.app")
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-          .AllowCredentials();
-});
-
-// ========================================
-// Swagger só no modo desenvolvimento
-// ========================================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// ========================================
-// HTTPS Redirection vem depois do CORS
-// ========================================
 app.UseHttpsRedirection();
 
-// ========================================
-// Autenticação e Autorização
-// ========================================
 app.UseAuthentication();
 app.UseAuthorization();
 
-// ========================================
-// Controllers
-// ========================================
 app.MapControllers();
 
-// ========================================
-// Migrações e Seed
-// ========================================
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
     SeedData.Initialize(context);
 }
+ app.Urls.Add("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Add($"http://0.0.0.0:{port}");
-
-app.Urls.Add("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
 app.Run();
