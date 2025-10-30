@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://projeto-tfc-2uh9.vercel.app'
+  apiUrl: 'https://backend-production-6973.up.railway.app/api'
 };

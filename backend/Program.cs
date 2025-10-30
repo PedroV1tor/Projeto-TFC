@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -25,30 +24,22 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
-    {
-        var allowedOrigins = new List<string>
-        {
-            "http://localhost:4200",
-            "https://localhost:4200",
-            "https://frontendtfc.vercel.app",
-            "https://projeto-tfc-2uh9.vercel.app"
-        };
+      options.AddPolicy("AllowProduction", policy =>
+      {
+          policy.WithOrigins('https://frontend-production-0b8e.up.railway.app')
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+      });
 
-        // Adicionar URL de produção se existir nas configurações
-        var productionUrl = builder.Configuration["ProductionUrl"];
-        if (!string.IsNullOrEmpty(productionUrl))
-        {
-            allowedOrigins.Add(productionUrl);
-        }
-
-        policy.WithOrigins(allowedOrigins.ToArray())
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
+      options.AddPolicy("AllowDevelopment", policy =>
+      {
+          policy.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+      });
 });
-
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres123456";
@@ -78,15 +69,15 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
-
-
-// IMPORTANTE: CORS deve vir ANTES de UseHttpsRedirection
-app.UseCors("AllowAngularApp");
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("AllowDevelopment");
+}
+else
+{
+    app.UseCors("AllowProduction");
 }
 
 app.UseHttpsRedirection();
