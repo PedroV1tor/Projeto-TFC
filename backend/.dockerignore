@@ -1,0 +1,51 @@
+# Ignorar artefatos de build
+bin/
+obj/
+
+# IDE/Editor
+.vs/
+.vscode/
+.idea/
+
+# Controle de versão
+.git/
+.gitignore
+
+# Outros
+*.user
+*.log
+**/node_modules/
+Dockerfile*
+
+# SO/Arquivos temporários
+.DS_Store
+Thumbs.db
+
+# Testes e cobertura
+**/TestResults/
+**/coverage/
+**/*.Tests/
+**/*.Test/
+InovalabAPI.Tests/
+
+# Logs e caches adicionais
+*.swp
+*.swo
+*.tmp
+*.cache
+*.bak
+
+# Configurações locais (não necessárias no build da imagem)
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/Properties/launchSettings.json
+
+# Variáveis de ambiente locais
+.env
+.env.*
+
+# Scripts e documentação
+*.md
+*.txt
+*.bat
+*.ps1

@@ -1,0 +1,32 @@
+# Binários compilados
+bin/
+obj/
+
+# Arquivos de build
+*.dll
+*.pdb
+*.cache
+
+# Logs
+*.log
+*.txt
+
+# Arquivos temporários
+*.tmp
+*.bak
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Documentação
+*.md
+!README.md
+
+# Arquivos de configuração local
+appsettings.Development.json
+
+# Migrations (já estão no código)
+# As migrations serão executadas automaticamente
+
