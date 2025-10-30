@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
       options.AddPolicy("AllowProduction", policy =>
       {
-          policy.WithOrigins('https://frontend-production-0b8e.up.railway.app')
+          policy.WithOrigins("https://frontend-production-0b8e.up.railway.app")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();

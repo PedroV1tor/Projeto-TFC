@@ -140,3 +140,4 @@ C:\Users\pedro vitor\Desktop\TFC-II\backend\obj\Debug\net8.0\refint\InovalabAPI.
 C:\Users\pedro vitor\Desktop\TFC-II\backend\obj\Debug\net8.0\InovalabAPI.pdb
 C:\Users\pedro vitor\Desktop\TFC-II\backend\obj\Debug\net8.0\InovalabAPI.genruntimeconfig.cache
 C:\Users\pedro vitor\Desktop\TFC-II\backend\obj\Debug\net8.0\ref\InovalabAPI.dll
+C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\appsettings.Production.json
