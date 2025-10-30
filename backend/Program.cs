@@ -69,23 +69,45 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 var app = builder.Build();
 
-// --- CONFIGURAÇÃO DE CORS ---
-// Ativa CORS para todos os controladores e endpoints
-app.UseCors("AllowProduction");
+// ========================================
+// CORS precisa vir logo no início do pipeline
+// ========================================
+app.UseCors(policy =>
+{
+    policy.WithOrigins("https://frontend-production-0b8e.up.railway.app")
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials();
+});
 
+// ========================================
+// Swagger só no modo desenvolvimento
+// ========================================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// ========================================
+// HTTPS Redirection vem depois do CORS
+// ========================================
 app.UseHttpsRedirection();
 
+// ========================================
+// Autenticação e Autorização
+// ========================================
 app.UseAuthentication();
 app.UseAuthorization();
 
+// ========================================
+// Controllers
+// ========================================
 app.MapControllers();
 
+// ========================================
+// Migrações e Seed
+// ========================================
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
