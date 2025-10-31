@@ -32,13 +32,13 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
       });
 
-      /*options.AddPolicy("AllowDevelopment", policy =>
+      options.AddPolicy("AllowDevelopment", policy =>
       {
           policy.WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
-      });*/
+      });
       });
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

@@ -353,6 +353,59 @@
   }
 }
 
+// Botões de status (Admin): Aprovado, Pendente, Reprovado
+.btn-status {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(10%);
+  }
+
+  &.btn-aprovado {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #a5d6a7;
+
+    &:hover:not(:disabled) {
+      background: #c8e6c9;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2);
+    }
+  }
+
+  &.btn-pendente {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-color: #90caf9;
+
+    &:hover:not(:disabled) {
+      background: #bbdefb;
+      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.2);
+    }
+  }
+
+  &.btn-reprovado {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #ef9a9a;
+
+    &:hover:not(:disabled) {
+      background: #ffcdd2;
+      box-shadow: 0 2px 8px rgba(198, 40, 40, 0.2);
+    }
+  }
+}
+
 .btn-action {
   display: flex;
   align-items: center;
