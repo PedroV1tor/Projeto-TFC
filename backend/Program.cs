@@ -70,8 +70,15 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 var app = builder.Build();
 
 // --- CONFIGURAÇÃO DE CORS ---
-// Ativa CORS para todos os controladores e endpoints
-app.UseCors("AllowProduction");
+// Ativa CORS baseado no ambiente
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowDevelopment");
+}
+else
+{
+    app.UseCors("AllowProduction");
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -92,6 +99,10 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
     SeedData.Initialize(context);
 }
- app.Urls.Add("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
+// Em produção, usa a porta do Railway, em desenvolvimento usa a do launchSettings.json
+if (!app.Environment.IsDevelopment())
+{
+    app.Urls.Add("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
+}
 
 app.Run();
