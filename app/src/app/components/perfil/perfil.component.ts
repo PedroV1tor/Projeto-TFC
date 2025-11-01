@@ -172,24 +172,39 @@ export class PerfilComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Prepara dados para envio - garante que não há strings vazias
+    // Prepara dados para envio - remove campos undefined e garante formato correto
+    const enderecoObj: any = {
+      cep: this.perfilForm.cep.trim(),
+      rua: this.perfilForm.rua.trim(),
+      bairro: this.perfilForm.bairro.trim()
+    };
+    
+    // Adiciona campos opcionais apenas se tiverem valor
+    const numeroTrimmed = this.perfilForm.numero.trim();
+    if (numeroTrimmed) {
+      enderecoObj.numero = numeroTrimmed;
+    }
+    
+    const complementoTrimmed = this.perfilForm.complemento.trim();
+    if (complementoTrimmed) {
+      enderecoObj.complemento = complementoTrimmed;
+    }
+    
+    const referenciaTrimmed = this.perfilForm.referencia.trim();
+    if (referenciaTrimmed) {
+      enderecoObj.referencia = referenciaTrimmed;
+    }
+
     const dadosAtualizacao: any = {
       nome: this.perfilForm.nome.trim(),
       sobrenome: this.perfilForm.sobrenome.trim(),
       email: this.usuario?.email || '', // Email vem do usuário logado
       nomeUsuario: this.perfilForm.usuario.trim(),
       telefone: this.perfilForm.telefone.trim(),
-      endereco: {
-        cep: this.perfilForm.cep.trim(),
-        rua: this.perfilForm.rua.trim(),
-        bairro: this.perfilForm.bairro.trim(),
-        numero: this.perfilForm.numero.trim() || undefined,
-        complemento: this.perfilForm.complemento.trim() || undefined,
-        referencia: this.perfilForm.referencia.trim() || undefined
-      }
+      endereco: enderecoObj
     };
 
-    console.log('📤 Enviando dados de atualização:', dadosAtualizacao);
+    console.log('📤 Enviando dados de atualização:', JSON.stringify(dadosAtualizacao, null, 2));
 
     this.authService.updatePerfil(dadosAtualizacao).subscribe({
       next: () => {
@@ -200,25 +215,29 @@ export class PerfilComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('❌ Erro ao atualizar perfil:', error);
         console.error('Status:', error.status);
-        console.error('Response:', error.error);
+        console.error('Response:', JSON.stringify(error.error, null, 2));
         
         // Tenta mostrar mensagens de erro específicas
         if (error.status === 400 && error.error) {
           let mensagemErro = 'Erro de validação:\n\n';
           
-          // Se houver erros do ModelState
+          // Se houver erros do ModelState (formato do ASP.NET Core)
           if (error.error.errors) {
             const erros = error.error.errors;
             Object.keys(erros).forEach(campo => {
-              mensagemErro += `${campo}: ${erros[campo].join(', ')}\n`;
+              const campoNome = campo.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+              mensagemErro += `• ${campoNome}: ${Array.isArray(erros[campo]) ? erros[campo].join(', ') : erros[campo]}\n`;
             });
           } else if (error.error.message) {
             mensagemErro = error.error.message;
+          } else {
+            mensagemErro = JSON.stringify(error.error, null, 2);
           }
           
+          console.error('📋 Erros de validação detalhados:', error.error.errors);
           alert(mensagemErro);
         } else {
-          alert('Erro ao atualizar perfil. Tente novamente.');
+          alert('Erro ao atualizar perfil. Verifique o console para mais detalhes.');
         }
       }
     });

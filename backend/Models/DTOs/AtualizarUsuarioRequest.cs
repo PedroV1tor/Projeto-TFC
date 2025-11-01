@@ -21,7 +21,8 @@ namespace InovalabAPI.Models.DTOs
         public string NomeUsuario { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Telefone é obrigatório")]
-        [Phone(ErrorMessage = "Formato de telefone inválido")]
+        [StringLength(20, ErrorMessage = "Telefone deve ter no máximo 20 caracteres")]
+        [RegularExpression(@"^[\d\s\(\)\-]+$", ErrorMessage = "Formato de telefone inválido. Use apenas números, espaços, parênteses e hífens")]
         public string Telefone { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O endereço é obrigatório")]
