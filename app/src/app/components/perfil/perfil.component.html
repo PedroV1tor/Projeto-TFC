@@ -236,49 +236,6 @@
             </div>
           </div>
 
-
-          <div class="form-section">
-            <h3>Informações Acadêmicas</h3>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="instituicao">Instituição:</label>
-                <input
-                  type="text"
-                  id="instituicao"
-                  [(ngModel)]="perfilForm.instituicao"
-                  name="instituicao"
-                  class="form-input"
-                  placeholder="Nome da sua instituição">
-              </div>
-
-              <div class="form-group">
-                <label for="curso">Curso:</label>
-                <input
-                  type="text"
-                  id="curso"
-                  [(ngModel)]="perfilForm.curso"
-                  name="curso"
-                  class="form-input"
-                  placeholder="Seu curso ou área de estudo">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="bio">Biografia:</label>
-              <textarea
-                id="bio"
-                [(ngModel)]="perfilForm.bio"
-                name="bio"
-                class="form-input textarea"
-                placeholder="Conte um pouco sobre você, seus interesses e objetivos..."
-                rows="4"
-                maxlength="500"></textarea>
-              <small class="form-hint">{{ perfilForm.bio.length }}/500 caracteres</small>
-            </div>
-          </div>
-
-
           <div class="form-section">
             <h3>Endereço</h3>
 

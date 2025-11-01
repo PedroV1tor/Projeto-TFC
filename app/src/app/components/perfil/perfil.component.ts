@@ -25,9 +25,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
     usuario: '',
     telefone: '',
     matricula: '',
-    instituicao: '',
-    curso: '',
-    bio: '',
     cep: '',
     rua: '',
     bairro: '',
@@ -117,9 +114,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
         usuario: this.usuario.nomeUsuario || '',
         telefone: this.usuario.telefone || '',
         matricula: this.usuario.matricula || '',
-        instituicao: '',
-        curso: '',
-        bio: '',
         cep: this.usuario.endereco?.cep || '',
         rua: this.usuario.endereco?.rua || '',
         bairro: this.usuario.endereco?.bairro || '',
@@ -131,7 +125,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   salvarPerfil() {
-
+    // Validações obrigatórias
     if (!this.perfilForm.nome.trim()) {
       alert('O nome é obrigatório.');
       return;
@@ -142,41 +136,90 @@ export class PerfilComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.perfilForm.telefone && !this.validarTelefone(this.perfilForm.telefone)) {
+    if (!this.perfilForm.usuario.trim() || this.perfilForm.usuario.trim().length < 3) {
+      alert('O nome de usuário é obrigatório e deve ter no mínimo 3 caracteres.');
+      return;
+    }
+
+    if (!this.perfilForm.telefone.trim()) {
+      alert('O telefone é obrigatório.');
+      return;
+    }
+
+    if (!this.validarTelefone(this.perfilForm.telefone)) {
       alert('Por favor, digite um telefone válido.');
       return;
     }
 
-    if (this.perfilForm.cep && !this.validarCEP(this.perfilForm.cep)) {
+    // Validações de endereço (obrigatórios)
+    if (!this.perfilForm.cep.trim()) {
+      alert('O CEP é obrigatório.');
+      return;
+    }
+
+    if (!this.validarCEP(this.perfilForm.cep)) {
       alert('Por favor, digite um CEP válido.');
       return;
     }
 
+    if (!this.perfilForm.rua.trim()) {
+      alert('A rua é obrigatória.');
+      return;
+    }
 
-    this.authService.updatePerfil({
+    if (!this.perfilForm.bairro.trim()) {
+      alert('O bairro é obrigatório.');
+      return;
+    }
+
+    // Prepara dados para envio - garante que não há strings vazias
+    const dadosAtualizacao: any = {
       nome: this.perfilForm.nome.trim(),
       sobrenome: this.perfilForm.sobrenome.trim(),
+      email: this.usuario?.email || '', // Email vem do usuário logado
       nomeUsuario: this.perfilForm.usuario.trim(),
       telefone: this.perfilForm.telefone.trim(),
-      matricula: this.perfilForm.matricula.trim(),
       endereco: {
         cep: this.perfilForm.cep.trim(),
         rua: this.perfilForm.rua.trim(),
         bairro: this.perfilForm.bairro.trim(),
-        numero: this.perfilForm.numero.trim(),
-        complemento: this.perfilForm.complemento.trim(),
-        referencia: this.perfilForm.referencia.trim()
+        numero: this.perfilForm.numero.trim() || undefined,
+        complemento: this.perfilForm.complemento.trim() || undefined,
+        referencia: this.perfilForm.referencia.trim() || undefined
       }
-    }).subscribe({
+    };
+
+    console.log('📤 Enviando dados de atualização:', dadosAtualizacao);
+
+    this.authService.updatePerfil(dadosAtualizacao).subscribe({
       next: () => {
         alert('Perfil atualizado com sucesso!');
         this.modoEdicao = false;
-
         this.carregarPerfil();
       },
       error: (error) => {
-        console.error('Erro ao atualizar perfil:', error);
-        alert('Erro ao atualizar perfil. Tente novamente.');
+        console.error('❌ Erro ao atualizar perfil:', error);
+        console.error('Status:', error.status);
+        console.error('Response:', error.error);
+        
+        // Tenta mostrar mensagens de erro específicas
+        if (error.status === 400 && error.error) {
+          let mensagemErro = 'Erro de validação:\n\n';
+          
+          // Se houver erros do ModelState
+          if (error.error.errors) {
+            const erros = error.error.errors;
+            Object.keys(erros).forEach(campo => {
+              mensagemErro += `${campo}: ${erros[campo].join(', ')}\n`;
+            });
+          } else if (error.error.message) {
+            mensagemErro = error.error.message;
+          }
+          
+          alert(mensagemErro);
+        } else {
+          alert('Erro ao atualizar perfil. Tente novamente.');
+        }
       }
     });
   }

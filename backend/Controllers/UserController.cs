@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using InovalabAPI.Services;
 using InovalabAPI.Models.DTOs;
 using System.Security.Claims;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace InovalabAPI.Controllers
 {
@@ -132,7 +134,19 @@ namespace InovalabAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errors = new Dictionary<string, string[]>();
+                foreach (var error in ModelState)
+                {
+                    if (error.Value.Errors.Count > 0)
+                    {
+                        errors[error.Key] = error.Value.Errors.Select(e => e.ErrorMessage).ToArray();
+                    }
+                }
+                
+                return BadRequest(new { 
+                    message = "Erro de validação nos dados enviados",
+                    errors = errors
+                });
             }
 
             // Extrai o email do token JWT (único e seguro)
