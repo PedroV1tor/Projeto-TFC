@@ -77,14 +77,29 @@ namespace InovalabAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var success = await _authService.SolicitarRecuperacaoSenhaAsync(request.Email);
-
-            if (!success)
+            try
             {
-                return NotFound(new { message = "Email não encontrado" });
-            }
+                var success = await _authService.SolicitarRecuperacaoSenhaAsync(request.Email);
 
-            return Ok(new { message = "Código de verificação enviado para o email" });
+                if (!success)
+                {
+                    return NotFound(new { message = "Email não encontrado" });
+                }
+
+                return Ok(new { message = "Código de verificação enviado para o email" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Erro no envio de email (SMTP)
+                Console.WriteLine($"❌ Erro ao enviar email de recuperação: {ex.Message}");
+                return StatusCode(500, new { message = "Erro ao enviar email. Por favor, tente novamente mais tarde." });
+            }
+            catch (Exception ex)
+            {
+                // Outros erros inesperados
+                Console.WriteLine($"❌ Erro inesperado na recuperação de senha: {ex.Message}");
+                return StatusCode(500, new { message = "Erro no servidor. Tente novamente mais tarde." });
+            }
         }
 
         [HttpPost("verificar-codigo")]
