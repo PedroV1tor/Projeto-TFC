@@ -143,3 +143,6 @@ C:\Users\pedro vitor\Desktop\TFC-II\backend\obj\Debug\net8.0\ref\InovalabAPI.dll
 C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\appsettings.Production.json
 C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\DotNetEnv.dll
 C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\Sprache.dll
+C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\Microsoft.AspNetCore.WebUtilities.dll
+C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\Microsoft.Net.Http.Headers.dll
+C:\Users\pedro vitor\Desktop\TFC-II\backend\bin\Debug\net8.0\Resend.dll

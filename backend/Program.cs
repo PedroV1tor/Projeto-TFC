@@ -6,7 +6,6 @@ using InovalabAPI.Data;
 using InovalabAPI.Services;
 using System.Text.Json;
 using System.Collections.Generic;
-using System.Linq;
 using DotNetEnv;
 
 // Carrega variáveis de ambiente do arquivo .env
@@ -106,37 +105,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
 builder.Services.AddScoped<IPublicacaoService, PublicacaoService>();
 builder.Services.AddScoped<IOrcamentoService, OrcamentoService>();
-builder.Services.AddScoped<IEmailService, SmtpEmailService>();
-
-// Debug: Verifica de onde vêm as configurações de EmailSettings
-var emailHost = builder.Configuration["EmailSettings:Host"] 
-    ?? builder.Configuration["EmailSettings__Host"]
-    ?? Environment.GetEnvironmentVariable("EmailSettings__Host");
-var emailUser = builder.Configuration["EmailSettings:User"] 
-    ?? builder.Configuration["EmailSettings__User"]
-    ?? Environment.GetEnvironmentVariable("EmailSettings__User");
-var emailPass = builder.Configuration["EmailSettings:Password"] 
-    ?? builder.Configuration["EmailSettings__Password"]
-    ?? Environment.GetEnvironmentVariable("EmailSettings__Password");
-
-Console.WriteLine($"📧 EmailSettings.Host: {(string.IsNullOrEmpty(emailHost) ? "❌ NÃO CONFIGURADO" : "✅ " + emailHost)}");
-Console.WriteLine($"📧 EmailSettings.User: {(string.IsNullOrEmpty(emailUser) ? "❌ NÃO CONFIGURADO" : "✅ " + emailUser)}");
-var passwordDisplay = string.IsNullOrEmpty(emailPass) 
-    ? "❌ NÃO CONFIGURADO" 
-    : "✅ ***" + (emailPass.Length > 3 ? emailPass.Substring(emailPass.Length - 3) : "***");
-Console.WriteLine($"📧 EmailSettings.Password: {passwordDisplay}");
-
-// Mostra todas as variáveis de ambiente relacionadas a EmailSettings
-Console.WriteLine($"\n🔍 Variáveis de ambiente EmailSettings encontradas:");
-foreach (var envVar in Environment.GetEnvironmentVariables().Cast<System.Collections.DictionaryEntry>()
-    .Where(e => e.Key?.ToString()?.StartsWith("EmailSettings") == true))
-{
-    var value = envVar.Value?.ToString() ?? "";
-    var maskedValue = envVar.Key?.ToString()?.Contains("Password") == true 
-        ? "***" + (value.Length > 3 ? value.Substring(value.Length - 3) : "")
-        : value;
-    Console.WriteLine($"   {envVar.Key} = {maskedValue}");
-}
+builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 var app = builder.Build();
 
