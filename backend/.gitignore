@@ -1,3 +1,5 @@
 .vercel
 obj/
 bin/
+.env
+!.env.example

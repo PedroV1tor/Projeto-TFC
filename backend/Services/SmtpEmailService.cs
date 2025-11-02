@@ -19,12 +19,36 @@ namespace InovalabAPI.Services
         public async Task EnviarAsync(string destinatarioEmail, string assunto, string corpoHtml)
         {
             var section = _configuration.GetSection("EmailSettings");
-            var host = section["Host"];
-            var portStr = section["Port"];
-            var enableSslStr = section["EnableSsl"];
-            var user = section["User"];
-            var pass = section["Password"];
-            var from = section["From"] ?? user;
+            
+            // Tenta ler de múltiplas fontes (formato JSON e formato de variável de ambiente)
+            var host = section["Host"] 
+                ?? _configuration["EmailSettings:Host"] 
+                ?? _configuration["EmailSettings__Host"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__Host");
+            var portStr = section["Port"] 
+                ?? _configuration["EmailSettings:Port"] 
+                ?? _configuration["EmailSettings__Port"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__Port");
+            var enableSslStr = section["EnableSsl"] 
+                ?? _configuration["EmailSettings:EnableSsl"] 
+                ?? _configuration["EmailSettings__EnableSsl"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__EnableSsl");
+            var user = section["User"] 
+                ?? _configuration["EmailSettings:User"] 
+                ?? _configuration["EmailSettings__User"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__User");
+            var pass = section["Password"] 
+                ?? _configuration["EmailSettings:Password"] 
+                ?? _configuration["EmailSettings__Password"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__Password");
+            var from = section["From"] 
+                ?? _configuration["EmailSettings:From"] 
+                ?? _configuration["EmailSettings__From"]
+                ?? Environment.GetEnvironmentVariable("EmailSettings__From") 
+                ?? user;
+            
+            // Debug: mostra de onde veio a configuração
+            Console.WriteLine($"🔍 DEBUG EmailSettings - Host: {(string.IsNullOrEmpty(host) ? "NULL" : "OK")}, User: {(string.IsNullOrEmpty(user) ? "NULL" : "OK")}");
 
             if (string.IsNullOrWhiteSpace(host))
             {
