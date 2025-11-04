@@ -48,7 +48,7 @@ export class PublicacoesComponent implements OnInit {
 
     observable.subscribe({
       next: (publicacoes) => this.publicacoes = publicacoes,
-      error: (error) => console.error('Erro ao carregar publicações:', error)
+      error: (error) => {}
     });
   }
 
@@ -90,7 +90,6 @@ export class PublicacoesComponent implements OnInit {
       return;
     }
 
-    console.log('Token atual:', this.authService.getToken());
 
     try {
       if (this.publicacaoEditando) {

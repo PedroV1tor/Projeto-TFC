@@ -32,7 +32,7 @@ export class AgendamentoService {
     if (this.authService.isLoggedIn) {
       this.getAgendamentos().subscribe({
         next: (agendamentos) => this.agendamentosSubject.next(agendamentos),
-        error: (error) => console.error('Erro ao carregar agendamentos:', error)
+        error: (error) => {}
       });
     }
   }
@@ -42,7 +42,6 @@ export class AgendamentoService {
     return this.http.get<Agendamento[]>(`${this.apiUrl}/meus`, { headers: this.getHeaders() });
   }
 
-  // Retorna TODOS os agendamentos (apenas para admin)
   getTodosAgendamentos(): Observable<Agendamento[]> {
     return this.http.get<Agendamento[]>(this.apiUrl, { headers: this.getHeaders() });
   }
@@ -54,7 +53,6 @@ export class AgendamentoService {
 
 
   getAgendamentosByStatus(status: string): Observable<Agendamento[]> {
-    // Usa o endpoint de filtro para garantir que retorna apenas agendamentos do usuário logado
     return this.filtrarAgendamentos({ status: status });
   }
 

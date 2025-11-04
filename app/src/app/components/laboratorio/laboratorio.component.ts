@@ -46,9 +46,8 @@ export class LaboratorioComponent implements OnInit {
     observable.subscribe({
       next: (agendamentos: Agendamento[]) => {
         this.agendamentos = agendamentos;
-        console.log(`Carregados ${agendamentos.length} agendamento(s) ${this.isAdmin ? '(admin - todos)' : '(usuário - apenas seus)'}`);
       },
-      error: (error: any) => console.error('Erro ao carregar agendamentos:', error)
+      error: (error: any) => {}
     });
   }
 

@@ -65,7 +65,6 @@ namespace InovalabAPI.Services
             return await UpdateUsuarioAsync(usuario);
         }
 
-        // Métodos para Empresa
         public async Task<Empresa?> GetEmpresaByEmailAsync(string email)
         {
             var empresa = await _context.Empresas

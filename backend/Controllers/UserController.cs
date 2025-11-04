@@ -23,7 +23,6 @@ namespace InovalabAPI.Controllers
         [HttpGet("perfil")]
         public async Task<IActionResult> GetPerfil()
         {
-            // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
 
             if (string.IsNullOrEmpty(email))
@@ -32,13 +31,10 @@ namespace InovalabAPI.Controllers
                 return Unauthorized(new { message = "Token inválido ou ausente" });
             }
 
-            // Primeiro tenta buscar como usuário pessoa física
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
 
             if (usuario != null)
             {
-
-                // Retorna dados de pessoa física
                 var perfilUsuario = new
                 {
                     Tipo = "usuario",
@@ -65,13 +61,10 @@ namespace InovalabAPI.Controllers
                 return Ok(perfilUsuario);
             }
 
-            // Se não encontrou como pessoa física, busca como empresa
             var empresa = await _userService.GetEmpresaByEmailAsync(email);
 
             if (empresa != null)
             {
-
-                // Retorna dados de empresa
                 var perfilEmpresa = new
                 {
                     Tipo = "empresa",
@@ -144,7 +137,6 @@ namespace InovalabAPI.Controllers
                 });
             }
 
-            // Extrai o email do token JWT (único e seguro)
             var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
 
             if (string.IsNullOrEmpty(email))
@@ -153,7 +145,6 @@ namespace InovalabAPI.Controllers
                 return Unauthorized(new { message = "Token inválido ou ausente" });
             }
 
-            // Busca APENAS o usuário autenticado pelo email do token
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
 
             if (usuario == null)
@@ -162,10 +153,8 @@ namespace InovalabAPI.Controllers
                 return NotFound(new { message = "Usuário não encontrado" });
             }
 
-            // Atualiza APENAS os dados permitidos (email NÃO pode ser alterado)
             usuario.Nome = request.Nome;
             usuario.Sobrenome = request.Sobrenome;
-            // usuario.Email NÃO é atualizado por segurança (é usado para autenticação)
             usuario.NomeUsuario = request.NomeUsuario;
             usuario.Telefone = request.Telefone;
 

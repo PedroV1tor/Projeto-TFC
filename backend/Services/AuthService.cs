@@ -26,7 +26,6 @@ namespace InovalabAPI.Services
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
-            // Tentar login como usuário
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == request.Email && u.Ativo);
 
@@ -48,7 +47,6 @@ namespace InovalabAPI.Services
                 };
             }
 
-            // Tentar login como empresa
             var empresa = await _context.Empresas
                 .FirstOrDefaultAsync(e => e.Email == request.Email && e.Ativo);
 
@@ -70,7 +68,6 @@ namespace InovalabAPI.Services
                 };
             }
 
-            // Nenhum encontrado ou senha incorreta
             return null;
         }
 
@@ -119,7 +116,6 @@ namespace InovalabAPI.Services
 
         public async Task<bool> CadastroEmpresaAsync(CadastroEmpresaRequest request)
         {
-            // Verificar se o email já existe (tanto em Usuarios quanto em Empresas)
             if (await _context.Usuarios.AnyAsync(u => u.Email == request.Email))
             {
                 return false;
@@ -130,7 +126,6 @@ namespace InovalabAPI.Services
                 return false;
             }
 
-            // Verificar se o CNPJ já existe
             if (await _context.Empresas.AnyAsync(e => e.CNPJ == request.CNPJ))
             {
                 return false;
@@ -178,7 +173,7 @@ namespace InovalabAPI.Services
 
 
             var codigo = new Random().Next(10000, 99999).ToString();
-            var expiracao = DateTime.UtcNow.AddMinutes(15); // Expira em 15 minutos
+            var expiracao = DateTime.UtcNow.AddMinutes(15);
 
 
             LimparCodigosExpirados();

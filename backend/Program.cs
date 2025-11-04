@@ -8,17 +8,14 @@ using System.Text.Json;
 using System.Collections.Generic;
 using DotNetEnv;
 
-// Carrega variáveis de ambiente do arquivo .env
-// O .env deve estar no diretório raiz do projeto backend
-// Usa múltiplos caminhos possíveis para encontrar o .env
 var currentDir = Directory.GetCurrentDirectory();
 var envPaths = new[]
 {
     Path.Combine(currentDir, ".env"),
     Path.Combine(currentDir, "backend", ".env"),
     Path.Combine(AppContext.BaseDirectory, ".env"),
-    Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env"), // Para executáveis compilados
-    ".env" // Caminho relativo padrão
+    Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env"),
+    ".env"
 };
 
 string? envPath = null;
@@ -36,8 +33,6 @@ if (envPath != null)
     Env.Load(envPath);
 }
 
-// IMPORTANTE: Env.Load() deve ser chamado ANTES do WebApplication.CreateBuilder
-// porque o builder já carrega variáveis de ambiente automaticamente
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -100,8 +95,6 @@ builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 var app = builder.Build();
 
-// --- CONFIGURAÇÃO DE CORS ---
-// Ativa CORS baseado no ambiente
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("AllowDevelopment");
@@ -130,7 +123,6 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
     SeedData.Initialize(context);
 }
-// Em produção, usa a porta do Railway, em desenvolvimento usa a do launchSettings.json
 if (!app.Environment.IsDevelopment())
 {
     app.Urls.Add("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));

@@ -13,10 +13,8 @@ import { AuthService, CadastroRequest, CadastroEmpresaRequest } from '../../serv
 })
 export class CadastroComponent {
 
-  // Tipo de cadastro
   tipoCadastro: 'usuario' | 'empresa' = 'usuario';
 
-  // Campos para usuário
   nome: string = '';
   sobrenome: string = '';
   email: string = '';
@@ -31,7 +29,6 @@ export class CadastroComponent {
   referencia: string = '';
   complemento: string = '';
 
-  // Campos para empresa
   razaoSocial: string = '';
   nomeFantasia: string = '';
   cnpj: string = '';
@@ -43,10 +40,8 @@ export class CadastroComponent {
   onSubmit() {
 
     if (this.tipoCadastro === 'usuario') {
-      console.log('Chamando cadastrarUsuario()');
       this.cadastrarUsuario();
     } else {
-      console.log('Chamando cadastrarEmpresa()');
       this.cadastrarEmpresa();
     }
   }

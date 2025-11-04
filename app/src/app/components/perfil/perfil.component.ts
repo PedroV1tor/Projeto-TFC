@@ -18,7 +18,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   mostrarModalExclusao = false;
   private subscription = new Subscription();
 
-
   perfilForm = {
     nome: '',
     sobrenome: '',
@@ -39,15 +38,12 @@ export class PerfilComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-
     if (!this.authService.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }
 
-
     this.carregarPerfil();
-
 
     this.subscription.add(
       this.authService.currentUser$.subscribe(user => {
@@ -65,26 +61,18 @@ export class PerfilComponent implements OnInit, OnDestroy {
   carregarPerfil() {
     this.authService.getPerfil().subscribe({
       next: (usuario) => {
-
         this.usuario = usuario;
         this.resetarFormulario();
       },
       error: (error) => {
-
-
-
-
         if (error.status === 401) {
-
           this.authService.logout();
           this.router.navigate(['/login']);
         } else if (error.status === 404) {
-
           alert('Erro: Usuário não encontrado. Faça login novamente.');
           this.authService.logout();
           this.router.navigate(['/login']);
         } else {
-
           alert('Erro ao carregar perfil. Tente novamente.');
         }
       }

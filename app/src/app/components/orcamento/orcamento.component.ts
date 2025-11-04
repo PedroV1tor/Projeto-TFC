@@ -53,7 +53,7 @@ export class OrcamentoComponent implements OnInit {
 
       observable.subscribe({
         next: (orcamentos) => this.orcamentos = orcamentos,
-        error: (error) => console.error('Erro ao carregar orçamentos:', error)
+        error: (error) => {}
       });
     } else {
       // Admin vê todos os orçamentos por status, usuários normais veem apenas os seus
@@ -63,7 +63,7 @@ export class OrcamentoComponent implements OnInit {
 
       observable.subscribe({
         next: (orcamentos) => this.orcamentos = orcamentos,
-        error: (error) => console.error('Erro ao carregar orçamentos:', error)
+        error: (error) => {}
       });
     }
   }
@@ -71,7 +71,7 @@ export class OrcamentoComponent implements OnInit {
   carregarEstatisticas() {
     this.orcamentoService.getEstatisticas().subscribe({
       next: (estatisticas) => this.estatisticas = estatisticas,
-      error: (error) => console.error('Erro ao carregar estatísticas:', error)
+      error: (error) => {}
     });
   }
 

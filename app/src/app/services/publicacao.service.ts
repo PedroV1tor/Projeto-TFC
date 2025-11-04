@@ -40,7 +40,7 @@ export class PublicacaoService {
   private loadPublicacoes(): void {
     this.getPublicacoes().subscribe({
       next: (publicacoes) => this.publicacoesSubject.next(publicacoes),
-      error: (error) => console.error('Erro ao carregar publicações:', error)
+      error: (error) => {}
     });
   }
 

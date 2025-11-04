@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
           ? todasPublicacoes
           : todasPublicacoes.slice(0, 3);
       },
-      error: (error) => console.error('Erro ao carregar publicações:', error)
+      error: (error) => {}
     });
   }
 
@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
   curtirPublicacao(id: number) {
     this.publicacaoService.curtirPublicacao(id).subscribe({
       next: () => this.carregarPublicacoesTimeline(),
-      error: (error) => console.error('Erro ao curtir publicação:', error)
+      error: (error) => {}
     });
   }
 

@@ -14,22 +14,20 @@ namespace InovalabAPI.Services
         {
             _environment = environment;
             
-            // Lê a API key do Resend de múltiplas fontes
             var apiKey = configuration["Resend:ApiKey"] 
                 ?? configuration["Resend__ApiKey"]
                 ?? Environment.GetEnvironmentVariable("Resend__ApiKey")
-                ?? "re_U6tGJTfA_96fyCj27fHQQDUtKURrz3HJ3"; // Fallback para a chave fornecida
+                ?? "re_U6tGJTfA_96fyCj27fHQQDUtKURrz3HJ3";
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 throw new InvalidOperationException("Resend API Key não configurada. Configure Resend__ApiKey no .env");
             }
 
-            // Lê o email "From" de múltiplas fontes (apenas Resend)
             _fromEmail = configuration["Resend:FromEmail"] 
                 ?? configuration["Resend__FromEmail"]
                 ?? Environment.GetEnvironmentVariable("Resend__FromEmail")
-                ?? "onboarding@resend.dev"; // Fallback padrão do Resend
+                ?? "onboarding@resend.dev";
 
             _resend = ResendClient.Create(apiKey);
         }
@@ -62,7 +60,6 @@ namespace InovalabAPI.Services
             {
                 var errorMessage = $"Falha no envio de email para {destinatarioEmail}: {ex.Message}";
                 
-                // Detecta se é o erro de domínio não verificado
                 if (errorMessage.Contains("You can only send testing emails") || 
                     errorMessage.Contains("verify a domain"))
                 {

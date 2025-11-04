@@ -88,16 +88,12 @@ namespace InovalabAPI.Controllers
 
                 return Ok(new { message = "Código de verificação enviado para o email" });
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                // Erro no envio de email (SMTP)
-
                 return StatusCode(500, new { message = "Erro ao enviar email. Por favor, tente novamente mais tarde." });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Outros erros inesperados
-
                 return StatusCode(500, new { message = "Erro no servidor. Tente novamente mais tarde." });
             }
         }

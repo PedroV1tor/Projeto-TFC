@@ -17,19 +17,16 @@ export interface Usuario {
   tipo?: 'usuario' | 'empresa';
   id?: number;
   email: string;
-  // Campos de Pessoa Física
   nome?: string;
   sobrenome?: string;
   nomeUsuario?: string;
   telefone?: string;
   matricula?: string;
-  // Campos de Empresa
   razaoSocial?: string;
   nomeFantasia?: string;
   cnpj?: string;
   responsavelNome?: string;
   responsavelTelefone?: string;
-  // Comum
   endereco?: EnderecoUsuario;
   dataCriacao?: string;
   ultimoLogin?: string;
@@ -236,7 +233,6 @@ export class AuthService {
       'Expires': '0'
     });
 
-    // Adiciona timestamp para evitar cache do navegador
     const timestamp = new Date().getTime();
     return this.http.get<Usuario>(`${environment.apiUrl}/user/perfil?t=${timestamp}`, { headers });
   }
@@ -254,7 +250,6 @@ export class AuthService {
       'Authorization': `Bearer ${this.getToken()}`
     });
 
-    // Primeiro busca o perfil para obter o ID
     return this.getPerfil().pipe(
       switchMap((usuario) => {
         if (!usuario.id) {
@@ -266,6 +261,5 @@ export class AuthService {
   }
 
   diagnosticarAutenticacao(): void {
-    // Método de diagnóstico removido
   }
 }
