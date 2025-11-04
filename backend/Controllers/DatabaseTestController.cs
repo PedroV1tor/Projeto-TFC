@@ -36,12 +36,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Buscando usuários DIRETAMENTE do contexto...");
-
 
                 var usuarios = await _context.Usuarios.ToListAsync();
 
-                Console.WriteLine($"📊 Total de usuários encontrados no banco (direto): {usuarios.Count}");
+                // Console.WriteLine($"📊 Total de usuários encontrados no banco (direto): {usuarios.Count}");
 
                 var usuariosSimplificados = usuarios.Select(u => new
                 {
@@ -54,10 +52,9 @@ namespace InovalabAPI.Controllers
                     u.Telefone
                 }).ToList();
 
-                Console.WriteLine("📋 Primeiros 5 usuários encontrados:");
                 foreach (var u in usuariosSimplificados.Take(5))
                 {
-                    Console.WriteLine($"   - ID: {u.Id}, Nome: {u.Nome} {u.Sobrenome}, Email: {u.Email}, Criado: {u.DataCriacao}");
+
                 }
 
                 return Ok(new
@@ -69,7 +66,7 @@ namespace InovalabAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao buscar usuários direto: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
@@ -79,13 +76,11 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Buscando usuários através do SERVIÇO...");
-
 
                 var usuarios = await _userService.GetAllUsuariosAsync();
                 var usuariosList = usuarios.ToList();
 
-                Console.WriteLine($"📊 Total de usuários encontrados no banco (serviço): {usuariosList.Count}");
+                // Console.WriteLine($"📊 Total de usuários encontrados no banco (serviço): {usuariosList.Count}");
 
                 var usuariosSimplificados = usuariosList.Select(u => new
                 {
@@ -98,10 +93,9 @@ namespace InovalabAPI.Controllers
                     u.Telefone
                 }).ToList();
 
-                Console.WriteLine("📋 Primeiros 5 usuários encontrados:");
                 foreach (var u in usuariosSimplificados.Take(5))
                 {
-                    Console.WriteLine($"   - ID: {u.Id}, Nome: {u.Nome} {u.Sobrenome}, Email: {u.Email}, Criado: {u.DataCriacao}");
+
                 }
 
                 return Ok(new
@@ -113,7 +107,7 @@ namespace InovalabAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao buscar usuários via serviço: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
@@ -123,11 +117,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Buscando publicações DIRETAMENTE do contexto...");
 
                 var publicacoes = await _context.Publicacoes.ToListAsync();
 
-                Console.WriteLine($"📊 Total de publicações encontradas no banco (direto): {publicacoes.Count}");
+                // Console.WriteLine($"📊 Total de publicações encontradas no banco (direto): {publicacoes.Count}");
 
                 var publicacoesSimplificadas = publicacoes.Select(p => new
                 {
@@ -140,10 +133,9 @@ namespace InovalabAPI.Controllers
                     p.Curtidas
                 }).ToList();
 
-                Console.WriteLine("📋 Primeiras 5 publicações encontradas:");
                 foreach (var p in publicacoesSimplificadas.Take(5))
                 {
-                    Console.WriteLine($"   - ID: {p.Id}, Título: {p.Titulo}, Autor: {p.Autor}, Criado: {p.CriadoEm}");
+
                 }
 
                 return Ok(new
@@ -155,7 +147,7 @@ namespace InovalabAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao buscar publicações direto: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
@@ -165,11 +157,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Buscando agendamentos DIRETAMENTE do contexto...");
 
                 var agendamentos = await _context.Agendamentos.ToListAsync();
 
-                Console.WriteLine($"📊 Total de agendamentos encontrados no banco (direto): {agendamentos.Count}");
+                // Console.WriteLine($"📊 Total de agendamentos encontrados no banco (direto): {agendamentos.Count}");
 
                 var agendamentosSimplificados = agendamentos.Select(a => new
                 {
@@ -181,10 +172,9 @@ namespace InovalabAPI.Controllers
                     CriadoEm = a.CriadoEm.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList();
 
-                Console.WriteLine("📋 Primeiros 5 agendamentos encontrados:");
                 foreach (var a in agendamentosSimplificados.Take(5))
                 {
-                    Console.WriteLine($"   - ID: {a.Id}, Título: {a.Titulo}, Data: {a.Data}, Criado: {a.CriadoEm}");
+
                 }
 
                 return Ok(new
@@ -196,7 +186,7 @@ namespace InovalabAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao buscar agendamentos direto: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
@@ -206,11 +196,10 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Buscando orçamentos DIRETAMENTE do contexto...");
 
                 var orcamentos = await _context.Orcamentos.ToListAsync();
 
-                Console.WriteLine($"📊 Total de orçamentos encontrados no banco (direto): {orcamentos.Count}");
+                // Console.WriteLine($"📊 Total de orçamentos encontrados no banco (direto): {orcamentos.Count}");
 
                 var orcamentosSimplificados = orcamentos.Select(o => new
                 {
@@ -224,10 +213,9 @@ namespace InovalabAPI.Controllers
                     PrazoOrcamento = o.PrazoOrcamento.ToString("yyyy-MM-dd")
                 }).ToList();
 
-                Console.WriteLine("📋 Primeiros 5 orçamentos encontrados:");
                 foreach (var o in orcamentosSimplificados.Take(5))
                 {
-                    Console.WriteLine($"   - ID: {o.Id}, Título: {o.Titulo}, Cliente: {o.Cliente}, Valor: R$ {o.Valor:F2}, Criado: {o.CriadoEm}");
+
                 }
 
                 return Ok(new
@@ -239,7 +227,7 @@ namespace InovalabAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao buscar orçamentos direto: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }
@@ -249,8 +237,6 @@ namespace InovalabAPI.Controllers
         {
             try
             {
-                Console.WriteLine("🔍 [DatabaseTest] Gerando estatísticas completas...");
-
 
                 var usuariosPorData = await _context.Usuarios
                     .GroupBy(u => u.DataCriacao.Date)
@@ -306,18 +292,16 @@ namespace InovalabAPI.Controllers
                     }
                 };
 
-                Console.WriteLine("📊 Estatísticas geradas:");
-                Console.WriteLine($"   - Total de usuários: {resultado.resumo.totalUsuarios}");
-                Console.WriteLine($"   - Total de publicações: {resultado.resumo.totalPublicacoes}");
-                Console.WriteLine($"   - Total de agendamentos: {resultado.resumo.totalAgendamentos}");
-                Console.WriteLine($"   - Total de orçamentos: {resultado.resumo.totalOrcamentos}");
-                Console.WriteLine($"   - Range de datas dos usuários: {resultado.rangesDatas.usuarios.dataMinima} até {resultado.rangesDatas.usuarios.dataMaxima}");
+
+
+
+
 
                 return Ok(resultado);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [DatabaseTest] Erro ao gerar estatísticas: {ex.Message}");
+
                 return BadRequest(new { error = ex.Message, stack = ex.StackTrace });
             }
         }

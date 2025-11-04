@@ -53,19 +53,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   goToNovaPublicacao() {
 
-    console.log('Navegando para Nova Publicação');
     this.router.navigate(['/publicacoes']);
   }
 
   goToLaboratorio() {
 
-    console.log('Navegando para Laboratório');
     this.router.navigate(['/laboratorio']);
   }
 
   goToOrcamento() {
 
-    console.log('Navegando para Orçamento');
     this.router.navigate(['/orcamento']);
   }
 

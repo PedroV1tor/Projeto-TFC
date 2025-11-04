@@ -106,7 +106,7 @@ export class LaboratorioComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao atualizar agendamento.');
-            console.error(error);
+
           }
         });
       } else {
@@ -119,7 +119,7 @@ export class LaboratorioComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao criar agendamento.');
-            console.error(error);
+
           }
         });
       }
@@ -213,7 +213,7 @@ export class LaboratorioComponent implements OnInit {
         },
         error: (error) => {
           alert('Erro ao alterar status do agendamento.');
-          console.error(error);
+
         }
       });
     }

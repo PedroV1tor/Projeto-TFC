@@ -112,13 +112,10 @@ export class AuthService {
   login(email: string, senha: string): Observable<LoginResponse> {
     const loginRequest: LoginRequest = { email, senha };
 
-    console.log('AuthService: tentando fazer login para', email);
-
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginRequest)
       .pipe(
         tap({
           next: (response) => {
-            console.log('AuthService: login bem-sucedido para', email);
 
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.setItem('authToken', response.token);
@@ -128,7 +125,6 @@ export class AuthService {
                 nomeUsuario: response.nomeUsuario,
                 isAdmin: response.isAdmin
               }));
-              console.log('AuthService: token salvo no localStorage:', response.token.substring(0, 20) + '...');
             }
             this.currentUserSubject.next({
               email: response.email,
@@ -138,10 +134,9 @@ export class AuthService {
             });
             this.isLoggedInSubject.next(true);
 
-            console.log('AuthService: estado de login atualizado para true');
           },
           error: (error) => {
-            console.error('AuthService: erro no login para', email, error);
+
           }
         })
       );
@@ -218,13 +213,10 @@ export class AuthService {
     if (typeof window !== 'undefined' && window.localStorage) {
       const token = localStorage.getItem('authToken');
       if (token) {
-        console.log('AuthService: retornando token existente:', token.substring(0, 20) + '...');
-      } else {
-        console.log('AuthService: nenhum token encontrado no localStorage');
       }
       return token;
     }
-    console.log('AuthService: ambiente não é navegador, retornando null');
+
     return null;
   }
 
@@ -274,34 +266,6 @@ export class AuthService {
   }
 
   diagnosticarAutenticacao(): void {
-    console.log('=== DIAGNÓSTICO DE AUTENTICAÇÃO ===');
-    console.log('URL da API:', this.apiUrl);
-    console.log('Ambiente de produção:', environment.production);
-
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const token = localStorage.getItem('authToken');
-      const user = localStorage.getItem('currentUser');
-
-      console.log('Token no localStorage:', token ? 'Presente' : 'Ausente');
-      if (token) {
-        console.log('Token (primeiros 20 chars):', token.substring(0, 20) + '...');
-      }
-
-      console.log('Dados do usuário no localStorage:', user ? 'Presente' : 'Ausente');
-      if (user) {
-        try {
-          const userData = JSON.parse(user);
-          console.log('Dados do usuário:', userData);
-        } catch (e) {
-          console.log('Erro ao fazer parse dos dados do usuário:', e);
-        }
-      }
-    } else {
-      console.log('Ambiente não é navegador');
-    }
-
-    console.log('Estado atual isLoggedIn:', this.isLoggedIn);
-    console.log('Usuário atual:', this.currentUser);
-    console.log('=====================================');
+    // Método de diagnóstico removido
   }
 }

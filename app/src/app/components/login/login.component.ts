@@ -36,7 +36,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Erro no login:', error);
+
         if (error.status === 401) {
           alert('Credenciais inválidas. Tente novamente.');
         } else {

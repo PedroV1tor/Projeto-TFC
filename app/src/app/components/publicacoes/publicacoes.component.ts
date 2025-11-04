@@ -90,10 +90,7 @@ export class PublicacoesComponent implements OnInit {
       return;
     }
 
-
-    console.log('Usuário logado:', this.authService.isLoggedIn);
     console.log('Token atual:', this.authService.getToken());
-    console.log('Dados da publicação:', this.novaPublicacao);
 
     try {
       if (this.publicacaoEditando) {
@@ -109,7 +106,7 @@ export class PublicacoesComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao atualizar publicação.');
-            console.error(error);
+
           }
         });
       } else {
@@ -122,7 +119,7 @@ export class PublicacoesComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao criar publicação.');
-            console.error(error);
+
           }
         });
       }
@@ -155,7 +152,7 @@ export class PublicacoesComponent implements OnInit {
         },
         error: (error) => {
           alert('Erro ao excluir publicação.');
-          console.error(error);
+
         }
       });
     }
@@ -169,7 +166,7 @@ export class PublicacoesComponent implements OnInit {
       },
       error: (error) => {
         alert('Erro ao alterar status.');
-        console.error(error);
+
       }
     });
   }
@@ -288,7 +285,7 @@ export class PublicacoesComponent implements OnInit {
         },
         error: (error) => {
           alert('Erro ao alterar status da publicação.');
-          console.error(error);
+
         }
       });
     }

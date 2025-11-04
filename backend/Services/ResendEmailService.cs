@@ -32,8 +32,6 @@ namespace InovalabAPI.Services
                 ?? "onboarding@resend.dev"; // Fallback padrão do Resend
 
             _resend = ResendClient.Create(apiKey);
-            
-            Console.WriteLine($"✅ ResendEmailService inicializado com From: {_fromEmail}");
         }
 
         public async Task EnviarAsync(string destinatarioEmail, string assunto, string corpoHtml)
@@ -50,11 +48,6 @@ namespace InovalabAPI.Services
 
             try
             {
-                Console.WriteLine($"=== ENVIANDO EMAIL COM RESEND ===");
-                Console.WriteLine($"De: {_fromEmail}");
-                Console.WriteLine($"Para: {destinatarioEmail}");
-                Console.WriteLine($"Assunto: {assunto}");
-
                 var emailMessage = new EmailMessage
                 {
                     From = _fromEmail,
@@ -63,41 +56,21 @@ namespace InovalabAPI.Services
                     HtmlBody = corpoHtml
                 };
 
-                var resp = await _resend.EmailSendAsync(emailMessage);
-
-                // Se chegou aqui sem exceção, o email foi enviado com sucesso
-                Console.WriteLine($"✅ Email enviado com sucesso via Resend!");
-                Console.WriteLine($"   Para: {destinatarioEmail}");
-                
-                // Tenta mostrar o ID se disponível (pode variar conforme versão da biblioteca)
-                try
-                {
-                    if (resp != null)
-                    {
-                        // A resposta pode ter propriedades diferentes dependendo da versão
-                        // Se tiver uma propriedade para o ID, será mostrado
-                        var respType = resp.GetType();
-                        var idProperty = respType.GetProperty("Id") ?? respType.GetProperty("Data");
-                        if (idProperty != null)
-                        {
-                            var idValue = idProperty.GetValue(resp);
-                            if (idValue != null)
-                            {
-                                Console.WriteLine($"   ID do envio: {idValue}");
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    // Ignora se não conseguir acessar o ID
-                }
+                await _resend.EmailSendAsync(emailMessage);
             }
             catch (Exception ex)
             {
                 var errorMessage = $"Falha no envio de email para {destinatarioEmail}: {ex.Message}";
-                Console.WriteLine($"❌ Erro Resend: {errorMessage}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                
+                // Detecta se é o erro de domínio não verificado
+                if (errorMessage.Contains("You can only send testing emails") || 
+                    errorMessage.Contains("verify a domain"))
+                {
+                    throw new InvalidOperationException(
+                        $"Não é possível enviar email para {destinatarioEmail}. " +
+                        $"O Resend está em modo de teste. " +
+                        $"Verifique um domínio em resend.com/domains para enviar para qualquer destinatário.", ex);
+                }
                 
                 throw new InvalidOperationException(errorMessage, ex);
             }

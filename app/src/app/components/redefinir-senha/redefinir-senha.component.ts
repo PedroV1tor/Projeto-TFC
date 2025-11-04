@@ -73,7 +73,6 @@ export class RedefinirSenhaComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Erro ao redefinir senha:', error);
 
         if (error.status === 400) {
           this.showMessage('Código inválido ou expirado. Solicite um novo código.', true);

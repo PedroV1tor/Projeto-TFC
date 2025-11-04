@@ -28,18 +28,15 @@ namespace InovalabAPI.Controllers
 
             if (string.IsNullOrEmpty(email))
             {
-                Console.WriteLine("⚠️ [Perfil] Tentativa de acesso sem email no token JWT");
+
                 return Unauthorized(new { message = "Token inválido ou ausente" });
             }
-
-            Console.WriteLine($"🔐 [Perfil] Usuário/Empresa autenticado solicitando perfil: {email}");
 
             // Primeiro tenta buscar como usuário pessoa física
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
 
             if (usuario != null)
             {
-                Console.WriteLine($"✅ [Perfil] Retornando dados do usuário ID: {usuario.Id}, Email: {email}");
 
                 // Retorna dados de pessoa física
                 var perfilUsuario = new
@@ -73,7 +70,6 @@ namespace InovalabAPI.Controllers
 
             if (empresa != null)
             {
-                Console.WriteLine($"✅ [Perfil] Retornando dados da empresa ID: {empresa.Id}, Email: {email}");
 
                 // Retorna dados de empresa
                 var perfilEmpresa = new
@@ -103,7 +99,6 @@ namespace InovalabAPI.Controllers
                 return Ok(perfilEmpresa);
             }
 
-            Console.WriteLine($"❌ [Perfil] Nenhum usuário ou empresa encontrado para email: {email}");
             return NotFound(new { message = "Perfil não encontrado" });
         }
 
@@ -154,22 +149,18 @@ namespace InovalabAPI.Controllers
 
             if (string.IsNullOrEmpty(email))
             {
-                Console.WriteLine("⚠️ [Atualizar Perfil] Tentativa de atualização sem email no token JWT");
+
                 return Unauthorized(new { message = "Token inválido ou ausente" });
             }
-
-            Console.WriteLine($"🔐 [Atualizar Perfil] Usuário autenticado solicitando atualização: {email}");
 
             // Busca APENAS o usuário autenticado pelo email do token
             var usuario = await _userService.GetUsuarioByEmailAsync(email);
 
             if (usuario == null)
             {
-                Console.WriteLine($"❌ [Atualizar Perfil] Usuário não encontrado para email: {email}");
+
                 return NotFound(new { message = "Usuário não encontrado" });
             }
-
-            Console.WriteLine($"✅ [Atualizar Perfil] Atualizando dados do usuário ID: {usuario.Id}, Email: {email}");
 
             // Atualiza APENAS os dados permitidos (email NÃO pode ser alterado)
             usuario.Nome = request.Nome;

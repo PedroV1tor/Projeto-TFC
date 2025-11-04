@@ -146,7 +146,7 @@ export class ContatoComponent implements OnInit {
 
   get currentOffice() {
     const office = this.offices[this.currentOfficeIndex];
-    console.log('Current Office:', office);
+
     return office;
   }
 }

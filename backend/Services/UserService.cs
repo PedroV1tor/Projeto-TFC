@@ -15,22 +15,9 @@ namespace InovalabAPI.Services
 
         public async Task<Usuario?> GetUsuarioByEmailAsync(string email)
         {
-            Console.WriteLine($"🔍 [UserService] Buscando usuário com email: {email}");
-
             var usuario = await _context.Usuarios
                 .Include(u => u.Endereco)
                 .FirstOrDefaultAsync(u => u.Email == email && u.Ativo);
-
-            if (usuario != null)
-            {
-                Console.WriteLine($"✅ [UserService] Usuário encontrado: ID={usuario.Id}, Nome={usuario.Nome} {usuario.Sobrenome}");
-                Console.WriteLine($"📧 [UserService] Email confirmado: {usuario.Email}");
-                Console.WriteLine($"🏠 [UserService] Endereço presente: {(usuario.Endereco != null ? "Sim" : "Não")}");
-            }
-            else
-            {
-                Console.WriteLine($"❌ [UserService] Nenhum usuário encontrado com email: {email}");
-            }
 
             return usuario;
         }
@@ -81,23 +68,9 @@ namespace InovalabAPI.Services
         // Métodos para Empresa
         public async Task<Empresa?> GetEmpresaByEmailAsync(string email)
         {
-            Console.WriteLine($"🔍 [UserService] Buscando empresa com email: {email}");
-
             var empresa = await _context.Empresas
                 .Include(e => e.Endereco)
                 .FirstOrDefaultAsync(e => e.Email == email && e.Ativo);
-
-            if (empresa != null)
-            {
-                Console.WriteLine($"✅ [UserService] Empresa encontrada: ID={empresa.Id}, Razão Social={empresa.RazaoSocial}");
-                Console.WriteLine($"📧 [UserService] Email confirmado: {empresa.Email}");
-                Console.WriteLine($"🏢 [UserService] CNPJ: {empresa.CNPJ}");
-                Console.WriteLine($"🏠 [UserService] Endereço presente: {(empresa.Endereco != null ? "Sim" : "Não")}");
-            }
-            else
-            {
-                Console.WriteLine($"❌ [UserService] Nenhuma empresa encontrada com email: {email}");
-            }
 
             return empresa;
         }

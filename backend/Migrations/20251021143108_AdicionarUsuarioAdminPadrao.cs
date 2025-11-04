@@ -1,4 +1,4 @@
-Ôªøusing Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 using BCrypt.Net;
 
 #nullable disable
@@ -94,7 +94,7 @@ namespace InovalabAPI.Migrations
                 oldType: "integer",
                 oldNullable: true);
 
-            // Inserir usu√°rio admin padr√£o
+            // Inserir usu·rio admin padr„o
             var senhaHash = BCrypt.Net.BCrypt.HashPassword("admin@123");
             var dataAtual = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -103,16 +103,16 @@ namespace InovalabAPI.Migrations
                 DECLARE
                     usuario_id INT;
                 BEGIN
-                    -- Primeiro, inserir o usu√°rio admin
+                    -- Primeiro, inserir o usu·rio admin
                     INSERT INTO ""Usuarios"" (""Nome"", ""Sobrenome"", ""Email"", ""NomeUsuario"", ""SenhaHash"", ""Telefone"", ""Ativo"", ""IsAdmin"", ""DataCriacao"")
                     VALUES ('Admin', 'Sistema', 'admin@inovalab.com', 'admin', '{senhaHash}', '(00) 00000-0000', true, true, '{dataAtual}')
                     ON CONFLICT (""Email"") DO NOTHING
                     RETURNING ""Id"" INTO usuario_id;
                     
-                    -- Depois, inserir o endere√ßo vinculado ao usu√°rio
+                    -- Depois, inserir o endereÁo vinculado ao usu·rio
                     IF usuario_id IS NOT NULL THEN
                         INSERT INTO ""EnderecosUsuario"" (""UsuarioId"", ""CEP"", ""Rua"", ""Bairro"", ""Numero"", ""DataCriacao"")
-                        VALUES (usuario_id, '01000-000', 'Rua da Administra√ß√£o', 'Centro', '100', '{dataAtual}');
+                        VALUES (usuario_id, '01000-000', 'Rua da AdministraÁ„o', 'Centro', '100', '{dataAtual}');
                     END IF;
                 END $$;
             ");
@@ -121,10 +121,10 @@ namespace InovalabAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // Remover usu√°rio admin padr√£o
+            // Remover usu·rio admin padr„o
             migrationBuilder.Sql(@"
                 DELETE FROM ""Usuarios"" WHERE ""Email"" = 'admin@inovalab.com';
-                DELETE FROM ""EnderecosUsuario"" WHERE ""Rua"" = 'Rua da Administra√ß√£o' AND ""CEP"" = '01000-000';
+                DELETE FROM ""EnderecosUsuario"" WHERE ""Rua"" = 'Rua da AdministraÁ„o' AND ""CEP"" = '01000-000';
             ");
 
             migrationBuilder.AlterColumn<bool>(

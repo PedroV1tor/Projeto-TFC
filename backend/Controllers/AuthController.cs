@@ -91,13 +91,13 @@ namespace InovalabAPI.Controllers
             catch (InvalidOperationException ex)
             {
                 // Erro no envio de email (SMTP)
-                Console.WriteLine($"❌ Erro ao enviar email de recuperação: {ex.Message}");
+
                 return StatusCode(500, new { message = "Erro ao enviar email. Por favor, tente novamente mais tarde." });
             }
             catch (Exception ex)
             {
                 // Outros erros inesperados
-                Console.WriteLine($"❌ Erro inesperado na recuperação de senha: {ex.Message}");
+
                 return StatusCode(500, new { message = "Erro no servidor. Tente novamente mais tarde." });
             }
         }
@@ -105,15 +105,13 @@ namespace InovalabAPI.Controllers
         [HttpPost("verificar-codigo")]
         public async Task<IActionResult> VerificarCodigo([FromBody] VerificarCodigoRequest? request)
         {
-            Console.WriteLine($"🌐 API VerificarCodigo chamada para: {request?.Email}");
-            Console.WriteLine($"🌐 Código recebido: '{request?.Codigo}'");
+
 
             if (request == null || !ModelState.IsValid)
             {
-                Console.WriteLine($"❌ ModelState inválido:");
+
                 foreach (var error in ModelState)
                 {
-                    Console.WriteLine($"   {error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
                 }
                 return BadRequest(ModelState);
             }
@@ -122,11 +120,10 @@ namespace InovalabAPI.Controllers
 
             if (!success)
             {
-                Console.WriteLine($"❌ Verificação falhou para: {request.Email}");
+
                 return BadRequest(new { message = "Código inválido ou expirado" });
             }
 
-            Console.WriteLine($"✅ Verificação bem-sucedida para: {request.Email}");
             return Ok(new { message = "Código verificado com sucesso" });
         }
 

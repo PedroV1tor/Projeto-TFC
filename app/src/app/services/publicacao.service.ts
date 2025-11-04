@@ -24,9 +24,7 @@ export class PublicacaoService {
     const token = this.authService.getToken();
     const isLoggedIn = this.authService.isLoggedIn;
 
-    console.log('PublicacaoService: criando headers para requisição');
-    console.log('PublicacaoService: usuário logado:', isLoggedIn);
-    console.log('PublicacaoService: token presente:', !!token);
+
 
     if (token) {
       return new HttpHeaders({
@@ -84,8 +82,6 @@ export class PublicacaoService {
       Resumo: publicacao.resumo,
       Descricao: publicacao.descricao
     };
-
-    console.log('Enviando dados para o backend:', dadosBackend);
 
     return this.http.post<Publicacao>(this.apiUrl, dadosBackend, { headers: this.getHeaders() });
   }

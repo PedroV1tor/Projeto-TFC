@@ -78,8 +78,6 @@ export class AgendamentoService {
       Usuario: agendamento.usuario
     };
 
-    console.log('Enviando dados de agendamento para o backend:', dadosBackend);
-
     return this.http.post<Agendamento>(this.apiUrl, dadosBackend, { headers: this.getHeaders() });
   }
 
@@ -136,8 +134,6 @@ export class AgendamentoService {
     if (filtro.proximosDias !== undefined) {
       dadosBackend.ProximosDias = filtro.proximosDias;
     }
-
-    console.log('Enviando filtro de agendamentos para o backend:', dadosBackend);
 
     return this.http.post<Agendamento[]>(`${this.apiUrl}/filtrar`, dadosBackend, { headers: this.getHeaders() });
   }

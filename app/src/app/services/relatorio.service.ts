@@ -119,7 +119,7 @@ export class RelatorioService {
       }
     ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar relatório de usuários:', error);
+
         return throwError(error);
       })
     );
@@ -137,7 +137,7 @@ export class RelatorioService {
       }
     ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar relatório de publicações:', error);
+
         return throwError(error);
       })
     );
@@ -155,7 +155,7 @@ export class RelatorioService {
       }
     ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar relatório de agendamentos:', error);
+
         return throwError(error);
       })
     );
@@ -173,7 +173,7 @@ export class RelatorioService {
       }
     ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar relatório de orçamentos:', error);
+
         return throwError(error);
       })
     );
@@ -191,7 +191,7 @@ export class RelatorioService {
       }
     ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar relatório resumo:', error);
+
         return throwError(error);
       })
     );

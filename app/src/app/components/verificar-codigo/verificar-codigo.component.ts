@@ -63,7 +63,6 @@ export class VerificarCodigoComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Erro ao verificar código:', error);
 
         if (error.status === 400) {
           this.showMessage('Código inválido ou expirado. Tente novamente.', true);
@@ -87,7 +86,7 @@ export class VerificarCodigoComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Erro ao reenviar código:', error);
+
         this.showMessage('Erro ao reenviar código. Tente novamente.', true);
       }
     });

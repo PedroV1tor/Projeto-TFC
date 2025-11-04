@@ -121,7 +121,7 @@ export class RelatoriosComponent implements OnInit {
         this.carregando = false;
       },
       error: (error) => {
-        console.error('Erro ao gerar relatório de usuários:', error);
+
         this.carregando = false;
       }
     });
@@ -134,7 +134,7 @@ export class RelatoriosComponent implements OnInit {
         this.carregando = false;
       },
       error: (error) => {
-        console.error('Erro ao gerar relatório de publicações:', error);
+
         this.carregando = false;
       }
     });
@@ -147,7 +147,7 @@ export class RelatoriosComponent implements OnInit {
         this.carregando = false;
       },
       error: (error) => {
-        console.error('Erro ao gerar relatório de agendamentos:', error);
+
         this.carregando = false;
       }
     });
@@ -160,7 +160,7 @@ export class RelatoriosComponent implements OnInit {
         this.carregando = false;
       },
       error: (error) => {
-        console.error('Erro ao gerar relatório de orçamentos:', error);
+
         this.carregando = false;
       }
     });
@@ -326,10 +326,10 @@ export class RelatoriosComponent implements OnInit {
       next: (publicacoes) => {
         this.publicacoesAtivas = publicacoes;
         this.carregando = false;
-        console.log('Publicações ativas carregadas:', publicacoes);
+
       },
       error: (error) => {
-        console.error('Erro ao buscar publicações ativas:', error);
+
         this.carregando = false;
       }
     });

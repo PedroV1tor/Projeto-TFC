@@ -180,8 +180,6 @@ namespace InovalabAPI.Services
             var codigo = new Random().Next(10000, 99999).ToString();
             var expiracao = DateTime.UtcNow.AddMinutes(15); // Expira em 15 minutos
 
-            Console.WriteLine($"✅ Código gerado para {email}: {codigo} (expira em 15min)");
-
 
             LimparCodigosExpirados();
 
@@ -248,11 +246,6 @@ namespace InovalabAPI.Services
 
             var codigoLimpo = request.Codigo?.Trim();
 
-            Console.WriteLine($"🔍 Verificando código para {request.Email}");
-            Console.WriteLine($"   Código recebido: '{request.Codigo}' (original)");
-            Console.WriteLine($"   Código limpo: '{codigoLimpo}'");
-
-
             LimparCodigosExpirados();
 
             var usuario = await _context.Usuarios
@@ -260,36 +253,23 @@ namespace InovalabAPI.Services
 
             if (usuario == null)
             {
-                Console.WriteLine($"❌ Usuário não encontrado: {request.Email}");
                 return false;
             }
 
-
             if (!_codigosRecuperacao.ContainsKey(request.Email))
             {
-                Console.WriteLine($"❌ Nenhum código encontrado para: {request.Email}");
-                Console.WriteLine($"   Códigos disponíveis: {string.Join(", ", _codigosRecuperacao.Keys)}");
                 return false;
             }
 
             var (codigoArmazenado, expiracao) = _codigosRecuperacao[request.Email];
-            Console.WriteLine($"   Código armazenado: '{codigoArmazenado}'");
-            Console.WriteLine($"   Expira em: {expiracao}");
-            Console.WriteLine($"   Agora: {DateTime.UtcNow}");
-
 
             if (DateTime.UtcNow > expiracao)
             {
-                Console.WriteLine($"❌ Código expirado para: {request.Email}");
                 _codigosRecuperacao.Remove(request.Email);
                 return false;
             }
 
-
             var resultado = codigoArmazenado == codigoLimpo;
-            Console.WriteLine($"   Comparação: '{codigoArmazenado}' == '{codigoLimpo}' = {resultado}");
-            Console.WriteLine($"{(resultado ? "✅" : "❌")} Verificação: {request.Email} - {(resultado ? "SUCESSO" : "FALHOU")}");
-
             return resultado;
         }
 
@@ -341,7 +321,6 @@ namespace InovalabAPI.Services
             foreach (var chave in chavesExpiradas)
             {
                 _codigosRecuperacao.Remove(chave);
-                Console.WriteLine($"Código expirado removido para: {chave}");
             }
         }
 

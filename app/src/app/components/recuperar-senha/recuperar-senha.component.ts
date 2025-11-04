@@ -53,7 +53,6 @@ export class RecuperarSenhaComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Erro ao solicitar recuperação:', error);
 
         if (error.status === 404) {
           this.showMessage('E-mail não encontrado em nossos registros.', true);

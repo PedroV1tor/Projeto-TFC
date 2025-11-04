@@ -34,15 +34,6 @@ foreach (var path in envPaths)
 if (envPath != null)
 {
     Env.Load(envPath);
-    Console.WriteLine($"✅ Arquivo .env carregado de: {envPath}");
-}
-else
-{
-    Console.WriteLine($"⚠️ Arquivo .env não encontrado. Procurou em:");
-    foreach (var path in envPaths)
-    {
-        Console.WriteLine($"   - {Path.GetFullPath(path)}");
-    }
 }
 
 // IMPORTANTE: Env.Load() deve ser chamado ANTES do WebApplication.CreateBuilder

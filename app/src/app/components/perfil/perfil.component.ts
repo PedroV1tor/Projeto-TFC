@@ -63,33 +63,28 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   carregarPerfil() {
-    console.log('🔄 Carregando perfil do usuário...');
-    console.log('🔑 Token atual:', this.authService.getToken()?.substring(0, 20) + '...');
-    console.log('👤 Estado de login:', this.authService.isLoggedIn);
-
     this.authService.getPerfil().subscribe({
       next: (usuario) => {
-        console.log('✅ Perfil carregado com sucesso:', usuario);
+
         this.usuario = usuario;
         this.resetarFormulario();
       },
       error: (error) => {
-        console.error('❌ Erro ao carregar perfil:', error);
-        console.error('Status do erro:', error.status);
-        console.error('Mensagem do erro:', error.message);
-        console.error('Detalhes completos:', error);
+
+
+
 
         if (error.status === 401) {
-          console.warn('⚠️ Token inválido ou expirado, redirecionando para login...');
+
           this.authService.logout();
           this.router.navigate(['/login']);
         } else if (error.status === 404) {
-          console.error('❌ Usuário não encontrado no banco de dados');
+
           alert('Erro: Usuário não encontrado. Faça login novamente.');
           this.authService.logout();
           this.router.navigate(['/login']);
         } else {
-          console.error('❌ Erro desconhecido ao carregar perfil');
+
           alert('Erro ao carregar perfil. Tente novamente.');
         }
       }
@@ -204,7 +199,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
       endereco: enderecoObj
     };
 
-    console.log('📤 Enviando dados de atualização:', JSON.stringify(dadosAtualizacao, null, 2));
 
     this.authService.updatePerfil(dadosAtualizacao).subscribe({
       next: () => {
@@ -213,9 +207,8 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.carregarPerfil();
       },
       error: (error) => {
-        console.error('❌ Erro ao atualizar perfil:', error);
-        console.error('Status:', error.status);
-        console.error('Response:', JSON.stringify(error.error, null, 2));
+
+
         
         // Tenta mostrar mensagens de erro específicas
         if (error.status === 400 && error.error) {
@@ -233,8 +226,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
           } else {
             mensagemErro = JSON.stringify(error.error, null, 2);
           }
-          
-          console.error('📋 Erros de validação detalhados:', error.error.errors);
+
           alert(mensagemErro);
         } else {
           alert('Erro ao atualizar perfil. Verifique o console para mais detalhes.');
@@ -318,17 +310,15 @@ export class PerfilComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('🗑️ Iniciando exclusão de perfil...');
-
     this.authService.deletePerfil().subscribe({
       next: () => {
-        console.log('✅ Perfil excluído com sucesso');
+
         alert('Perfil excluído com sucesso. Você será redirecionado para a página inicial.');
         this.authService.logout();
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('❌ Erro ao excluir perfil:', error);
+
         if (error.status === 404) {
           alert('Perfil não encontrado ou já foi excluído.');
         } else if (error.status === 401) {

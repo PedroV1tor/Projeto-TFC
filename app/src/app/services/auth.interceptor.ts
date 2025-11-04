@@ -33,21 +33,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('AuthInterceptor: adicionando token para', req.url);
+
     } else if (!isPublicUrl) {
-      console.warn('AuthInterceptor: token ausente para URL protegida ->', req.url);
+
     }
   } catch (e) {
-    console.warn('AuthInterceptor: erro ao ler token do localStorage', e);
+
   }
 
   return next(requestToSend).pipe(
     tap({
       error: (err) => {
         if (err instanceof HttpErrorResponse && err.status === 401) {
-          console.warn('AuthInterceptor: resposta 401 para', req.url);
+
           if (!isPublicUrl) {
-            console.log('AuthInterceptor: token expirado ou inválido, fazendo logout e redirecionando para login');
 
             authService.logout();
 

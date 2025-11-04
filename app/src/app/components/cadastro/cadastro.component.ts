@@ -41,7 +41,7 @@ export class CadastroComponent {
   constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit() {
-    console.log('Tipo de cadastro:', this.tipoCadastro);
+
     if (this.tipoCadastro === 'usuario') {
       console.log('Chamando cadastrarUsuario()');
       this.cadastrarUsuario();
@@ -82,7 +82,7 @@ export class CadastroComponent {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.error('Erro no cadastro:', error);
+
         if (error.status === 400) {
           alert('Email ou nome de usuário já existe. Tente outros dados.');
         } else {
@@ -93,12 +93,6 @@ export class CadastroComponent {
   }
 
   cadastrarEmpresa() {
-    console.log('Dados da empresa:', {
-      razaoSocial: this.razaoSocial,
-      cnpj: this.cnpj,
-      email: this.email,
-      telefone: this.telefone
-    });
 
     if (!this.razaoSocial || !this.cnpj || !this.email || !this.senha ||
         !this.telefone || !this.cep || !this.rua || !this.bairro) {
@@ -131,7 +125,7 @@ export class CadastroComponent {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.error('Erro no cadastro:', error);
+
         if (error.status === 400) {
           alert('Email ou CNPJ já existe. Tente outros dados.');
         } else {

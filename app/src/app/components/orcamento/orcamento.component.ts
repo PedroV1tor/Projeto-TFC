@@ -152,7 +152,7 @@ export class OrcamentoComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao atualizar orçamento.');
-            console.error(error);
+
           }
         });
       } else {
@@ -166,7 +166,7 @@ export class OrcamentoComponent implements OnInit {
           },
           error: (error) => {
             alert('Erro ao criar orçamento.');
-            console.error(error);
+
           }
         });
       }
@@ -209,7 +209,7 @@ export class OrcamentoComponent implements OnInit {
         },
         error: (error) => {
           alert('Erro ao excluir orçamento.');
-          console.error(error);
+
         }
       });
     }
@@ -302,7 +302,7 @@ export class OrcamentoComponent implements OnInit {
         this.carregarEstatisticas();
       },
       error: (error) => {
-        console.error('Erro ao alterar status do orçamento:', error);
+
         alert(`Erro ao alterar status do orçamento: ${error.message || 'Erro desconhecido'}`);
       }
     });

@@ -91,8 +91,6 @@ export class OrcamentoService {
       Responsavel: orcamento.responsavel
     };
 
-    console.log('Enviando dados de orçamento para o backend:', dadosBackend);
-
     return this.http.post<Orcamento>(this.apiUrl, dadosBackend, { headers: this.getHeaders() });
   }
 
@@ -161,8 +159,6 @@ export class OrcamentoService {
     if (filtro.diasPrazo !== undefined) {
       dadosBackend.DiasPrazo = filtro.diasPrazo;
     }
-
-    console.log('Enviando filtro de orçamentos para o backend:', dadosBackend);
 
     return this.http.post<Orcamento[]>(`${this.apiUrl}/filtrar`, dadosBackend, { headers: this.getHeaders() });
   }
